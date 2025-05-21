@@ -43,8 +43,6 @@ uint8_t putByteOnTx(_sTx    *dataTx, uint8_t byte);
  */
 uint8_t putStrOntx(_sTx *dataTx, const char *str);
 
-
-
 /**
  * @brief Decodifica la trama recibida
  *
@@ -53,18 +51,8 @@ uint8_t putStrOntx(_sTx *dataTx, const char *str);
 void decodeHeader(_sRx *dataRx);
 
 
-//global variables
-uint8_t globalIndex;
-
 
 //Function definitions
-void onRxData()
-{
-    while(PC.readable()){ //Es leible? - buffers con diferencia de datos
-        dataRx.buff[dataRx.indexW++]=PC.getc(); //Si hay diferencia entonces guarda en el buffer de recepción
-        dataRx.indexW &= dataRx.mask;
-    }
-}
 
 uint8_t putHeaderOnTx(_sTx  *dataTx, _eCmd ID, uint8_t frameLength)
 {
@@ -98,7 +86,7 @@ uint8_t putByteOnTx(_sTx *dataTx, uint8_t byte)
 
 uint8_t putStrOntx(_sTx *dataTx, const char *str)
 {
-    globalIndex=0;
+    volatile uint8_t globalIndex=0;
     while(str[globalIndex]){
         dataTx->buff[dataTx->indexW++]=str[globalIndex];
         dataTx->indexW &= dataTx->mask;
@@ -191,26 +179,29 @@ void decodeHeader(_sRx *dataRx)
     }
 }
 
+void initComm(_sComm *myComm){
+    //INICIALIZAMOS VARIABLES
+    myComm->SerialRx.buff = (uint8_t *)myComm->SerialBuffRx;
+    myComm->SerialRx.indexR = 0;
+    myComm->SerialRx.indexW = 0;
+    myComm->SerialRx.header = HEADER_U;
+    myComm->SerialRx.mask = RXBUFSIZE - 1;
 
-void decodeCommand(_sRx *dataRx, _sTx *dataTx)
-{
-    switch(dataRx->buff[dataRx->indexData]){
-        case ALIVE:
-//            putHeaderOnTx(dataTx, ALIVE, 2);
-//            putByteOnTx(dataTx, ACK );
-//            putByteOnTx(dataTx, dataTx->chk);
-        break;
-        case FIRMWARE:
-//            putHeaderOnTx(dataTx, FIRMWARE, 12);
-//            putStrOntx(dataTx, firmware);
-//            putByteOnTx(dataTx, dataTx->chk);
-        break;
-        default:
-//            putHeaderOnTx(dataTx, (_eCmd)dataRx->buff[dataRx->indexData], 2);
-//            putByteOnTx(dataTx,UNKNOWN );
-//            putByteOnTx(dataTx, dataTx->chk);
-        break;
+    myComm->SerialTx.buff = myComm->SerialBuffTx;
+    myComm->SerialTx.indexR = 0;
+    myComm->SerialTx.indexW = 0;
+    myComm->SerialTx.mask = TXBUFSIZE - 1;
 
-    }
+    myComm->WiFiRx.buff = myComm->WiFiBuffRx;
+    myComm->WiFiRx.indexR = 0;
+    myComm->WiFiRx.indexW = 0;
+    myComm->WiFiRx.header = HEADER_U;
+    myComm->WiFiRx.mask = RXBUFSIZE - 1;
+
+    myComm->WiFiTx.buff = myComm->WiFiBuffTx;
+    myComm->WiFiTx.indexR = 0;
+    myComm->WiFiTx.indexW = 0;
+    myComm->WiFiTx.mask = TXBUFSIZE - 1;
 }
+
 

@@ -1,0 +1,6 @@
+../Core/Src/protocol.c:57:9:putHeaderOnTx	1
+../Core/Src/protocol.c:79:9:putByteOnTx	1
+../Core/Src/protocol.c:87:9:putStrOntx	2
+../Core/Src/protocol.c:98:9:getByteFromRx	1
+../Core/Src/protocol.c:109:6:decodeHeader	17
+../Core/Src/protocol.c:182:6:initComm	1

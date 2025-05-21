@@ -67,6 +67,7 @@ uint16_t adcData[8], adcDataTx[8]; //ADC
 uint8_t BufUSBTx[256], nBytesTx; //USB
 
 _uFlag myFlag;
+_sComm myComm;
 
 char buf_oled[20];
 
@@ -123,6 +124,35 @@ void USBRxData(uint8_t *buf, uint32_t len) {
 	nBytesTx += 0;
 
 }
+
+void onRxData() {
+	while (PC.readable()) { //Es leible? - buffers con diferencia de datos
+		dataRx.buff[dataRx.indexW++] = PC.getc(); //Si hay diferencia entonces guarda en el buffer de recepción
+		dataRx.indexW &= dataRx.mask;
+	}
+}
+
+void decodeCommand(_sRx *dataRx, _sTx *dataTx) {
+	switch (dataRx->buff[dataRx->indexData]) {
+	case ALIVE:
+//            putHeaderOnTx(dataTx, ALIVE, 2);
+//            putByteOnTx(dataTx, ACK );
+//            putByteOnTx(dataTx, dataTx->chk);
+		break;
+	case FIRMWARE:
+//            putHeaderOnTx(dataTx, FIRMWARE, 12);
+//            putStrOntx(dataTx, firmware);
+//            putByteOnTx(dataTx, dataTx->chk);
+		break;
+	default:
+//            putHeaderOnTx(dataTx, (_eCmd)dataRx->buff[dataRx->indexData], 2);
+//            putByteOnTx(dataTx,UNKNOWN );
+//            putByteOnTx(dataTx, dataTx->chk);
+		break;
+
+	}
+}
+
 /* USER CODE END 0 */
 
 /**

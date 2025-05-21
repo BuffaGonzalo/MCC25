@@ -29,6 +29,8 @@ typedef union {
 	int8_t i8[4];
 } _uWord;
 
+
+
 /**
  * @brief estructura para la recepción de datos por puerto serie
  *
@@ -60,10 +62,14 @@ typedef struct {
 
 typedef struct {
 	_uWord myWord;
-	_sTx dataTx;
-	_sRx dataRx;
-	uint8_t buffRx[RXBUFSIZE];
-	uint8_t buffTx[TXBUFSIZE];
+	_sTx SerialTx;
+	_sRx SerialRx;
+	_sTx WiFiTx;
+	_sRx WiFiRx;
+	uint8_t SerialBuffRx[RXBUFSIZE];
+	uint8_t SerialBuffTx[TXBUFSIZE];
+	uint8_t WiFiBuffRx[RXBUFSIZE];
+	uint8_t WiFiBuffTx[TXBUFSIZE];
 } _sComm;
 
 /**
@@ -78,11 +84,14 @@ typedef enum {
 
 /**
  * @brief Enumeración de los comandos del protocolo
- *
- *
+
  */
 typedef enum {
-	ALIVE = 0xF0, FIRMWARE = 0xF1,
+	ALIVE = 0xF0,
+	FIRMWARE = 0xF1,
+	GETDISTANCE = 0xA3,
+	ACK = 0x0D,
+	UNKNOWN = 0xFF
 } _eCmd;
 
 

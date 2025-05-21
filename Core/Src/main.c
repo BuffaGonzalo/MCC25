@@ -26,11 +26,13 @@
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
 
+#include "util.h"
+
 #include "ssd1306_oled.h"
 #include "fonts.h"
 #include "bmp.h"
 
-#include "util.h"
+#include "protocol.h"
 
 #include <stdio.h>
 /* USER CODE END Includes */
@@ -60,7 +62,7 @@ I2C_HandleTypeDef hi2c1;
 TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN PV */
-uint32_t is10ms,is1000ms, tmo100ms, tmo1000ms, counter; //Time
+uint32_t is10ms, is1000ms, tmo100ms, tmo1000ms, counter; //Time
 uint16_t adcData[8], adcDataTx[8]; //ADC
 uint8_t BufUSBTx[256], nBytesTx; //USB
 
@@ -68,10 +70,6 @@ _uFlag myFlag;
 
 char buf_oled[20];
 
-enum{ //Enumeracion nameless
-	FALSE,
-	TRUE
-};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,27 +85,24 @@ void USBRxData(uint8_t *buf, uint32_t len);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
-	myFlag.bits.bit1=1;
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+	myFlag.bits.bit1 = 1;
 
-	for (int i=0;i<8;i++)
-	{
-		adcDataTx[i]=adcData[i];
+	for (int i = 0; i < 8; i++) {
+		adcDataTx[i] = adcData[i];
 	}
 }
 
-
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	if(htim->Instance == TIM1){
+	if (htim->Instance == TIM1) {
 		counter++;
 
-		if(counter==TIMETO10MS)
-		{
+		if (counter == TIMETO10MS) {
 			counter = 0;
 			is10ms = 1;
 		}
 
-		HAL_ADC_Start_DMA(&hadc1,(uint32_t*)adcData, 8);
+		HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adcData, 8);
 
 	}
 }
@@ -165,23 +160,23 @@ int main(void)
   MX_TIM1_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-  CDC_Attach_Rx(USBRxData); //Attach myusbrxdata a la función que tenia en el .C
-    HAL_TIM_Base_Start_IT(&htim1); //timer
+	CDC_Attach_Rx(USBRxData); //Attach myusbrxdata a la función que tenia en el .C
+	HAL_TIM_Base_Start_IT(&htim1); //timer
 
-    nBytesTx = 0;
-    tmo100ms = 10;
-    tmo1000ms = 25;
-    is10ms = 0;
-    is1000ms = 0;
+	nBytesTx = 0;
+	tmo100ms = 10;
+	tmo1000ms = 25;
+	is10ms = 0;
+	is1000ms = 0;
 
-    myFlag.bytes = 0;
+	myFlag.bytes = 0;
 
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 1);
-    //SSD1306_Init();
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 1);
+	//SSD1306_Init();
 
-    counter = 0;
-    //HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
+	counter = 0;
+	//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -191,70 +186,69 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if(myFlag.bits.bit1 && is1000ms){
-	  		  is1000ms=0;
-	  		  myFlag.bits.bit1=0;
-	  		  CDC_Transmit_FS((uint8_t *)adcDataTx, 16);
-	  	  }
+		if (myFlag.bits.bit1 && is1000ms) {
+			is1000ms = 0;
+			myFlag.bits.bit1 = 0;
+			CDC_Transmit_FS((uint8_t*) adcDataTx, 16);
+		}
 
-	  		if (is10ms) {
+		if (is10ms) {
 
-	  			is10ms = 0;
+			is10ms = 0;
 
-	  			tmo100ms--;
-	  			if (tmo100ms == 0) {
-	  				tmo100ms = 10;
-	  				tmo1000ms--;
-	  				if (tmo1000ms == 0) {
-	  					tmo1000ms = 25;
-	  					is1000ms = 1;
-	  				}
-	  				HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Blink LED
-	  			}
-	  		}
+			tmo100ms--;
+			if (tmo100ms == 0) {
+				tmo100ms = 10;
+				tmo1000ms--;
+				if (tmo1000ms == 0) {
+					tmo1000ms = 25;
+					is1000ms = 1;
+				}
+				HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Blink LED
+			}
+		}
 
-	  	  if((nBytesTx!=0)){ //Condicio para que envio de datos se realiza de manera continua
-	  		  if((CDC_Transmit_FS(BufUSBTx, nBytesTx) == USBD_OK))
-	  			  nBytesTx = 0;
-	  	  }
+		if ((nBytesTx != 0)) { //Condicio para que envio de datos se realiza de manera continua
+			if ((CDC_Transmit_FS(BufUSBTx, nBytesTx) == USBD_OK))
+				nBytesTx = 0;
+		}
 
-	  /*s
-	    	SSD1306_GotoXY(10,0);
-	  	SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
-	  	SSD1306_GotoXY(10,20);
-	  	SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
-	  	SSD1306_GotoXY(10,40);
-	  	SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
-	  	SSD1306_UpdateScreen();
-	  	HAL_Delay(2500);
+		/*s
+		 SSD1306_GotoXY(10,0);
+		 SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
+		 SSD1306_GotoXY(10,20);
+		 SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
+		 SSD1306_GotoXY(10,40);
+		 SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
+		 SSD1306_UpdateScreen();
+		 HAL_Delay(2500);
 
-	  	SSD1306_Clear();
-	  	SSD1306_GotoXY(10,1);
-	  	SSD1306_Puts("TEST PANTALLA", &Font_7x10, WHITE);
-	  	SSD1306_GotoXY(10,15);
-	  	SSD1306_Puts("19/05/2025", &Font_11x18,WHITE);
-	  	SSD1306_GotoXY(10,35);
-	  	SSD1306_Puts("MICRO", &Font_16x26, WHITE);
-	  	SSD1306_UpdateScreen();
-	  	HAL_Delay(2500);
+		 SSD1306_Clear();
+		 SSD1306_GotoXY(10,1);
+		 SSD1306_Puts("TEST PANTALLA", &Font_7x10, WHITE);
+		 SSD1306_GotoXY(10,15);
+		 SSD1306_Puts("19/05/2025", &Font_11x18,WHITE);
+		 SSD1306_GotoXY(10,35);
+		 SSD1306_Puts("MICRO", &Font_16x26, WHITE);
+		 SSD1306_UpdateScreen();
+		 HAL_Delay(2500);
 
-	  	SSD1306_Clear();
+		 SSD1306_Clear();
 
-	  	SSD1306_DrawBitmap(17, 20, imagen, 90, 34, WHITE);
-	  	SSD1306_UpdateScreen();
-	  	HAL_Delay(2000);
+		 SSD1306_DrawBitmap(17, 20, imagen, 90, 34, WHITE);
+		 SSD1306_UpdateScreen();
+		 HAL_Delay(2000);
 
-	  	SSD1306_ScrollRight(0, 0x0F);
-	  	HAL_Delay(5000);
-	  	SSD1306_ScrollLeft(0, 0x0F);
-	  	HAL_Delay(5000);
-	  	SSD1306_Stopscroll();
-	  	HAL_Delay(1000);
-	  	*/
+		 SSD1306_ScrollRight(0, 0x0F);
+		 HAL_Delay(5000);
+		 SSD1306_ScrollLeft(0, 0x0F);
+		 HAL_Delay(5000);
+		 SSD1306_Stopscroll();
+		 HAL_Delay(1000);
+		 */
 
-	  	//SSD1306_Clear();
-
-	    }
+		//SSD1306_Clear();
+	}
 
   /* USER CODE END 3 */
 }

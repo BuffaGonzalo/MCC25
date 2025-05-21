@@ -9,6 +9,14 @@
 #define INC_UTIL_H_
 
 /**
+ * @brief Enumeracion nameless
+ *
+ */
+enum {
+	FALSE, TRUE
+};
+
+/**
  * @brief Mapa de bits para declarar banderas
  *
  */

@@ -8,9 +8,7 @@
 #ifndef INC_PROTOCOL_H_
 #define INC_PROTOCOL_H_
 
-
 #include <stdint.h>
-
 
 #define RXBUFSIZE           256
 #define TXBUFSIZE           256
@@ -28,8 +26,6 @@ typedef union {
 	uint8_t ui8[4];
 	int8_t i8[4];
 } _uWord;
-
-
 
 /**
  * @brief estructura para la recepción de datos por puerto serie
@@ -57,20 +53,9 @@ typedef struct {
 	uint8_t indexR; /*!<indice de lectura del buffer circular*/
 	uint8_t indexW; /*!<indice de escritura del buffer circular*/
 	uint8_t mask; /*!<máscara para controlar el tamaño del buffer*/
+	uint8_t indexData;
 	uint8_t chk; /*!< variable para calcular el checksum*/
 } _sTx;
-
-typedef struct {
-	_uWord myWord;
-	_sTx SerialTx;
-	_sRx SerialRx;
-	_sTx WiFiTx;
-	_sRx WiFiRx;
-	uint8_t SerialBuffRx[RXBUFSIZE];
-	uint8_t SerialBuffTx[TXBUFSIZE];
-	uint8_t WiFiBuffRx[RXBUFSIZE];
-	uint8_t WiFiBuffTx[TXBUFSIZE];
-} _sComm;
 
 /**
  * @brief Enumeración para la maquina de estados
@@ -83,19 +68,48 @@ typedef enum {
 } _eDecode;
 
 /**
- * @brief Enumeración de los comandos del protocolo
-
+ * @brief Recepcion de datos por el puerto serie
+ *
  */
-typedef enum {
-	ALIVE = 0xF0,
-	FIRMWARE = 0xF1,
-	GETDISTANCE = 0xA3,
-	ACK = 0x0D,
-	UNKNOWN = 0xFF
-} _eCmd;
+void onRxData();
 
+/**
+ * @brief Pone el encabezado del protocolo, el ID y la cantidad de bytes a enviar
+ *
+ * @param dataTx Estructura para la trasnmisi?n de datos
+ * @param ID Identificaci?n del comando que se env?a
+ * @param frameLength Longitud de la trama del comando
+ * @return uint8_t devuelve el Checksum de los datos agregados al buffer de trasnmisi?n
+ */
+uint8_t putHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength);
 
-uint8_t getByteFromRx(_sRx *dataRx, uint8_t iniPos, uint8_t finalPos);
+/**
+ * @brief Agrega un byte al buffer de transmisi?n
+ *
+ * @param dataTx Estructura para la trasnmisi?n de datos
+ * @param byte El elemento que se quiere agregar
+ * @return uint8_t devuelve el Checksum del dato agregado al buffer de trasnmisi?n
+ */
+uint8_t putByteOnTx(_sTx    *dataTx, uint8_t byte);
 
+/**
+ * @brief Agrega un String al buffer de transmisi?n
+ *
+ * @param dataTx Estructura para la trasnmisi?n de datos
+ * @param str String a agregar
+ * @return uint8_t devuelve el Checksum del dato agregado al buffer de trasnmisi?n
+ */
+uint8_t putStrOntx(_sTx *dataTx, const char *str);
+
+/**
+ * @brief Decodifica la trama recibida
+ *
+ * @param dataRx Estructura para la recepci?n de datos
+ */
+uint8_t decodeHeader(_sTx *dataRx);
+
+uint8_t getByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end);
+
+void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, uint8_t *buffTx);
 
 #endif /* INC_PROTOCOL_H_ */

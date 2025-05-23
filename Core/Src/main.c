@@ -39,12 +39,22 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+/**
+ * @brief Enumeración de los comandos del protocolo
+ */
+typedef enum {
+	ALIVE = 0xF0,
+	FIRMWARE = 0xF1,
+	GETDISTANCE = 0xA3,
+	ACK = 0x0D,
+	UNKNOWN = 0xFF
+} _eCmd;
 
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define	TIMETO10MS		40
+#define	TO10MS		40
 
 /* USER CODE END PD */
 
@@ -62,12 +72,23 @@ I2C_HandleTypeDef hi2c1;
 TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN PV */
-uint32_t is10ms, is1000ms, tmo100ms, tmo1000ms, counter; //Time
+uint32_t heartBeatMask[] = {0x55555555, 0x1, 0x2010080, 0x5F, 0x5, 0x28140A00, 0x15F, 0x15, 0x2A150A08, 0x55F};
+
+const char firmware[] = "EX100923v01\n";
+uint8_t time10ms;
 uint16_t adcData[8], adcDataTx[8]; //ADC
-uint8_t BufUSBTx[256], nBytesTx; //USB
+
+//COMM USB
+_sTx USBTx, USBRx;
+uint8_t buffUSBTx[RXBUFSIZE];
+uint8_t buffUSBRx[TXBUFSIZE]; //VOLATILE???
+uint8_t nBytesTx = 0;
+
+/*
+ * bit0 - comunicación USB
+ */
 
 _uFlag myFlag;
-_sComm myComm;
 
 char buf_oled[20];
 
@@ -81,7 +102,12 @@ static void MX_ADC1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
+void USBTask();
 void USBRxData(uint8_t *buf, uint32_t len);
+void decodeCommand(_sTx *dataRx, _sTx *dataTx);
+void is10ms();
+void heartBeatTask();
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -96,11 +122,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (htim->Instance == TIM1) {
-		counter++;
+		time10ms++;
 
-		if (counter == TIMETO10MS) {
-			counter = 0;
-			is10ms = 1;
+		if (time10ms == TO10MS) {
+			time10ms = 0;
+			is10ms();
 		}
 
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adcData, 8);
@@ -108,41 +134,51 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	}
 }
 
-void USBRxData(uint8_t *buf, uint32_t len) {
-	/*
-	 BufUSBTx[0]='U';
-	 BufUSBTx[1]='S';
-	 BufUSBTx[2]='B';
-	 BufUSBTx[3]=' ';
-
-	 */
-
-	for (nBytesTx = 0; nBytesTx < len; nBytesTx++) {
-		BufUSBTx[nBytesTx] = buf[nBytesTx];
+void USBRxData(uint8_t *buf, uint32_t len) { //Recibimos datos -> Enviamos datos
+	nBytesTx = len;
+	myFlag.bits.bit0 = TRUE;
+	for (uint8_t nBytesRx = 0; nBytesRx < len; nBytesRx++) { //Guardamos los datos en el buffer de recepcion
+		USBRx.buff[USBRx.indexW++] = buf[nBytesRx];
+		USBRx.indexW &= USBRx.mask;
 	}
-
-	nBytesTx += 0;
 
 }
 
-void onRxData() {
-	while (PC.readable()) { //Es leible? - buffers con diferencia de datos
-		dataRx.buff[dataRx.indexW++] = PC.getc(); //Si hay diferencia entonces guarda en el buffer de recepción
-		dataRx.indexW &= dataRx.mask;
+void USBTask(){
+
+	//if(USBRx.indexR != USBRx.indexW){
+	if(myFlag.bits.bit0){
+		myFlag.bits.bit0 = FALSE;
+		uint8_t sendBuffer[nBytesTx];
+
+		if(decodeHeader(&USBRx))
+			decodeCommand(&USBRx, &USBTx);
+
+		for(uint8_t i=0; i<nBytesTx;i++){ //Paso limpio, error ultima posición
+			sendBuffer[i]=USBTx.buff[USBTx.indexData++];
+			USBTx.indexData &= USBTx.mask;
+		}
+
+		CDC_Transmit_FS(sendBuffer, nBytesTx);
+//		if ((nBytesTx != 0)) { //Condicion para que envio de datos se realiza de manera continua
+//			if ((CDC_Transmit_FS(sendBuffer, nBytesTx) == USBD_OK)) //&USBTx.buff[USBTx.indexData] pos inicio datos
+//				nBytesTx = 0;
+//		}
 	}
+
 }
 
-void decodeCommand(_sRx *dataRx, _sTx *dataTx) {
+void decodeCommand(_sTx *dataRx, _sTx *dataTx){
 	switch (dataRx->buff[dataRx->indexData]) {
 	case ALIVE:
-//            putHeaderOnTx(dataTx, ALIVE, 2);
-//            putByteOnTx(dataTx, ACK );
-//            putByteOnTx(dataTx, dataTx->chk);
+            putHeaderOnTx(dataTx, ALIVE, 2);
+            putByteOnTx(dataTx, ACK);
+            putByteOnTx(dataTx, dataTx->chk);
 		break;
 	case FIRMWARE:
-//            putHeaderOnTx(dataTx, FIRMWARE, 12);
-//            putStrOntx(dataTx, firmware);
-//            putByteOnTx(dataTx, dataTx->chk);
+            putHeaderOnTx(dataTx, FIRMWARE, 12);
+            putStrOntx(dataTx, firmware);
+            putByteOnTx(dataTx, dataTx->chk);
 		break;
 	default:
 //            putHeaderOnTx(dataTx, (_eCmd)dataRx->buff[dataRx->indexData], 2);
@@ -151,6 +187,27 @@ void decodeCommand(_sRx *dataRx, _sTx *dataTx) {
 		break;
 
 	}
+}
+
+void is10ms(){
+	static uint32_t tmo100ms=10; //Time
+
+	tmo100ms--;
+	if (tmo100ms == 0) {
+		tmo100ms = 10;
+		heartBeatTask();
+	}
+}
+
+void heartBeatTask(){
+	static uint8_t times=0;
+
+	if(~heartBeatMask[0] & (1<<times)) //Add index
+		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Blink LED
+
+	times++;
+	times &= 31; //control de times
+
 }
 
 /* USER CODE END 0 */
@@ -190,22 +247,25 @@ int main(void)
   MX_TIM1_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-	CDC_Attach_Rx(USBRxData); //Attach myusbrxdata a la función que tenia en el .C
+
+	CDC_Attach_Rx(USBRxData); //Attach a la función que tenia en el .C
+
 	HAL_TIM_Base_Start_IT(&htim1); //timer
 
-	nBytesTx = 0;
-	tmo100ms = 10;
-	tmo1000ms = 25;
-	is10ms = 0;
-	is1000ms = 0;
+//	tmo100ms = 10;
+//	tmo1000ms = 25;
+//	is10ms = 0;
+//	is1000ms = 0;
 
 	myFlag.bytes = 0;
 
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 1);
 	//SSD1306_Init();
 
-	counter = 0;
-	//HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+//	counter = 0;
+
+	initComm(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
+
 	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
   /* USER CODE END 2 */
 
@@ -216,68 +276,15 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		if (myFlag.bits.bit1 && is1000ms) {
-			is1000ms = 0;
-			myFlag.bits.bit1 = 0;
-			CDC_Transmit_FS((uint8_t*) adcDataTx, 16);
-		}
 
-		if (is10ms) {
 
-			is10ms = 0;
+//		if (myFlag.bits.bit1 && is1000ms) {
+//			is1000ms = 0;
+//			myFlag.bits.bit1 = 0;
+//			CDC_Transmit_FS((uint8_t*) adcDataTx, 16);
+//		}
 
-			tmo100ms--;
-			if (tmo100ms == 0) {
-				tmo100ms = 10;
-				tmo1000ms--;
-				if (tmo1000ms == 0) {
-					tmo1000ms = 25;
-					is1000ms = 1;
-				}
-				HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Blink LED
-			}
-		}
-
-		if ((nBytesTx != 0)) { //Condicio para que envio de datos se realiza de manera continua
-			if ((CDC_Transmit_FS(BufUSBTx, nBytesTx) == USBD_OK))
-				nBytesTx = 0;
-		}
-
-		/*s
-		 SSD1306_GotoXY(10,0);
-		 SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
-		 SSD1306_GotoXY(10,20);
-		 SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
-		 SSD1306_GotoXY(10,40);
-		 SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
-		 SSD1306_UpdateScreen();
-		 HAL_Delay(2500);
-
-		 SSD1306_Clear();
-		 SSD1306_GotoXY(10,1);
-		 SSD1306_Puts("TEST PANTALLA", &Font_7x10, WHITE);
-		 SSD1306_GotoXY(10,15);
-		 SSD1306_Puts("19/05/2025", &Font_11x18,WHITE);
-		 SSD1306_GotoXY(10,35);
-		 SSD1306_Puts("MICRO", &Font_16x26, WHITE);
-		 SSD1306_UpdateScreen();
-		 HAL_Delay(2500);
-
-		 SSD1306_Clear();
-
-		 SSD1306_DrawBitmap(17, 20, imagen, 90, 34, WHITE);
-		 SSD1306_UpdateScreen();
-		 HAL_Delay(2000);
-
-		 SSD1306_ScrollRight(0, 0x0F);
-		 HAL_Delay(5000);
-		 SSD1306_ScrollLeft(0, 0x0F);
-		 HAL_Delay(5000);
-		 SSD1306_Stopscroll();
-		 HAL_Delay(1000);
-		 */
-
-		//SSD1306_Clear();
+		USBTask();
 	}
 
   /* USER CODE END 3 */

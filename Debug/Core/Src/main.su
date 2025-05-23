@@ -1,0 +1,15 @@
+../Core/Src/main.c:115:6:HAL_ADC_ConvCpltCallback	24	static
+../Core/Src/main.c:123:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:137:6:USBRxData	24	static
+../Core/Src/main.c:147:6:USBTask	40	dynamic
+../Core/Src/main.c:171:6:decodeCommand	16	static
+../Core/Src/main.c:192:6:is10ms	8	static
+../Core/Src/main.c:202:6:heartBeatTask	8	static
+../Core/Src/main.c:219:5:main	8	static
+../Core/Src/main.c:297:6:SystemClock_Config	88	static
+../Core/Src/main.c:343:13:MX_ADC1_Init	24	static
+../Core/Src/main.c:458:13:MX_I2C1_Init	8	static
+../Core/Src/main.c:492:13:MX_TIM1_Init	56	static
+../Core/Src/main.c:543:13:MX_DMA_Init	16	static
+../Core/Src/main.c:561:13:MX_GPIO_Init	48	static
+../Core/Src/main.c:597:6:Error_Handler	4	static,ignoring_inline_asm

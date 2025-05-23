@@ -9,54 +9,19 @@
 #include "util.h"
 #include <stdint.h>
 
-/**
- * @brief Recepcion de datos por el puerto serie
- *
- */
-void onRxData();
+#include "main.h"
 
-/**
- * @brief Pone el encabezado del protocolo, el ID y la cantidad de bytes a enviar
- *
- * @param dataTx Estructura para la trasnmisi?n de datos
- * @param ID Identificaci?n del comando que se env?a
- * @param frameLength Longitud de la trama del comando
- * @return uint8_t devuelve el Checksum de los datos agregados al buffer de trasnmisi?n
- */
-uint8_t putHeaderOnTx(_sTx  *dataTx, _eCmd ID, uint8_t frameLength);
 
-/**
- * @brief Agrega un byte al buffer de transmisi?n
- *
- * @param dataTx Estructura para la trasnmisi?n de datos
- * @param byte El elemento que se quiere agregar
- * @return uint8_t devuelve el Checksum del dato agregado al buffer de trasnmisi?n
- */
-uint8_t putByteOnTx(_sTx    *dataTx, uint8_t byte);
-
-/**
- * @brief Agrega un String al buffer de transmisi?n
- *
- * @param dataTx Estructura para la trasnmisi?n de datos
- * @param str String a agregar
- * @return uint8_t devuelve el Checksum del dato agregado al buffer de trasnmisi?n
- */
-uint8_t putStrOntx(_sTx *dataTx, const char *str);
-
-/**
- * @brief Decodifica la trama recibida
- *
- * @param dataRx Estructura para la recepci?n de datos
- */
-void decodeHeader(_sRx *dataRx);
-
+uint8_t isCommand = FALSE;
+uint8_t chk = 0;
 
 
 //Function definitions
 
-uint8_t putHeaderOnTx(_sTx  *dataTx, _eCmd ID, uint8_t frameLength)
+uint8_t putHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength)
 {
     dataTx->chk = 0;
+    dataTx->indexData = dataTx->indexW;
     dataTx->buff[dataTx->indexW++]='U';
     dataTx->indexW &= dataTx->mask;
     dataTx->buff[dataTx->indexW++]='N';
@@ -95,113 +60,110 @@ uint8_t putStrOntx(_sTx *dataTx, const char *str)
     return dataTx->chk ;
 }
 
-uint8_t getByteFromRx(_sRx *dataRx, uint8_t iniPos, uint8_t finalPos){
-    uint8_t getByte;
-    dataRx->indexData += iniPos;
-    dataRx->indexData &=dataRx->mask;
-    getByte = dataRx->buff[dataRx->indexData];
-    dataRx->indexData += finalPos;
-    dataRx->indexData &=dataRx->mask;
-    return getByte;
+uint8_t getByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end) {
+	uint8_t getByte;
+	dataRx->indexData += start;
+	dataRx->indexData &= dataRx->mask;
+	getByte = dataRx->buff[dataRx->indexData];
+	dataRx->indexData += end;
+	dataRx->indexData &= dataRx->mask;
+	return getByte;
 }
 
 
-void decodeHeader(_sRx *dataRx)
+uint8_t decodeHeader(_sTx *dataRx)
 {
-    uint8_t auxIndex=dataRx->indexW;
+	static uint8_t header = HEADER_U;
+	static uint8_t nBytes;
+    uint8_t auxIndex=dataRx->indexW; //Importante asignar valor de dataRx->indexW
+
     while(dataRx->indexR != auxIndex){
-        switch(dataRx->header)
+        switch(header)
         {
             case HEADER_U:
                 if(dataRx->buff[dataRx->indexR] == 'U'){
-                    dataRx->header = HEADER_N;
-                    dataRx->timeOut = 5;
+                    //dataRx->timeOut = 5;
+                    header = HEADER_N;
                 }
             break;
             case HEADER_N:
                 if(dataRx->buff[dataRx->indexR] == 'N'){
-                    dataRx->header = HEADER_E;
+                    header = HEADER_E;
                 }else{
                     if(dataRx->buff[dataRx->indexR] != 'U'){
-                        dataRx->header = HEADER_U;
-                        dataRx->indexR--;
+                    	header = HEADER_U;
+                    	dataRx->indexR--;
                     }
                 }
             break;
             case HEADER_E:
                 if(dataRx->buff[dataRx->indexR] == 'E'){
-                    dataRx->header = HEADER_R;
+                    header = HEADER_R;
                 }else{
-                    dataRx->header = HEADER_U;
+                	header = HEADER_U;
                     dataRx->indexR--;
                 }
             break;
             case HEADER_R:
                 if(dataRx->buff[dataRx->indexR] == 'R'){
-                    dataRx->header = NBYTES;
+                    header = NBYTES;
                 }else{
-                    dataRx->header = HEADER_U;
+                    header = HEADER_U;
                     dataRx->indexR--;
                 }
             break;
             case NBYTES:
-                dataRx->nBytes=dataRx->buff[dataRx->indexR];
-                dataRx->header = TOKEN;
+                nBytes=dataRx->buff[dataRx->indexR];
+                header = TOKEN;
             break;
             case TOKEN:
                 if(dataRx->buff[dataRx->indexR] == ':'){
-                    dataRx->header = PAYLOAD;
+                    header = PAYLOAD;
                     dataRx->indexData = dataRx->indexR+1;
                     dataRx->indexData &= dataRx->mask;
-                    dataRx->chk = 0;
-                    dataRx->chk ^= ('U' ^'N' ^'E' ^'R' ^dataRx->nBytes ^':') ;
+                    chk = 0;
+                    chk ^= ('U' ^'N' ^'E' ^'R' ^nBytes ^':') ;
                 }else{
-                    dataRx->header = HEADER_U;
+                    header = HEADER_U;
                     dataRx->indexR--;
                 }
             break;
             case PAYLOAD:
-                dataRx->nBytes--;
-                if(dataRx->nBytes>0){
-                   dataRx->chk ^= dataRx->buff[dataRx->indexR];
+                nBytes--;
+                if(nBytes>0){
+                   chk ^= dataRx->buff[dataRx->indexR];
                 }else{
-                    dataRx->header = HEADER_U;
-                    if(dataRx->buff[dataRx->indexR] == dataRx->chk)
-                        dataRx->isComannd = TRUE;
+                    header = HEADER_U;
+                    if(dataRx->buff[dataRx->indexR] == chk)
+                    	return TRUE;
                 }
             break;
             default:
-                dataRx->header = HEADER_U;
+                header = HEADER_U;
             break;
         }
         dataRx->indexR++;
         dataRx->indexR &= dataRx->mask;
     }
+    return FALSE;
 }
 
-void initComm(_sComm *myComm){
+void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, uint8_t *buffTx){
     //INICIALIZAMOS VARIABLES
-    myComm->SerialRx.buff = (uint8_t *)myComm->SerialBuffRx;
-    myComm->SerialRx.indexR = 0;
-    myComm->SerialRx.indexW = 0;
-    myComm->SerialRx.header = HEADER_U;
-    myComm->SerialRx.mask = RXBUFSIZE - 1;
+	Rx->buff = (uint8_t *)buffRx;
+    Rx->indexR = 0;
+    Rx->indexW = 0;
+    Rx->indexData = 0;
+    Rx->mask = RXBUFSIZE - 1; //Control de buffer 2n-1
+    Rx->chk = 0;
 
-    myComm->SerialTx.buff = myComm->SerialBuffTx;
-    myComm->SerialTx.indexR = 0;
-    myComm->SerialTx.indexW = 0;
-    myComm->SerialTx.mask = TXBUFSIZE - 1;
+    Tx->buff = (uint8_t *)buffTx;
+    Tx->indexR = 0;
+    Tx->indexW = 0;
+    Tx->indexData = 0;
+    Tx->mask = TXBUFSIZE - 1;
+    Tx->chk = 0;
 
-    myComm->WiFiRx.buff = myComm->WiFiBuffRx;
-    myComm->WiFiRx.indexR = 0;
-    myComm->WiFiRx.indexW = 0;
-    myComm->WiFiRx.header = HEADER_U;
-    myComm->WiFiRx.mask = RXBUFSIZE - 1;
-
-    myComm->WiFiTx.buff = myComm->WiFiBuffTx;
-    myComm->WiFiTx.indexR = 0;
-    myComm->WiFiTx.indexW = 0;
-    myComm->WiFiTx.mask = TXBUFSIZE - 1;
 }
 
 

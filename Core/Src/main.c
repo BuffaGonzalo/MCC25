@@ -40,12 +40,17 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
-
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+//time
 #define	TO10MS		40
+
+//banderas
+#define ALLFLAGS          myFlags.bytes
+#define IS10MS				myFlags.bits.bit0
+#define IS100MS				myFlags.bits.bit1
 
 /* USER CODE END PD */
 
@@ -66,21 +71,21 @@ TIM_HandleTypeDef htim1;
 uint32_t heartBeatMask[] = {0x55555555, 0x1, 0x2010080, 0x5F, 0x5, 0x28140A00, 0x15F, 0x15, 0x2A150A08, 0x55F};
 
 const char firmware[] = "EX100923v01\n";
+
+//Tiempos
 uint8_t time10ms;
+uint32_t tmo100ms = 10;
+//ADC
 uint16_t adcData[8], adcDataTx[8]; //ADC
 
-//COMM USB
+//Comunicación
 _sTx USBTx, USBRx;
 volatile uint8_t buffUSBTx[RXBUFSIZE];
 volatile uint8_t buffUSBRx[TXBUFSIZE]; //VOLATILE???
 uint8_t nBytesTx = 0;
-
-/*
- * bit0 - comunicación USB
- */
-
-_uFlag myFlag;
-
+//Control
+_uFlag myFlags;
+//Variables pantalla
 char buf_oled[20];
 
 /* USER CODE END PV */
@@ -93,19 +98,24 @@ static void MX_ADC1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
+
+//USB-Serial Communication
 void USBTask();
 void USBRxData(uint8_t *buf, uint32_t len);
 void decodeCommand(_sTx *dataRx, _sTx *dataTx);
-void is10ms();
+//Time functions
+void do10ms();
+void do100ms();
+
+//Others
 void heartBeatTask();
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
-	myFlag.bits.bit1 = 1;
 
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 	for (int i = 0; i < 8; i++) {
 		adcDataTx[i] = adcData[i];
 	}
@@ -114,20 +124,15 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (htim->Instance == TIM1) {
 		time10ms++;
-
 		if (time10ms == TO10MS) {
 			time10ms = 0;
-			is10ms();
+			IS10MS=TRUE;
 		}
-
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adcData, 8);
-
 	}
 }
 
 void USBRxData(uint8_t *buf, uint32_t len) { //Recibimos datos -> Enviamos datos
-
-	myFlag.bits.bit0 = TRUE;
 
 	for (uint8_t nBytesRx = 0; nBytesRx < len; nBytesRx++) { //Guardamos los datos en el buffer de recepcion
 		USBRx.buff[USBRx.indexW++] = buf[nBytesRx];
@@ -136,71 +141,71 @@ void USBRxData(uint8_t *buf, uint32_t len) { //Recibimos datos -> Enviamos datos
 
 }
 
-void USBTask(){
+void USBTask() {
 
-	//if(USBRx.indexR != USBRx.indexW){
-	if(myFlag.bits.bit0){
-
-		myFlag.bits.bit0 = FALSE;
-
+	if(USBRx.indexR != USBRx.indexW){
 		uint8_t sendBuffer[TXBUFSIZE];
 
-		if(decodeHeader(&USBRx))
+		if (decodeHeader(&USBRx))
 			decodeCommand(&USBRx, &USBTx);
 
-		for(uint8_t i=0; i<USBTx.bytes;i++){ //Paso limpio, error ultima posición
-			sendBuffer[i]=USBTx.buff[USBTx.indexData++];
+		for (uint8_t i = 0; i < USBTx.bytes; i++) { //Paso limpio, error ultima posición
+			sendBuffer[i] = USBTx.buff[USBTx.indexData++];
 			USBTx.indexData &= USBTx.mask;
 		}
 
 		CDC_Transmit_FS(sendBuffer, USBTx.bytes);
-//		if ((nBytesTx != 0)) { //Condicion para que envio de datos se realiza de manera continua
-//			if ((CDC_Transmit_FS(sendBuffer, nBytesTx) == USBD_OK)) //&USBTx.buff[USBTx.indexData] pos inicio datos
-//				nBytesTx = 0;
-//		}
 	}
 
 }
 
-void decodeCommand(_sTx *dataRx, _sTx *dataTx){
+void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
+
 	switch (dataRx->buff[dataRx->indexData]) {
 	case ALIVE:
-            putHeaderOnTx(dataTx, ALIVE, 2);
-            putByteOnTx(dataTx, ACK);
-            putByteOnTx(dataTx, dataTx->chk);
+		putHeaderOnTx(dataTx, ALIVE, 2);
+		putByteOnTx(dataTx, ACK);
+		putByteOnTx(dataTx, dataTx->chk);
 		break;
 	case FIRMWARE:
-            putHeaderOnTx(dataTx, FIRMWARE, 13);
-            putStrOntx(dataTx, firmware);
-            putByteOnTx(dataTx, dataTx->chk);
+		putHeaderOnTx(dataTx, FIRMWARE, 13);
+		putStrOntx(dataTx, firmware);
+		putByteOnTx(dataTx, dataTx->chk);
 		break;
 	default:
-//            putHeaderOnTx(dataTx, (_eCmd)dataRx->buff[dataRx->indexData], 2);
-//            putByteOnTx(dataTx,UNKNOWN );
-//            putByteOnTx(dataTx, dataTx->chk);
+		putHeaderOnTx(dataTx, (_eCmd) dataRx->buff[dataRx->indexData], 2);
+		putByteOnTx(dataTx, UNKNOWN);
+		putByteOnTx(dataTx, dataTx->chk);
 		break;
-
 	}
 }
 
-void is10ms(){
-	static uint32_t tmo100ms=10; //Time
-
-	tmo100ms--;
-	if (tmo100ms == 0) {
-		tmo100ms = 10;
-		heartBeatTask();
+void do10ms() {
+	if(IS10MS){
+		IS10MS=FALSE;
+		tmo100ms--;
+		if (tmo100ms == 0) {
+			tmo100ms = 10;
+			IS100MS=TRUE;
+			heartBeatTask();
+		}
 	}
 }
 
-void heartBeatTask(){
-	static uint8_t times=0;
+void do100ms(){
+	if(IS100MS){
+		IS100MS=FALSE;
+	}
+}
 
-	if(~heartBeatMask[0] & (1<<times)) //Add index
+void heartBeatTask() {
+	static uint8_t times = 0;
+
+	if (~heartBeatMask[0] & (1 << times)) //Add index
 		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); // Blink LED
 
 	times++;
-	times &= 31; //control de times
+	times &= 31;
 }
 
 /* USER CODE END 0 */
@@ -245,21 +250,17 @@ int main(void)
 
 	HAL_TIM_Base_Start_IT(&htim1); //timer
 
-//	tmo100ms = 10;
-//	tmo1000ms = 25;
-//	is10ms = 0;
-//	is1000ms = 0;
-
-	myFlag.bytes = 0;
+	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
 
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 1);
-	//SSD1306_Init();
 
-//	counter = 0;
+	//SSD1306_Init();
 
 	initComm(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
 
-	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
+	//Variables
+	ALLFLAGS = RESET;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -269,17 +270,9 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-
-//		if (myFlag.bits.bit1 && is1000ms) {
-//			is1000ms = 0;
-//			myFlag.bits.bit1 = 0;
-//			CDC_Transmit_FS((uint8_t*) adcDataTx, 16);
-//		}
-
+	  	do10ms();
 		USBTask();
 	}
-
   /* USER CODE END 3 */
 }
 

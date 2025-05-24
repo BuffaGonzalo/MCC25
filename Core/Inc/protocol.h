@@ -69,18 +69,6 @@ typedef enum {
 	HEADER_U, HEADER_N, HEADER_E, HEADER_R, NBYTES, TOKEN, ID, PAYLOAD
 } _eDecode;
 
-
-/**
- * @brief Enumeración de los comandos del protocolo
- */
-typedef enum {
-	ALIVE = 0xF0,
-	FIRMWARE = 0xF1,
-	GETDISTANCE = 0xA3,
-	ACK = 0x0D,
-	UNKNOWN = 0xFF
-} _eCmd;
-
 /**
  * @brief Recepcion de datos por el puerto serie
  *

@@ -2,6 +2,7 @@
 /**
   ******************************************************************************
   * @file           : main.h
+  * @author			: Gonzalo M Buffa
   * @brief          : Header for main.c file.
   *                   This file contains the common defines of the application.
   ******************************************************************************

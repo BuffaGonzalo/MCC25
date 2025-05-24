@@ -16,8 +16,9 @@ enum {
 	FALSE, TRUE
 };
 
+
 /**
- * @brief Mapa de bits para declarar banderas
+ * @brief Mapa de bits para banderas
  *
  */
 typedef union{
@@ -33,5 +34,15 @@ typedef union{
     }bits;
     uint8_t bytes;
 }_uFlag;
+
+/**
+ * @brief Enumeración de los comandos del protocolo
+ */
+typedef enum {
+	ALIVE = 0xF0,
+	FIRMWARE = 0xF1,
+	ACK = 0x0D,
+	UNKNOWN = 0xFF
+} _eCmd;
 
 #endif /* INC_UTIL_H_ */

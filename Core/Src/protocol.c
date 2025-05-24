@@ -11,7 +11,6 @@
 
 #include "main.h"
 
-
 uint8_t isCommand = FALSE;
 uint8_t chk = 0;
 
@@ -20,8 +19,10 @@ uint8_t chk = 0;
 
 uint8_t putHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength)
 {
+	frameLength++;
     dataTx->chk = 0;
     dataTx->indexData = dataTx->indexW;
+
     dataTx->buff[dataTx->indexW++]='U';
     dataTx->indexW &= dataTx->mask;
     dataTx->buff[dataTx->indexW++]='N';
@@ -30,19 +31,22 @@ uint8_t putHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength)
     dataTx->indexW &= dataTx->mask;
     dataTx->buff[dataTx->indexW++]='R';
     dataTx->indexW &= dataTx->mask;
-    dataTx->buff[dataTx->indexW++]=frameLength+1;
+    dataTx->buff[dataTx->indexW++]=frameLength;
     dataTx->indexW &= dataTx->mask;
     dataTx->buff[dataTx->indexW++]=':';
     dataTx->indexW &= dataTx->mask;
     dataTx->buff[dataTx->indexW++]=ID;
     dataTx->indexW &= dataTx->mask;
-    dataTx->chk ^= (frameLength+1);
-    dataTx->chk ^= ('U' ^'N' ^'E' ^'R' ^ID ^':') ;
+
+    dataTx->bytes = TXBYTES;
+    dataTx->chk ^= ('U' ^'N' ^'E' ^'R' ^frameLength ^':'^ID) ;
+
     return  dataTx->chk;
 }
 
 uint8_t putByteOnTx(_sTx *dataTx, uint8_t byte)
 {
+	dataTx->bytes++;
     dataTx->buff[dataTx->indexW++]=byte;
     dataTx->indexW &= dataTx->mask;
     dataTx->chk ^= byte;
@@ -53,11 +57,13 @@ uint8_t putStrOntx(_sTx *dataTx, const char *str)
 {
     volatile uint8_t globalIndex=0;
     while(str[globalIndex]){
+    	dataTx->bytes++;
         dataTx->buff[dataTx->indexW++]=str[globalIndex];
         dataTx->indexW &= dataTx->mask;
         dataTx->chk ^= str[globalIndex++];
     }
-    return dataTx->chk ;
+    //dataTx->bytes += ++globalIndex;
+    return dataTx->chk;
 }
 
 uint8_t getByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end) {
@@ -73,17 +79,15 @@ uint8_t getByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end) {
 
 uint8_t decodeHeader(_sTx *dataRx)
 {
+	uint8_t nBytes = 0;
 	static uint8_t header = HEADER_U;
-	static uint8_t nBytes;
-    uint8_t auxIndex=dataRx->indexW; //Importante asignar valor de dataRx->indexW
-
+    uint8_t auxIndex=dataRx->indexW;
     while(dataRx->indexR != auxIndex){
         switch(header)
         {
             case HEADER_U:
                 if(dataRx->buff[dataRx->indexR] == 'U'){
-                    //dataRx->timeOut = 5;
-                    header = HEADER_N;
+                   header = HEADER_N;
                 }
             break;
             case HEADER_N:
@@ -92,7 +96,7 @@ uint8_t decodeHeader(_sTx *dataRx)
                 }else{
                     if(dataRx->buff[dataRx->indexR] != 'U'){
                     	header = HEADER_U;
-                    	dataRx->indexR--;
+                        dataRx->indexR--;
                     }
                 }
             break;
@@ -100,7 +104,7 @@ uint8_t decodeHeader(_sTx *dataRx)
                 if(dataRx->buff[dataRx->indexR] == 'E'){
                     header = HEADER_R;
                 }else{
-                	header = HEADER_U;
+                    header = HEADER_U;
                     dataRx->indexR--;
                 }
             break;
@@ -121,8 +125,8 @@ uint8_t decodeHeader(_sTx *dataRx)
                     header = PAYLOAD;
                     dataRx->indexData = dataRx->indexR+1;
                     dataRx->indexData &= dataRx->mask;
-                    chk = 0;
-                    chk ^= ('U' ^'N' ^'E' ^'R' ^nBytes ^':') ;
+                    dataRx->chk = 0;
+                    dataRx->chk ^= ('U' ^'N' ^'E' ^'R' ^nBytes ^':') ;
                 }else{
                     header = HEADER_U;
                     dataRx->indexR--;
@@ -131,11 +135,11 @@ uint8_t decodeHeader(_sTx *dataRx)
             case PAYLOAD:
                 nBytes--;
                 if(nBytes>0){
-                   chk ^= dataRx->buff[dataRx->indexR];
+                   dataRx->chk ^= dataRx->buff[dataRx->indexR];
                 }else{
                     header = HEADER_U;
-                    if(dataRx->buff[dataRx->indexR] == chk)
-                    	return TRUE;
+                    if(dataRx->buff[dataRx->indexR] == dataRx->chk)
+                        return TRUE;
                 }
             break;
             default:
@@ -148,12 +152,13 @@ uint8_t decodeHeader(_sTx *dataRx)
     return FALSE;
 }
 
-void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, uint8_t *buffTx){
+void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, volatile uint8_t *buffTx){
     //INICIALIZAMOS VARIABLES
 	Rx->buff = (uint8_t *)buffRx;
     Rx->indexR = 0;
     Rx->indexW = 0;
     Rx->indexData = 0;
+    Rx->bytes = 0;
     Rx->mask = RXBUFSIZE - 1; //Control de buffer 2n-1
     Rx->chk = 0;
 
@@ -161,6 +166,7 @@ void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, uint8_t *buffTx){
     Tx->indexR = 0;
     Tx->indexW = 0;
     Tx->indexData = 0;
+    Tx->bytes = 0;
     Tx->mask = TXBUFSIZE - 1;
     Tx->chk = 0;
 

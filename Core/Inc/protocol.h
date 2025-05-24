@@ -12,6 +12,7 @@
 
 #define RXBUFSIZE           256
 #define TXBUFSIZE           256
+#define TXBYTES				7
 
 /**
  *
@@ -53,6 +54,7 @@ typedef struct {
 	uint8_t indexR; /*!<indice de lectura del buffer circular*/
 	uint8_t indexW; /*!<indice de escritura del buffer circular*/
 	uint8_t mask; /*!<máscara para controlar el tamaño del buffer*/
+	uint8_t bytes;
 	uint8_t indexData;
 	uint8_t chk; /*!< variable para calcular el checksum*/
 } _sTx;
@@ -64,8 +66,20 @@ typedef struct {
  *
  */
 typedef enum {
-	HEADER_U, HEADER_N, HEADER_E, HEADER_R, NBYTES, TOKEN, PAYLOAD
+	HEADER_U, HEADER_N, HEADER_E, HEADER_R, NBYTES, TOKEN, ID, PAYLOAD
 } _eDecode;
+
+
+/**
+ * @brief Enumeración de los comandos del protocolo
+ */
+typedef enum {
+	ALIVE = 0xF0,
+	FIRMWARE = 0xF1,
+	GETDISTANCE = 0xA3,
+	ACK = 0x0D,
+	UNKNOWN = 0xFF
+} _eCmd;
 
 /**
  * @brief Recepcion de datos por el puerto serie
@@ -110,6 +124,6 @@ uint8_t decodeHeader(_sTx *dataRx);
 
 uint8_t getByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end);
 
-void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, uint8_t *buffTx);
+void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, volatile uint8_t *buffTx);
 
 #endif /* INC_PROTOCOL_H_ */

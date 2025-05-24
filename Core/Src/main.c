@@ -39,16 +39,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-/**
- * @brief Enumeración de los comandos del protocolo
- */
-typedef enum {
-	ALIVE = 0xF0,
-	FIRMWARE = 0xF1,
-	GETDISTANCE = 0xA3,
-	ACK = 0x0D,
-	UNKNOWN = 0xFF
-} _eCmd;
+
 
 /* USER CODE END PTD */
 
@@ -80,8 +71,8 @@ uint16_t adcData[8], adcDataTx[8]; //ADC
 
 //COMM USB
 _sTx USBTx, USBRx;
-uint8_t buffUSBTx[RXBUFSIZE];
-uint8_t buffUSBRx[TXBUFSIZE]; //VOLATILE???
+volatile uint8_t buffUSBTx[RXBUFSIZE];
+volatile uint8_t buffUSBRx[TXBUFSIZE]; //VOLATILE???
 uint8_t nBytesTx = 0;
 
 /*
@@ -135,8 +126,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 }
 
 void USBRxData(uint8_t *buf, uint32_t len) { //Recibimos datos -> Enviamos datos
-	nBytesTx = len;
+
 	myFlag.bits.bit0 = TRUE;
+
 	for (uint8_t nBytesRx = 0; nBytesRx < len; nBytesRx++) { //Guardamos los datos en el buffer de recepcion
 		USBRx.buff[USBRx.indexW++] = buf[nBytesRx];
 		USBRx.indexW &= USBRx.mask;
@@ -148,18 +140,20 @@ void USBTask(){
 
 	//if(USBRx.indexR != USBRx.indexW){
 	if(myFlag.bits.bit0){
+
 		myFlag.bits.bit0 = FALSE;
-		uint8_t sendBuffer[nBytesTx];
+
+		uint8_t sendBuffer[TXBUFSIZE];
 
 		if(decodeHeader(&USBRx))
 			decodeCommand(&USBRx, &USBTx);
 
-		for(uint8_t i=0; i<nBytesTx;i++){ //Paso limpio, error ultima posición
+		for(uint8_t i=0; i<USBTx.bytes;i++){ //Paso limpio, error ultima posición
 			sendBuffer[i]=USBTx.buff[USBTx.indexData++];
 			USBTx.indexData &= USBTx.mask;
 		}
 
-		CDC_Transmit_FS(sendBuffer, nBytesTx);
+		CDC_Transmit_FS(sendBuffer, USBTx.bytes);
 //		if ((nBytesTx != 0)) { //Condicion para que envio de datos se realiza de manera continua
 //			if ((CDC_Transmit_FS(sendBuffer, nBytesTx) == USBD_OK)) //&USBTx.buff[USBTx.indexData] pos inicio datos
 //				nBytesTx = 0;
@@ -176,7 +170,7 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx){
             putByteOnTx(dataTx, dataTx->chk);
 		break;
 	case FIRMWARE:
-            putHeaderOnTx(dataTx, FIRMWARE, 12);
+            putHeaderOnTx(dataTx, FIRMWARE, 13);
             putStrOntx(dataTx, firmware);
             putByteOnTx(dataTx, dataTx->chk);
 		break;
@@ -207,7 +201,6 @@ void heartBeatTask(){
 
 	times++;
 	times &= 31; //control de times
-
 }
 
 /* USER CODE END 0 */

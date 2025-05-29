@@ -1,8 +1,9 @@
-/*
- * mpu6050.h
+/**
+ * @file   [FILENAME]
+ * @author [AUTHOR]
+ * @date   [DATE]
  *
- *  Created on: May 24, 2025
- *      Author: gonza
+ * [DESCRIPTION OF FILE/LIBRARY]
  */
 
 #ifndef INC_MPU6050_H_

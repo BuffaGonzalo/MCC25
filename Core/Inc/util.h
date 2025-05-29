@@ -1,8 +1,9 @@
-/*
- * util.h
+/**
+ * @file   util.h
+ * @author Gonzalo M. Buffa
+ * @date   24/05/2025
  *
- *  Created on: May 20, 2025
- *      Author: gonza
+ * file used to declare all enums,structs,unions of the main project
  */
 
 #ifndef INC_UTIL_H_

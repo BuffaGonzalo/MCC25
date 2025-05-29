@@ -1,8 +1,15 @@
-/*
- * protocol.c
+/**
+ * @file   protocol.h
+ * @author Gonzalo M. buffa
+ * @date   24/05/2025
  *
- *  Created on: May 21, 2025
- *      Author: gonza
+ * protocol.c
+ * File part of the protocol library, based un the UNER protocol. It's designed to simplify the
+ * the development of code for the user by reducing the amount of code lines in the main.c
+ *
+ * User Attention!!!
+ * The library automates the configuration/decryption of headers and some data manipulation
+ * The user still needs to handle the received data (RxData) and also what to do with the received data.
  */
 
 #include "protocol.h"

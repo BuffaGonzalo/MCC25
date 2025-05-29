@@ -18,7 +18,6 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-
 #include "main.h"
 #include "usb_device.h"
 
@@ -39,7 +38,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -64,6 +62,8 @@ ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 
 I2C_HandleTypeDef hi2c1;
+DMA_HandleTypeDef hdma_i2c1_rx;
+DMA_HandleTypeDef hdma_i2c1_tx;
 
 TIM_HandleTypeDef htim1;
 
@@ -87,6 +87,7 @@ uint8_t nBytesTx = 0;
 _uFlag myFlags;
 //Variables pantalla
 char buf_oled[20];
+volatile uint8_t SSD1306_TxCplt = 0;
 
 /* USER CODE END PV */
 
@@ -110,6 +111,9 @@ void do100ms();
 //Others
 void heartBeatTask();
 
+//Display
+void SSD1306Upd();
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -120,6 +124,19 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 		adcDataTx[i] = adcData[i];
 	}
 }
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c){
+	//Control del final de operaciones
+    //if (hi2c->Instance == hi2c1.Instance) {
+        SSD1306_TxCplt = 1;
+    //}
+}
+
+//void HAL_I2C_EV_IRQHandler(){
+//	HAL_I2C_EV_IRQHandler(&hi2c1);
+//}
+//void HAL_I2C_ER_IRQHandler(){
+//	HAL_I2C_ER_IRQHandler(&hi2c1);
+//}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (htim->Instance == TIM1) {
@@ -208,6 +225,17 @@ void heartBeatTask() {
 	times &= 31;
 }
 
+void SSD1306Upd(){
+	SSD1306_GotoXY(10, 0);
+	SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
+	SSD1306_GotoXY(10, 20);
+	SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
+	SSD1306_GotoXY(10, 40);
+	SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
+	SSD1306_UpdateScreen();
+}
+
+
 /* USER CODE END 0 */
 
 /**
@@ -252,10 +280,12 @@ int main(void)
 
 	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
 
+	//Display
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 1);
 
-	//SSD1306_Init();
+	SSD1306_Init();
 
+	//Inicializacion de protocolo
 	initComm(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
 
 	//Variables
@@ -272,6 +302,8 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  	do10ms();
 		USBTask();
+		SSD1306Upd();
+
 	}
   /* USER CODE END 3 */
 }
@@ -531,8 +563,15 @@ static void MX_DMA_Init(void)
 
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+  /* DMA1_Stream1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
   /* DMA2_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);

@@ -10,6 +10,7 @@ extern I2C_HandleTypeDef hi2c1;
 #define ABS(x)   ((x) > 0 ? (x) : -(x))
 
 static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+extern uint8_t SSD1306_TxCplt;
 
 typedef struct {
 	uint16_t CurrentX;
@@ -154,14 +155,51 @@ uint8_t SSD1306_Init(void)
 
 void SSD1306_UpdateScreen(void)
 {
-	uint8_t m;
-	for(m=0; m<8; m++)
-	{
-		SSD1306_WRITECOMMAND(0xB0 + m);
-		SSD1306_WRITECOMMAND(0x00);
-		SSD1306_WRITECOMMAND(0x10);
-		SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40, &SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH);
-	}
+//	static uint8_t m = 0;
+//	static uint8_t i = 1;
+//	static uint8_t flag = 0;
+
+	//for(m=0; m<8; m++)
+//	if (m < 8) {
+//		if(flag==0){
+//		switch (i) {
+//		case 1:
+//			SSD1306_WRITECOMMAND(0xB0 + m);
+//			break;
+//		case 2:
+//			SSD1306_WRITECOMMAND(0x00);
+//			break;
+//		case 3:
+//			SSD1306_WRITECOMMAND(0x10);
+//			break;
+//		case 4:
+//			SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,&SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH);
+//			m++;
+//			if (m == 7)
+//				m = 1;
+//			break;
+//		}
+//		flag=1;
+//		}
+//		if (SSD1306_TxCplt) {
+//			flag = 0;
+//			SSD1306_TxCplt = 0;
+//			i &= 3;
+//			i++;
+//		}
+	    for (uint8_t page = 0; page < 8; page++) {
+				SSD1306_WRITECOMMAND(0xB0 + page);
+
+				SSD1306_WRITECOMMAND(0x00);
+
+				SSD1306_WRITECOMMAND(0x10);
+
+				SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,&SSD1306_Buffer[SSD1306_WIDTH * page], SSD1306_WIDTH);
+	        while (!SSD1306_TxCplt) { /* wait */ }
+	    }
+
+	//}
+
 }
 
 void SSD1306_ToggleInvert(void)
@@ -506,7 +544,8 @@ void SSD1306_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t* data, uint16_
 	uint8_t i;
 	for(i = 0; i < count; i++)
 	dt[i+1] = data[i];
-	HAL_I2C_Master_Transmit(&hi2c1, address, dt, count+1, 10);
+	//HAL_I2C_Master_Transmit(&hi2c1, address, dt, count+1, 10);
+	HAL_I2C_Master_Transmit_DMA(&hi2c1, address, dt, count+1);
 }
 
 
@@ -515,5 +554,6 @@ void SSD1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data)
 	uint8_t dt[2];
 	dt[0] = reg;
 	dt[1] = data;
-	HAL_I2C_Master_Transmit(&hi2c1, address, dt, 2, 10);
+	HAL_I2C_Master_Transmit_DMA(&hi2c1, address, dt, 2);
+//	HAL_I2C_Master_Transmit(&hi2c1, address, dt, 2, 10);
 }

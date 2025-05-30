@@ -10,7 +10,7 @@ extern I2C_HandleTypeDef hi2c1;
 #define ABS(x)   ((x) > 0 ? (x) : -(x))
 
 static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
-extern uint8_t SSD1306_TxCplt;
+extern volatile uint8_t SSD1306_TxCplt;
 
 typedef struct {
 	uint16_t CurrentX;
@@ -153,54 +153,80 @@ uint8_t SSD1306_Init(void)
 	return 1;
 }
 
-void SSD1306_UpdateScreen(void)
-{
+void SSD1306_UpdateScreen(void) {
+	static uint8_t current_page = 0;
+	static uint8_t state = 1;
+
+	// Only proceed if I2C is ready or we're starting a new transaction
+	if (SSD1306_TxCplt || state == 1) {
+		SSD1306_TxCplt = 0;  // Reset completion flag
+
+		switch (state) {
+		case 1:  // Set page address
+			SSD1306_WRITECOMMAND(0xB0 + current_page);
+			state = 2;
+			break;
+		case 2:  // Set column address low nibble
+			SSD1306_WRITECOMMAND(0x00);
+			state = 3;
+			break;
+		case 3:  // Set column address high nibble
+			SSD1306_WRITECOMMAND(0x10);
+			state = 4;
+			break;
+		case 4:  // Write page data
+			SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,
+					&SSD1306_Buffer[SSD1306_WIDTH * current_page],
+					SSD1306_WIDTH);
+			current_page++;
+			if (current_page >= 8) {
+				current_page = 0;
+			}
+			state = 1;  // Start over with next page
+			break;
+		}
+	}
+}
+
+//void SSD1306_UpdateScreen(void) {
 //	static uint8_t m = 0;
 //	static uint8_t i = 1;
-//	static uint8_t flag = 0;
-
-	//for(m=0; m<8; m++)
+//	static uint8_t save = 0;
+//
 //	if (m < 8) {
-//		if(flag==0){
 //		switch (i) {
 //		case 1:
-//			SSD1306_WRITECOMMAND(0xB0 + m);
+//			save = i;
+//			SSD1306_WRITECOMMAND(0xB0 + m); //seleccion pagina
 //			break;
 //		case 2:
-//			SSD1306_WRITECOMMAND(0x00);
+//			save = i;
+//			SSD1306_WRITECOMMAND(0x00); //nibble bajo
 //			break;
 //		case 3:
-//			SSD1306_WRITECOMMAND(0x10);
+//			save = i;
+//			SSD1306_WRITECOMMAND(0x10); //nibble alto
 //			break;
 //		case 4:
-//			SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,&SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH);
+//			save = i;
+//			SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,
+//					&SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH);
 //			m++;
-//			if (m == 7)
-//				m = 1;
+//			if (m > 7)
+//				m = 0;
+//			break;
+//		default:
 //			break;
 //		}
-//		flag=1;
-//		}
+//		i = 0;
 //		if (SSD1306_TxCplt) {
-//			flag = 0;
 //			SSD1306_TxCplt = 0;
-//			i &= 3;
-//			i++;
+//			save &= 3;
+//			save++;
+//			i = save;
 //		}
-	    for (uint8_t page = 0; page < 8; page++) {
-				SSD1306_WRITECOMMAND(0xB0 + page);
-
-				SSD1306_WRITECOMMAND(0x00);
-
-				SSD1306_WRITECOMMAND(0x10);
-
-				SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,&SSD1306_Buffer[SSD1306_WIDTH * page], SSD1306_WIDTH);
-	        while (!SSD1306_TxCplt) { /* wait */ }
-	    }
-
-	//}
-
-}
+//	}
+//}
 
 void SSD1306_ToggleInvert(void)
 {
@@ -545,7 +571,8 @@ void SSD1306_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t* data, uint16_
 	for(i = 0; i < count; i++)
 	dt[i+1] = data[i];
 	//HAL_I2C_Master_Transmit(&hi2c1, address, dt, count+1, 10);
-	HAL_I2C_Master_Transmit_DMA(&hi2c1, address, dt, count+1);
+	//HAL_I2C_Master_Transmit_DMA(&hi2c1, address, dt, count+1);
+	HAL_I2C_Mem_Write_DMA(&hi2c1, address, 0x40, 1, dt, count+1);
 }
 
 
@@ -554,6 +581,7 @@ void SSD1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data)
 	uint8_t dt[2];
 	dt[0] = reg;
 	dt[1] = data;
-	HAL_I2C_Master_Transmit_DMA(&hi2c1, address, dt, 2);
+	//HAL_I2C_Master_Transmit_DMA(&hi2c1, address, dt, 2);
 //	HAL_I2C_Master_Transmit(&hi2c1, address, dt, 2, 10);
+	HAL_I2C_Mem_Write_DMA(&hi2c1, address, 0x40, 1, dt, 2);
 }

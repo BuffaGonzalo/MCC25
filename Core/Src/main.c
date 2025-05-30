@@ -43,13 +43,14 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 //time
-#define	TO10MS		40
+#define	TO10MS				40
 
 //banderas
-#define ALLFLAGS          myFlags.bytes
+#define ALLFLAGS          	myFlags.bytes
 #define IS10MS				myFlags.bits.bit0
 #define IS100MS				myFlags.bits.bit1
 
+#define TEST				myFlags.bits.bit7
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -88,7 +89,6 @@ _uFlag myFlags;
 //Variables pantalla
 char buf_oled[20];
 volatile uint8_t SSD1306_TxCplt = 0;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -112,7 +112,7 @@ void do100ms();
 void heartBeatTask();
 
 //Display
-void SSD1306Upd();
+void SSD1306Data();
 
 /* USER CODE END PFP */
 
@@ -124,7 +124,8 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 		adcDataTx[i] = adcData[i];
 	}
 }
-void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c){
+//void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c){
+void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c){
 	//Control del final de operaciones
     //if (hi2c->Instance == hi2c1.Instance) {
         SSD1306_TxCplt = 1;
@@ -225,14 +226,16 @@ void heartBeatTask() {
 	times &= 31;
 }
 
-void SSD1306Upd(){
-	SSD1306_GotoXY(10, 0);
-	SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
-	SSD1306_GotoXY(10, 20);
-	SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
-	SSD1306_GotoXY(10, 40);
-	SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
-	SSD1306_UpdateScreen();
+void SSD1306Data(){
+	//if(IS100MS){
+	//	IS100MS=FALSE;
+		SSD1306_GotoXY(10, 0);
+		SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
+		SSD1306_GotoXY(10, 20);
+		SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
+		SSD1306_GotoXY(10, 40);
+		SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
+	//}
 }
 
 
@@ -302,8 +305,8 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  	do10ms();
 		USBTask();
-		SSD1306Upd();
-
+		SSD1306Data();
+		SSD1306_UpdateScreen();
 	}
   /* USER CODE END 3 */
 }

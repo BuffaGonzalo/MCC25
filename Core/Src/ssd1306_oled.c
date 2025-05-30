@@ -188,46 +188,6 @@ void SSD1306_UpdateScreen(void) {
 	}
 }
 
-//void SSD1306_UpdateScreen(void) {
-//	static uint8_t m = 0;
-//	static uint8_t i = 1;
-//	static uint8_t save = 0;
-//
-//	if (m < 8) {
-//		switch (i) {
-//		case 1:
-//			save = i;
-//			SSD1306_WRITECOMMAND(0xB0 + m); //seleccion pagina
-//			break;
-//		case 2:
-//			save = i;
-//			SSD1306_WRITECOMMAND(0x00); //nibble bajo
-//			break;
-//		case 3:
-//			save = i;
-//			SSD1306_WRITECOMMAND(0x10); //nibble alto
-//			break;
-//		case 4:
-//			save = i;
-//			SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,
-//					&SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH);
-//			m++;
-//			if (m > 7)
-//				m = 0;
-//			break;
-//		default:
-//			break;
-//		}
-//		i = 0;
-//		if (SSD1306_TxCplt) {
-//			SSD1306_TxCplt = 0;
-//			save &= 3;
-//			save++;
-//			i = save;
-//		}
-//	}
-//}
-
 void SSD1306_ToggleInvert(void)
 {
 	uint16_t i;

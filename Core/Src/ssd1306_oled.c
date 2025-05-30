@@ -178,7 +178,7 @@ void SSD1306_UpdateScreen(void) {
 			SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,
 					&SSD1306_Buffer[SSD1306_WIDTH * current_page],
 					SSD1306_WIDTH);
-			current_page++;
+			//current_page++;
 			if (current_page >= 8) {
 				current_page = 0;
 			}

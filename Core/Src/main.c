@@ -129,7 +129,6 @@ void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c){
 	//Control del final de operaciones
     //if (hi2c->Instance == hi2c1.Instance) {
         SSD1306_TxCplt = 1;
-        HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
     //}
 }
 
@@ -206,7 +205,7 @@ void do10ms() {
 		if (tmo100ms == 0) {
 			tmo100ms = 10;
 			IS100MS=TRUE;
-			//heartBeatTask();
+			heartBeatTask();
 		}
 	}
 }
@@ -306,8 +305,8 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  	do10ms();
 		USBTask();
-		SSD1306Data();
-		SSD1306_UpdateScreen();
+		//SSD1306Data();
+		SSD1306_UpdateScreen_NB();
 	}
   /* USER CODE END 3 */
 }

@@ -4,13 +4,15 @@
 #include <string.h>
 
 extern I2C_HandleTypeDef hi2c1;
+extern volatile uint8_t SSD1306_TxCplt;
 
+#define SSD1306_WRITECOMMAND_DMA(command)	SSD1306_I2C_Write_DMA(SSD1306_I2C_ADDR, 0x00, (command))
 #define SSD1306_WRITECOMMAND(command)	SSD1306_I2C_Write(SSD1306_I2C_ADDR, 0x00, (command))
+#define SSD1306_WRITEDATA_DMA(data)      	SSD1306_I2C_Write_DMA(SSD1306_I2C_ADDR, 0x40, (data))
 #define SSD1306_WRITEDATA(data)      	SSD1306_I2C_Write(SSD1306_I2C_ADDR, 0x40, (data))
 #define ABS(x)   ((x) > 0 ? (x) : -(x))
 
 static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
-extern volatile uint8_t SSD1306_TxCplt;
 
 typedef struct {
 	uint16_t CurrentX;
@@ -116,73 +118,88 @@ uint8_t SSD1306_Init(void)
 	while(p>0)
 		p--;
 
-	SSD1306_WRITECOMMAND(0xAE);
-	SSD1306_WRITECOMMAND(0x20);
-	SSD1306_WRITECOMMAND(0x10);
-	SSD1306_WRITECOMMAND(0xB0);
-	SSD1306_WRITECOMMAND(0xC8);
-	SSD1306_WRITECOMMAND(0x00);
-	SSD1306_WRITECOMMAND(0x10);
-	SSD1306_WRITECOMMAND(0x40);
-	SSD1306_WRITECOMMAND(0x81);
-	SSD1306_WRITECOMMAND(0xFF);
-	SSD1306_WRITECOMMAND(0xA1);
-	SSD1306_WRITECOMMAND(0xA6);
-	SSD1306_WRITECOMMAND(0xA8);
-	SSD1306_WRITECOMMAND(0x3F);
-	SSD1306_WRITECOMMAND(0xA4);
-	SSD1306_WRITECOMMAND(0xD3);
-	SSD1306_WRITECOMMAND(0x00);
-	SSD1306_WRITECOMMAND(0xD5);
-	SSD1306_WRITECOMMAND(0xF0);
-	SSD1306_WRITECOMMAND(0xD9);
-	SSD1306_WRITECOMMAND(0x22);
-	SSD1306_WRITECOMMAND(0xDA);
-	SSD1306_WRITECOMMAND(0x12);
-	SSD1306_WRITECOMMAND(0xDB);
-	SSD1306_WRITECOMMAND(0x20);
-	SSD1306_WRITECOMMAND(0x8D);
-	SSD1306_WRITECOMMAND(0x14);
-	SSD1306_WRITECOMMAND(0xAF);
-	SSD1306_WRITECOMMAND(SSD1306_DEACTIVATE_SCROLL);
-	SSD1306_Fill(BLACK);
-	SSD1306_UpdateScreen();
+	SSD1306_WRITECOMMAND(0xAE); // Comando para apagar la pantalla (Display OFF). Es común apagarla antes de reconfigurar.
+	SSD1306_WRITECOMMAND(0x20); // Configura el modo de direccionamiento de memoria.
+	SSD1306_WRITECOMMAND(0x01); //  0x10 para modo de direccionamiento de página (Page Addressing Mode).
+	SSD1306_WRITECOMMAND(0xB0); // Establece la dirección de inicio de página para el modo de página (Set Page Start Address for Page Addressing Mode). (0xB0 a 0xB7)
+	SSD1306_WRITECOMMAND(0xC8); // Establece la dirección de salida de COM escaneada en modo remapeado (Set COM Output Scan Direction normal/remapped). 0xC0 es normal, 0xC8 es remapeado (invertido verticalmente).
+	SSD1306_WRITECOMMAND(0x00); // Establece la columna baja de la dirección de inicio de la pantalla (Set Lower Column Start Address for Page Addressing Mode).
+	SSD1306_WRITECOMMAND(0x10); // Establece la columna alta de la dirección de inicio de la pantalla (Set Higher Column Start Address for Page Addressing Mode).
+	SSD1306_WRITECOMMAND(0x40); // Establece la línea de inicio de la pantalla (Set Display Start Line). (0x40 a 0x7F)
+	SSD1306_WRITECOMMAND(0x81); // Comando para configurar el contraste.
+	SSD1306_WRITECOMMAND(0xFF); //   Valor de contraste (0x00 a 0xFF). 0xFF es el máximo contraste.
+	SSD1306_WRITECOMMAND(0xA1); // Establece el remapeo del segmento (Set Segment Re-map). 0xA0 es normal, 0xA1 es remapeado (invertido horizontalmente).
+	SSD1306_WRITECOMMAND(0xA6); // Establece el modo de visualización normal/inverso. 0xA6 es normal (píxel encendido es luz), 0xA7 es inverso (píxel encendido es oscuro).
+	SSD1306_WRITECOMMAND(0xA8); // Comando para configurar el ratio de multiplexación.
+	SSD1306_WRITECOMMAND(0x3F); //   Valor del ratio de multiplexación (de 16 a 63). 0x3F (63) es común para pantallas de 128x64.
+	SSD1306_WRITECOMMAND(0xA4); // Reanuda la visualización siguiendo el contenido de la RAM (Entire Display ON from RAM). 0xA5 fuerza todos los píxeles a ON ignorando la RAM.
+	SSD1306_WRITECOMMAND(0xD3); // Comando para configurar el offset de la pantalla.
+	SSD1306_WRITECOMMAND(0x00); //   Valor del offset vertical (sin offset).
+	SSD1306_WRITECOMMAND(0xD5); // Comando para configurar el reloj del oscilador y el factor de división.
+	SSD1306_WRITECOMMAND(0xF0); //   Valor sugerido por defecto. Divide la frecuencia del oscilador.
+	SSD1306_WRITECOMMAND(0xD9); // Comando para configurar el período de pre-carga.
+	SSD1306_WRITECOMMAND(0x22); //   Fase 1 y Fase 2 del período.
+	SSD1306_WRITECOMMAND(0xDA); // Comando para configurar los pines COM.
+	SSD1306_WRITECOMMAND(0x12); //   Configuración de hardware de los pines COM. Depende del tipo de pantalla.
+	SSD1306_WRITECOMMAND(0xDB); // Comando para configurar el nivel de deselección de VCOMH.
+	SSD1306_WRITECOMMAND(0x20); //   Valor del nivel de VCOMH. (aproximadamente 0.77 * Vcc)
+	SSD1306_WRITECOMMAND(0x8D); // Comando para la configuración de la bomba de carga.
+	SSD1306_WRITECOMMAND(0x14); //   Habilita la bomba de carga (0x14 para encender, 0x10 para apagar). Es necesaria para generar el voltaje de la pantalla.
+	SSD1306_WRITECOMMAND(0xAF); // Comando para encender la pantalla (Display ON).
+
+
+	SSD1306_WRITECOMMAND(SSD1306_DEACTIVATE_SCROLL); // Desactiva cualquier configuración de scroll que pudiera estar activa.
+
+
+//	SSD1306_Fill(WHITE);
+//	SSD1306_UpdateScreen();
 	SSD1306.CurrentX = 0;
 	SSD1306.CurrentY = 0;
 	SSD1306.Initialized = 1;
 	return 1;
 }
 
-void SSD1306_UpdateScreen(void) {
+void SSD1306_UpdateScreen(void)
+{
+	uint8_t m;
+	for(m=0; m<8; m++)
+	{
+		SSD1306_WRITECOMMAND(0xB0 + m);
+		SSD1306_WRITECOMMAND(0x00);
+		SSD1306_WRITECOMMAND(0x10);
+		SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40, &SSD1306_Buffer[SSD1306_WIDTH * m], SSD1306_WIDTH);
+	}
+}
+
+void SSD1306_UpdateScreen_NB(void) {
 	static uint8_t current_page = 0;
 	static uint8_t state = 1;
 
-	// Only proceed if I2C is ready or we're starting a new transaction
 	if (SSD1306_TxCplt || state == 1) {
-		SSD1306_TxCplt = 0;  // Reset completion flag
+		SSD1306_TxCplt = 0;
 
 		switch (state) {
-		case 1:  // Set page address
-			SSD1306_WRITECOMMAND(0xB0 + current_page);
+		case 1:  // Setea la direccion de la pagina
+			SSD1306_WRITECOMMAND_DMA(0xB0 + current_page);
 			state = 2;
 			break;
-		case 2:  // Set column address low nibble
-			SSD1306_WRITECOMMAND(0x00);
+		case 2:  // Setea nibble-bajo de la columna
+			SSD1306_WRITECOMMAND_DMA(0x00);
 			state = 3;
 			break;
-		case 3:  // Set column address high nibble
-			SSD1306_WRITECOMMAND(0x10);
+		case 3:  // Setea nibble-alto de la columna
+			SSD1306_WRITECOMMAND_DMA(0x10);
 			state = 4;
 			break;
-		case 4:  // Write page data
-			SSD1306_I2C_WriteMulti(SSD1306_I2C_ADDR, 0x40,
+		case 4:  // Escribimos datos en la pagina
+			SSD1306_I2C_WriteMulti_DMA(SSD1306_I2C_ADDR, 0x40,
 					&SSD1306_Buffer[SSD1306_WIDTH * current_page],
 					SSD1306_WIDTH);
-			//current_page++;
-			if (current_page >= 8) {
+			current_page++;
+			if (current_page > 7) {
 				current_page = 0;
 			}
-			state = 1;  // Start over with next page
+			state = 1;
 			break;
 		}
 	}
@@ -530,9 +547,13 @@ void SSD1306_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t* data, uint16_
 	uint8_t i;
 	for(i = 0; i < count; i++)
 	dt[i+1] = data[i];
-	//HAL_I2C_Master_Transmit(&hi2c1, address, dt, count+1, 10);
-	//HAL_I2C_Master_Transmit_DMA(&hi2c1, address, dt, count+1);
-	HAL_I2C_Mem_Write_DMA(&hi2c1, address, 0x40, 1, dt, count+1);
+	HAL_I2C_Master_Transmit(&hi2c1, address, dt, count+1, 20);
+}
+
+
+void SSD1306_I2C_WriteMulti_DMA(uint8_t address, uint8_t reg, uint8_t* data, uint16_t count)
+{
+	HAL_I2C_Mem_Write_DMA(&hi2c1, address, reg, 1, data, count);
 }
 
 
@@ -541,7 +562,11 @@ void SSD1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data)
 	uint8_t dt[2];
 	dt[0] = reg;
 	dt[1] = data;
-	//HAL_I2C_Master_Transmit_DMA(&hi2c1, address, dt, 2);
-//	HAL_I2C_Master_Transmit(&hi2c1, address, dt, 2, 10);
-	HAL_I2C_Mem_Write_DMA(&hi2c1, address, 0x40, 1, dt, 2);
+	HAL_I2C_Master_Transmit(&hi2c1, address, dt, 2, 20);
+}
+
+
+void SSD1306_I2C_Write_DMA(uint8_t address, uint8_t reg, uint8_t data)
+{
+	HAL_I2C_Mem_Write_DMA(&hi2c1, address, reg, 1, data, 1);
 }

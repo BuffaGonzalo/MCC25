@@ -4,7 +4,7 @@
 #include "fonts.h"
 
 #ifndef SSD1306_I2C_ADDR
-#define SSD1306_I2C_ADDR	0x78
+#define SSD1306_I2C_ADDR	(0x3C << 1)//0x78
 //#define SSD1306_I2C_ADDR	0x7A
 #endif
 
@@ -36,6 +36,7 @@ typedef enum {
 
 uint8_t SSD1306_Init(void);
 void SSD1306_UpdateScreen(void);
+void SSD1306_UpdateScreen_NB(void);
 void SSD1306_ToggleInvert(void);
 void SSD1306_Fill(SSD1306_COLOR_t Color);
 void SSD1306_DrawPixel(uint16_t x, uint16_t y, SSD1306_COLOR_t color);
@@ -54,6 +55,8 @@ void SSD1306_DrawFilledCircle(int16_t x0, int16_t y0, int16_t r, SSD1306_COLOR_t
 #endif
 
 void SSD1306_I2C_Init(void);
+void SSD1306_I2C_Write_DMA(uint8_t address, uint8_t reg, uint8_t data);
+void SSD1306_I2C_WriteMulti_DMA(uint8_t address, uint8_t reg, uint8_t *data, uint16_t count);
 void SSD1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data);
 void SSD1306_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t *data, uint16_t count);
 void SSD1306_DrawBitmap(int16_t x, int16_t y, const unsigned char* bitmap, int16_t w, int16_t h, uint16_t color);

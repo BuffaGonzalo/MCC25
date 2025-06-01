@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <string.h>  // For memcpy
 
-extern volatile uint8_t SSD1306_TxCplt;
+static volatile uint8_t *SSD1306_TxCplt = NULL;
+static HAL_StatusTypeDef (*memWrite)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout) = NULL;
+static HAL_StatusTypeDef (*memWriteDMA)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size) = NULL;
 
 #if defined(SSD1306_USE_I2C)
 
@@ -13,20 +15,24 @@ void ssd1306_Reset(void) {
 
 // Send a byte to the command register
 void ssd1306_WriteCommand(uint8_t byte) {
-    HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+	memWrite(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+	//HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
 }
 
 void ssd1306_WriteCommandDMA(uint8_t byte) {
-    HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
+	//HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
+	memWriteDMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
 }
 
 // Send data
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
-    HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+    memWrite(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+	//HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
 }
 
 void ssd1306_WriteDataDMA(uint8_t* buffer, size_t buff_size) {
-    HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
+	//HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
+	memWriteDMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
 }
 
 #elif defined(SSD1306_USE_SPI)
@@ -77,6 +83,18 @@ SSD1306_Error_t ssd1306_FillBuffer(uint8_t* buf, uint32_t len) {
         ret = SSD1306_OK;
     }
     return ret;
+}
+
+void ssd1306_Attach_MemWriteDMA(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size)){
+	memWriteDMA = PtrRx;
+}
+
+void ssd1306_Attach_MemWrite(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout)){
+	memWrite = PtrRx;
+}
+
+void ssd1306_ADC_ConfCpltCallback(volatile uint8_t *PtrRx){
+	SSD1306_TxCplt = PtrRx;
 }
 
 /* Initialize the oled screen */
@@ -169,8 +187,8 @@ void ssd1306_Init(void) {
     ssd1306_SetDisplayOn(1); //--turn on SSD1306 panel
 
     // Clear screen
-    ssd1306_Fill(Black);
-
+    //ssd1306_Fill(Black);
+    ssd1306_Fill(White);
     // Flush buffer to screen
     ssd1306_UpdateScreen();
 
@@ -204,27 +222,21 @@ void ssd1306_UpdateScreen(void) {
 
 
 /* Write the screenbuffer with changed to the screen */
-void ssd1306_UpdateScreeDMA(void) {
+void ssd1306_UpdateScreenDMA(void) {
     // Write data to each page of RAM. Number of pages
     // depends on the screen height:
     //
     //  * 32px   ==  4 pages
     //  * 64px   ==  8 pages
     //  * 128px  ==  16 pages
-    for(uint8_t i = 0; i < SSD1306_HEIGHT/8; i++) {
-        ssd1306_WriteCommand(0xB0 + i); // Set the current RAM page address.
-        ssd1306_WriteCommand(0x00 + SSD1306_X_OFFSET_LOWER);
-        ssd1306_WriteCommand(0x10 + SSD1306_X_OFFSET_UPPER);
-        ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*i],SSD1306_WIDTH);
-    }
 
 	static uint8_t current_page = 0;
 	static uint8_t state = 1;
 
 	// Only proceed if I2C is ready or we're starting a new transaction
 
-	if (SSD1306_TxCplt || state == 1) {
-		SSD1306_TxCplt = 0;  // Reset completion flag
+	if (*SSD1306_TxCplt || state == 1) {
+		*SSD1306_TxCplt = 0;  // Reset completion flag
 		switch (state) {
 		case 1:  // Set page address
 			ssd1306_WriteCommand(0xB0 + current_page);

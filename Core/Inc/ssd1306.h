@@ -153,10 +153,17 @@ typedef struct {
     const uint8_t *const char_width;    /**< Proportional character width in pixels (NULL for monospaced) */
 } SSD1306_Font_t;
 
+//Init definitions
+void ssd1306_Attach_MemWriteDMA(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size));
+void ssd1306_Attach_MemWrite(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout));
+void ssd1306_ADC_ConfCpltCallback(volatile uint8_t *PtrRx);
+
+
 // Procedure definitions
 void ssd1306_Init(void);
 void ssd1306_Fill(SSD1306_COLOR color);
 void ssd1306_UpdateScreen(void);
+void ssd1306_UpdateScreenDMA(void);
 void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
 char ssd1306_WriteChar(char ch, SSD1306_Font_t Font, SSD1306_COLOR color);
 char ssd1306_WriteString(char* str, SSD1306_Font_t Font, SSD1306_COLOR color);

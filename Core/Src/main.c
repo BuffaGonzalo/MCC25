@@ -81,13 +81,13 @@ uint16_t adcData[8], adcDataTx[8]; //ADC
 //Comunicación
 _sTx USBTx, USBRx;
 volatile uint8_t buffUSBTx[RXBUFSIZE];
-volatile uint8_t buffUSBRx[TXBUFSIZE]; //VOLATILE???
+volatile uint8_t buffUSBRx[TXBUFSIZE];
 uint8_t nBytesTx = 0;
 //Control
 _uFlag myFlags;
 //Variables pantalla
-char buf_oled[20];
 volatile uint8_t SSD1306_TxCplt = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -111,7 +111,7 @@ void do100ms();
 void heartBeatTask();
 
 //Display
-void SSD1306Data();
+void ssd1306Data();
 
 /* USER CODE END PFP */
 
@@ -126,17 +126,8 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 //void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c){
 void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c){
 	//Control del final de operaciones
-    //if (hi2c->Instance == hi2c1.Instance) {
-        SSD1306_TxCplt = 1;
-    //}
+    SSD1306_TxCplt = 1;
 }
-
-//void HAL_I2C_EV_IRQHandler(){
-//	HAL_I2C_EV_IRQHandler(&hi2c1);
-//}
-//void HAL_I2C_ER_IRQHandler(){
-//	HAL_I2C_ER_IRQHandler(&hi2c1);
-//}
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if (htim->Instance == TIM1) {
@@ -225,16 +216,11 @@ void heartBeatTask() {
 	times &= 31;
 }
 
-void SSD1306Data(){
-	//if(IS100MS){
-	//	IS100MS=FALSE;
-//		SSD1306_GotoXY(10, 0);
-//		SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
-//		SSD1306_GotoXY(10, 20);
-//		SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
-//		SSD1306_GotoXY(10, 40);
-//		SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
-	//}
+void ssd1306Data(){
+	//ssd1306_FillRectangle(31, 1, 65, 35, White);
+	//ssd1306_FillRectangle(10, 45, 70, 60, White);
+	ssd1306_FillRectangle(75, 10, 100, 45, White);
+	ssd1306_FillRectangle(55, 30, 80, 55, Black);
 }
 
 
@@ -284,9 +270,13 @@ int main(void)
 
 	//Display
 	ssd1306_Init();
+	ssd1306_ADC_ConfCpltCallback(&SSD1306_TxCplt);
+	ssd1306_Attach_MemWrite(HAL_I2C_Mem_Write);
+	ssd1306_Attach_MemWriteDMA(HAL_I2C_Mem_Write_DMA);
 
 	//Inicializacion de protocolo
 	initComm(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
+
 
 	//Variables
 	ALLFLAGS = RESET;
@@ -300,19 +290,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  	do10ms();
+		do10ms();
 		USBTask();
 
-		  //ssd1306_FillRectangle(31, 1, 65, 35, White);
-		  ssd1306_FillRectangle(10, 45, 70, 60, White);
-		  ssd1306_FillRectangle(75, 10, 100, 45, White);
-		  ssd1306_FillRectangle(55, 30, 80, 55, Black);
-		  ssd1306_UpdateScreen();
-
-		//ssd1306_TestAll();
-//		//SSD1306Data();
-
-		//SSD1306_UpdateScreen_NB();
+		ssd1306Data();
+		ssd1306_UpdateScreenDMA();
 	}
   /* USER CODE END 3 */
 }

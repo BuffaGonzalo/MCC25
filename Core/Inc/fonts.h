@@ -1,22 +1,29 @@
-#ifndef INC_FONTS_H_
-#define INC_FONTS_H_
+#ifndef __SSD1306_FONTS_H__
+#define __SSD1306_FONTS_H__
 
-#include "main.h"
+#include "ssd1306.h"
 
-typedef struct {
-	uint8_t FontWidth;
-	uint8_t FontHeight;
-	const uint16_t *data;
-} FontDef_t;
-
-typedef struct {
-	uint16_t Length;
-	uint16_t Height;
-} FONTS_SIZE_t;
-
-extern FontDef_t Font_7x10;
-extern FontDef_t Font_11x18;
-extern FontDef_t Font_16x26;
-char* FONTS_GetStringSize(char* str, FONTS_SIZE_t* SizeStruct, FontDef_t* Font);
-
+#ifdef SSD1306_INCLUDE_FONT_6x8
+extern const SSD1306_Font_t Font_6x8;
 #endif
+#ifdef SSD1306_INCLUDE_FONT_7x10
+extern const SSD1306_Font_t Font_7x10;
+#endif
+#ifdef SSD1306_INCLUDE_FONT_11x18
+extern const SSD1306_Font_t Font_11x18;
+#endif
+#ifdef SSD1306_INCLUDE_FONT_16x26
+extern const SSD1306_Font_t Font_16x26;
+#endif
+#ifdef SSD1306_INCLUDE_FONT_16x24
+extern const SSD1306_Font_t Font_16x24;
+#endif
+#ifdef SSD1306_INCLUDE_FONT_16x15
+/** Generated Roboto Thin 15
+ * @copyright Google https://github.com/googlefonts/roboto
+ * @license This font is licensed under the Apache License, Version 2.0.
+*/
+extern const SSD1306_Font_t Font_16x15;
+#endif
+
+#endif // __SSD1306_FONTS_H__

@@ -1,5 +1,5 @@
-Core/Src/ssd1306_oled.o: ../Core/Src/ssd1306_oled.c \
- ../Core/Inc/ssd1306_oled.h ../Core/Inc/fonts.h ../Core/Inc/main.h \
+Core/Src/ssd1306_tests.o: ../Core/Src/ssd1306_tests.c \
+ ../Core/Inc/ssd1306.h ../Core/Inc/ssd1306_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -34,10 +34,10 @@ Core/Src/ssd1306_oled.o: ../Core/Src/ssd1306_oled.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
- ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h
-../Core/Inc/ssd1306_oled.h:
-../Core/Inc/fonts.h:
-../Core/Inc/main.h:
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h \
+ ../Core/Inc/ssd1306_tests.h ../Core/Inc/fonts.h ../Core/Inc/ssd1306.h
+../Core/Inc/ssd1306.h:
+../Core/Inc/ssd1306_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
@@ -73,3 +73,6 @@ Core/Src/ssd1306_oled.o: ../Core/Src/ssd1306_oled.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pcd_ex.h:
+../Core/Inc/ssd1306_tests.h:
+../Core/Inc/fonts.h:
+../Core/Inc/ssd1306.h:

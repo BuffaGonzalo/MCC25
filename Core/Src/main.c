@@ -27,9 +27,8 @@
 
 #include "util.h"
 
-#include "ssd1306_oled.h"
-#include "fonts.h"
-#include "bmp.h"
+#include "ssd1306.h"
+#include "ssd1306_tests.h"
 
 #include "protocol.h"
 
@@ -229,12 +228,12 @@ void heartBeatTask() {
 void SSD1306Data(){
 	//if(IS100MS){
 	//	IS100MS=FALSE;
-		SSD1306_GotoXY(10, 0);
-		SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
-		SSD1306_GotoXY(10, 20);
-		SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
-		SSD1306_GotoXY(10, 40);
-		SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
+//		SSD1306_GotoXY(10, 0);
+//		SSD1306_Puts("CONEXION", &Font_11x18, WHITE);
+//		SSD1306_GotoXY(10, 20);
+//		SSD1306_Puts("OLED I2C", &Font_11x18, WHITE);
+//		SSD1306_GotoXY(10, 40);
+//		SSD1306_Puts("BLACK PILL", &Font_11x18, WHITE);
 	//}
 }
 
@@ -284,9 +283,7 @@ int main(void)
 	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
 
 	//Display
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, 1);
-
-	SSD1306_Init();
+	ssd1306_Init();
 
 	//Inicializacion de protocolo
 	initComm(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
@@ -305,8 +302,10 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  	do10ms();
 		USBTask();
-		//SSD1306Data();
-		SSD1306_UpdateScreen_NB();
+		ssd1306_TestAll();
+//		//SSD1306Data();
+
+		//SSD1306_UpdateScreen_NB();
 	}
   /* USER CODE END 3 */
 }

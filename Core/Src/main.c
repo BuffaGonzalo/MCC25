@@ -123,9 +123,8 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 		adcDataTx[i] = adcData[i];
 	}
 }
-//void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c){
+
 void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c){
-	//Control del final de operaciones
     SSD1306_TxCplt = 1;
 }
 
@@ -270,13 +269,13 @@ int main(void)
 
 	//Display
 	ssd1306_Init();
+
 	ssd1306_ADC_ConfCpltCallback(&SSD1306_TxCplt);
 	ssd1306_Attach_MemWrite(HAL_I2C_Mem_Write);
 	ssd1306_Attach_MemWriteDMA(HAL_I2C_Mem_Write_DMA);
 
 	//Inicializacion de protocolo
 	initComm(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
-
 
 	//Variables
 	ALLFLAGS = RESET;

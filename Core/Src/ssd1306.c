@@ -3,7 +3,8 @@
 #include <stdlib.h>
 #include <string.h>  // For memcpy
 
-static volatile uint8_t *SSD1306_TxCplt = NULL;
+//extern volatile uint8_t SSD1306_TxCplt;
+static uint8_t *SSD1306_TxCplt = NULL;
 static HAL_StatusTypeDef (*memWrite)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout) = NULL;
 static HAL_StatusTypeDef (*memWriteDMA)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size) = NULL;
 
@@ -15,24 +16,24 @@ void ssd1306_Reset(void) {
 
 // Send a byte to the command register
 void ssd1306_WriteCommand(uint8_t byte) {
-	memWrite(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
-	//HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+	//memWrite(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+	HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
 }
 
 void ssd1306_WriteCommandDMA(uint8_t byte) {
-	//HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
-	memWriteDMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
+	HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
+	//memWriteDMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
 }
 
 // Send data
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
-    memWrite(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
-	//HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+    //memWrite(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+	HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
 }
 
 void ssd1306_WriteDataDMA(uint8_t* buffer, size_t buff_size) {
-	//HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
-	memWriteDMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
+	HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
+	//memWriteDMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
 }
 
 #elif defined(SSD1306_USE_SPI)
@@ -94,7 +95,7 @@ void ssd1306_Attach_MemWrite(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, 
 }
 
 void ssd1306_ADC_ConfCpltCallback(volatile uint8_t *PtrRx){
-	SSD1306_TxCplt = PtrRx;
+	SSD1306_TxCplt = (uint8_t *)PtrRx;
 }
 
 /* Initialize the oled screen */
@@ -187,8 +188,9 @@ void ssd1306_Init(void) {
     ssd1306_SetDisplayOn(1); //--turn on SSD1306 panel
 
     // Clear screen
-    //ssd1306_Fill(Black);
-    ssd1306_Fill(White);
+    ssd1306_Fill(Black);
+    //ssd1306_Fill(White);
+
     // Flush buffer to screen
     ssd1306_UpdateScreen();
 
@@ -232,29 +234,31 @@ void ssd1306_UpdateScreenDMA(void) {
 
 	static uint8_t current_page = 0;
 	static uint8_t state = 1;
+	static uint8_t test = 0;
 
 	// Only proceed if I2C is ready or we're starting a new transaction
 
 	if (*SSD1306_TxCplt || state == 1) {
 		*SSD1306_TxCplt = 0;  // Reset completion flag
+
 		switch (state) {
 		case 1:  // Set page address
-			ssd1306_WriteCommand(0xB0 + current_page);
+			ssd1306_WriteCommandDMA(0xB0 + current_page);
 			state = 2;
 			break;
 		case 2:  // Set column address low nibble
-			ssd1306_WriteCommand(0x00 + SSD1306_X_OFFSET_LOWER);
+			ssd1306_WriteCommandDMA(0x00 + SSD1306_X_OFFSET_LOWER);
 			state = 3;
 			break;
 		case 3:  // Set column address high nibble
-			ssd1306_WriteCommand(0x10 + SSD1306_X_OFFSET_UPPER);
+			ssd1306_WriteCommandDMA(0x10 + SSD1306_X_OFFSET_UPPER);
 			state = 4;
 			break;
 		case 4:  // Write page data
-			ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*current_page],SSD1306_WIDTH);
+			ssd1306_WriteDataDMA(&SSD1306_Buffer[SSD1306_WIDTH*current_page],SSD1306_WIDTH);
 			current_page++;
 
-			if (current_page >= SSD1306_HEIGHT/8) {
+			if (current_page > 7){//SSD1306_HEIGHT/8) {
 				current_page = 0;
 			}
 			state = 1;  // Start over with next page

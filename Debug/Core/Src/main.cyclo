@@ -9,10 +9,10 @@
 ../Core/Src/main.c:218:6:heartBeatTask	2
 ../Core/Src/main.c:228:6:SSD1306Data	1
 ../Core/Src/main.c:247:5:main	1
-../Core/Src/main.c:317:6:SystemClock_Config	3
-../Core/Src/main.c:363:13:MX_ADC1_Init	10
-../Core/Src/main.c:478:13:MX_I2C1_Init	2
-../Core/Src/main.c:512:13:MX_TIM1_Init	5
-../Core/Src/main.c:563:13:MX_DMA_Init	1
-../Core/Src/main.c:588:13:MX_GPIO_Init	1
-../Core/Src/main.c:624:6:Error_Handler	1
+../Core/Src/main.c:324:6:SystemClock_Config	3
+../Core/Src/main.c:370:13:MX_ADC1_Init	10
+../Core/Src/main.c:485:13:MX_I2C1_Init	2
+../Core/Src/main.c:519:13:MX_TIM1_Init	5
+../Core/Src/main.c:570:13:MX_DMA_Init	1
+../Core/Src/main.c:595:13:MX_GPIO_Init	1
+../Core/Src/main.c:631:6:Error_Handler	1

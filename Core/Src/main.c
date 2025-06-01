@@ -302,7 +302,14 @@ int main(void)
     /* USER CODE BEGIN 3 */
 	  	do10ms();
 		USBTask();
-		ssd1306_TestAll();
+
+		  //ssd1306_FillRectangle(31, 1, 65, 35, White);
+		  ssd1306_FillRectangle(10, 45, 70, 60, White);
+		  ssd1306_FillRectangle(75, 10, 100, 45, White);
+		  ssd1306_FillRectangle(55, 30, 80, 55, Black);
+		  ssd1306_UpdateScreen();
+
+		//ssd1306_TestAll();
 //		//SSD1306Data();
 
 		//SSD1306_UpdateScreen_NB();

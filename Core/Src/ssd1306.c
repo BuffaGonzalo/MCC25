@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>  // For memcpy
 
+extern volatile uint8_t SSD1306_TxCplt;
+
 #if defined(SSD1306_USE_I2C)
 
 void ssd1306_Reset(void) {
@@ -14,9 +16,17 @@ void ssd1306_WriteCommand(uint8_t byte) {
     HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
 }
 
+void ssd1306_WriteCommandDMA(uint8_t byte) {
+    HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
+}
+
 // Send data
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
     HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+}
+
+void ssd1306_WriteDataDMA(uint8_t* buffer, size_t buff_size) {
+    HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
 }
 
 #elif defined(SSD1306_USE_SPI)
@@ -190,6 +200,55 @@ void ssd1306_UpdateScreen(void) {
         ssd1306_WriteCommand(0x10 + SSD1306_X_OFFSET_UPPER);
         ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*i],SSD1306_WIDTH);
     }
+}
+
+
+/* Write the screenbuffer with changed to the screen */
+void ssd1306_UpdateScreeDMA(void) {
+    // Write data to each page of RAM. Number of pages
+    // depends on the screen height:
+    //
+    //  * 32px   ==  4 pages
+    //  * 64px   ==  8 pages
+    //  * 128px  ==  16 pages
+    for(uint8_t i = 0; i < SSD1306_HEIGHT/8; i++) {
+        ssd1306_WriteCommand(0xB0 + i); // Set the current RAM page address.
+        ssd1306_WriteCommand(0x00 + SSD1306_X_OFFSET_LOWER);
+        ssd1306_WriteCommand(0x10 + SSD1306_X_OFFSET_UPPER);
+        ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*i],SSD1306_WIDTH);
+    }
+
+	static uint8_t current_page = 0;
+	static uint8_t state = 1;
+
+	// Only proceed if I2C is ready or we're starting a new transaction
+
+	if (SSD1306_TxCplt || state == 1) {
+		SSD1306_TxCplt = 0;  // Reset completion flag
+		switch (state) {
+		case 1:  // Set page address
+			ssd1306_WriteCommand(0xB0 + current_page);
+			state = 2;
+			break;
+		case 2:  // Set column address low nibble
+			ssd1306_WriteCommand(0x00 + SSD1306_X_OFFSET_LOWER);
+			state = 3;
+			break;
+		case 3:  // Set column address high nibble
+			ssd1306_WriteCommand(0x10 + SSD1306_X_OFFSET_UPPER);
+			state = 4;
+			break;
+		case 4:  // Write page data
+			ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*current_page],SSD1306_WIDTH);
+			current_page++;
+
+			if (current_page >= SSD1306_HEIGHT/8) {
+				current_page = 0;
+			}
+			state = 1;  // Start over with next page
+			break;
+		}
+	}
 }
 
 /*

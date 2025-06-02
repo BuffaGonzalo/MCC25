@@ -44,6 +44,7 @@
 //time
 #define	TO10MS				40
 
+
 //banderas
 #define ALLFLAGS          	myFlags.bytes
 #define IS10MS				myFlags.bits.bit0
@@ -112,6 +113,7 @@ void heartBeatTask();
 
 //Display
 void ssd1306Data();
+void TestScreen();
 
 /* USER CODE END PFP */
 
@@ -216,11 +218,60 @@ void heartBeatTask() {
 }
 
 void ssd1306Data(){
-	//ssd1306_FillRectangle(31, 1, 65, 35, White);
-	//ssd1306_FillRectangle(10, 45, 70, 60, White);
-	ssd1306_FillRectangle(75, 10, 100, 45, White);
-	ssd1306_FillRectangle(55, 30, 80, 55, Black);
+//	ssd1306_FillRectangle(31, 1, 65, 35, White);
+//	ssd1306_FillRectangle(10, 45, 70, 60, White);
+//	ssd1306_FillRectangle(75, 10, 100, 45, White);
+//
+//	ssd1306_FillRectangle(50, 30, 80, 50, Black);
+    //ssd1306_UpdateScreen();
+
 }
+
+//void TestScreen() {
+//	static uint8_t tmo5000ms = 0;
+//
+//	if (IS100MS) {
+//		IS100MS = 0;
+//		ssd1306_Fill(White);
+//
+//		uint32_t start = HAL_GetTick();
+//		uint32_t end = start;
+//
+//		int fps = 0;
+//		char message[] = "ABCDEFGHIJK";
+//
+//		ssd1306_SetCursor(2, 0);
+//		ssd1306_WriteString("Testing...", Font_11x18, Black);
+//		ssd1306_SetCursor(2, 18 * 2);
+//		ssd1306_WriteString("0123456789A", Font_11x18, Black);
+//
+//		do {
+//			ssd1306_SetCursor(2, 18);
+//			ssd1306_WriteString(message, Font_11x18, Black);
+//			ssd1306_UpdateScreen();
+//
+//			char ch = message[0];
+//			memmove(message, message + 1, sizeof(message) - 2);
+//			message[sizeof(message) - 2] = ch;
+//
+//			fps++;
+//			end = HAL_GetTick();
+//		} while ((end - start) < 5000);
+//
+//		tmo5000ms++;
+//		if (tmo5000ms == 50) {
+//			tmo5000ms = 0;
+//			char buff[64];
+//			fps = (float) fps / ((end - start) / 1000.0);
+//			snprintf(buff, sizeof(buff), "~%d FPS", fps);
+//
+//			ssd1306_Fill(White);
+//			ssd1306_SetCursor(2, 2);
+//			ssd1306_WriteString(buff, Font_11x18, Black);
+//		}
+//	}
+//}
+//
 
 
 /* USER CODE END 0 */
@@ -268,11 +319,11 @@ int main(void)
 	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
 
 	//Display
-	ssd1306_Init();
-
 	ssd1306_ADC_ConfCpltCallback(&SSD1306_TxCplt);
 	ssd1306_Attach_MemWrite(HAL_I2C_Mem_Write);
 	ssd1306_Attach_MemWriteDMA(HAL_I2C_Mem_Write_DMA);
+	ssd1306_Init();
+
 
 	//Inicializacion de protocolo
 	initComm(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
@@ -291,8 +342,8 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		do10ms();
 		USBTask();
-
 		ssd1306Data();
+		//TestScreen();
 		ssd1306_UpdateScreenDMA();
 	}
   /* USER CODE END 3 */

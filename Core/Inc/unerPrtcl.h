@@ -12,8 +12,8 @@
  * The user still needs to handle the received data (RxData) and also what to do with the received data.
  */
 
-#ifndef INC_PROTOCOL_H_
-#define INC_PROTOCOL_H_
+#ifndef INC_UNERPRTCL_H_
+#define INC_UNERPRTCL_H_
 
 #include <stdint.h>
 
@@ -77,12 +77,6 @@ typedef enum {
 } _eDecode;
 
 /**
- * @brief Recepcion de datos por el puerto serie
- *
- */
-void onRxData();
-
-/**
  * @brief Pone el encabezado del protocolo, el ID y la cantidad de bytes a enviar
  *
  * @param dataTx Estructura para la trasnmisi?n de datos
@@ -90,7 +84,7 @@ void onRxData();
  * @param frameLength Longitud de la trama del comando
  * @return uint8_t devuelve el Checksum de los datos agregados al buffer de trasnmisi?n
  */
-uint8_t putHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength);
+uint8_t unerPrtcl_PutHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength);
 
 /**
  * @brief Agrega un byte al buffer de transmisi?n
@@ -99,7 +93,7 @@ uint8_t putHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength);
  * @param byte El elemento que se quiere agregar
  * @return uint8_t devuelve el Checksum del dato agregado al buffer de trasnmisi?n
  */
-uint8_t putByteOnTx(_sTx    *dataTx, uint8_t byte);
+uint8_t unerPrtcl_PutByteOnTx(_sTx    *dataTx, uint8_t byte);
 
 /**
  * @brief Agrega un String al buffer de transmisi?n
@@ -108,17 +102,17 @@ uint8_t putByteOnTx(_sTx    *dataTx, uint8_t byte);
  * @param str String a agregar
  * @return uint8_t devuelve el Checksum del dato agregado al buffer de trasnmisi?n
  */
-uint8_t putStrOntx(_sTx *dataTx, const char *str);
+uint8_t unerPrtcl_PutStrOntx(_sTx *dataTx, const char *str);
 
 /**
  * @brief Decodifica la trama recibida
  *
  * @param dataRx Estructura para la recepci?n de datos
  */
-uint8_t decodeHeader(_sTx *dataRx);
+uint8_t unerPrtcl_DecodeHeader(_sTx *dataRx);
 
-uint8_t getByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end);
+uint8_t unerPrtcl_GetByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end);
 
-void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, volatile uint8_t *buffTx);
+void unerPrtcl_Init(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, volatile uint8_t *buffTx);
 
-#endif /* INC_PROTOCOL_H_ */
+#endif /* INC_UNERPRTCL_H_ */

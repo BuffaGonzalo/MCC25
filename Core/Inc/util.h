@@ -9,6 +9,8 @@
 #ifndef INC_UTIL_H_
 #define INC_UTIL_H_
 
+#include <stdint.h>
+
 /**
  * @brief Enumeracion nameless
  *

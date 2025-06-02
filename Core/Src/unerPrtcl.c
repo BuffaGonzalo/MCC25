@@ -12,9 +12,9 @@
  * The user still needs to handle the received data (RxData) and also what to do with the received data.
  */
 
-#include "protocol.h"
 #include "util.h"
 #include <stdint.h>
+#include <unerPrtcl.h>
 
 #include "main.h"
 
@@ -24,7 +24,7 @@ uint8_t chk = 0;
 
 //Function definitions
 
-uint8_t putHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength)
+uint8_t unerPrtcl_PutHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength)
 {
 	frameLength++;
     dataTx->chk = 0;
@@ -51,7 +51,7 @@ uint8_t putHeaderOnTx(_sTx  *dataTx, uint8_t ID, uint8_t frameLength)
     return  dataTx->chk;
 }
 
-uint8_t putByteOnTx(_sTx *dataTx, uint8_t byte)
+uint8_t unerPrtcl_PutByteOnTx(_sTx *dataTx, uint8_t byte)
 {
 	dataTx->bytes++;
     dataTx->buff[dataTx->indexW++]=byte;
@@ -60,7 +60,7 @@ uint8_t putByteOnTx(_sTx *dataTx, uint8_t byte)
     return dataTx->chk;
 }
 
-uint8_t putStrOntx(_sTx *dataTx, const char *str)
+uint8_t unerPrtcl_PutStrOntx(_sTx *dataTx, const char *str)
 {
     volatile uint8_t globalIndex=0;
     while(str[globalIndex]){
@@ -73,7 +73,7 @@ uint8_t putStrOntx(_sTx *dataTx, const char *str)
     return dataTx->chk;
 }
 
-uint8_t getByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end) {
+uint8_t unerPrtcl_GetByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end) {
 	uint8_t getByte;
 	dataRx->indexData += start;
 	dataRx->indexData &= dataRx->mask;
@@ -84,7 +84,7 @@ uint8_t getByteFromRx(_sTx *dataRx, uint8_t start, uint8_t end) {
 }
 
 
-uint8_t decodeHeader(_sTx *dataRx)
+uint8_t unerPrtcl_DecodeHeader(_sTx *dataRx)
 {
 	uint8_t nBytes = 0;
 	static uint8_t header = HEADER_U;
@@ -159,8 +159,7 @@ uint8_t decodeHeader(_sTx *dataRx)
     return FALSE;
 }
 
-void initComm(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, volatile uint8_t *buffTx){
-    //INICIALIZAMOS VARIABLES
+void unerPrtcl_Init(_sTx *Rx, _sTx *Tx, volatile uint8_t *buffRx, volatile uint8_t *buffTx){
 	Rx->buff = (uint8_t *)buffRx;
     Rx->indexR = 0;
     Rx->indexW = 0;

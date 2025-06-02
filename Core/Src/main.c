@@ -28,6 +28,7 @@
 #include "util.h"
 
 #include "ssd1306.h"
+#include "fonts.h"
 #include "ssd1306_tests.h"
 
 #include "protocol.h"
@@ -113,7 +114,7 @@ void heartBeatTask();
 
 //Display
 void ssd1306Data();
-void TestScreen();
+void testScreen();
 
 /* USER CODE END PFP */
 
@@ -227,51 +228,51 @@ void ssd1306Data(){
 
 }
 
-//void TestScreen() {
-//	static uint8_t tmo5000ms = 0;
-//
-//	if (IS100MS) {
-//		IS100MS = 0;
-//		ssd1306_Fill(White);
-//
-//		uint32_t start = HAL_GetTick();
-//		uint32_t end = start;
-//
-//		int fps = 0;
-//		char message[] = "ABCDEFGHIJK";
-//
-//		ssd1306_SetCursor(2, 0);
-//		ssd1306_WriteString("Testing...", Font_11x18, Black);
-//		ssd1306_SetCursor(2, 18 * 2);
-//		ssd1306_WriteString("0123456789A", Font_11x18, Black);
-//
-//		do {
-//			ssd1306_SetCursor(2, 18);
-//			ssd1306_WriteString(message, Font_11x18, Black);
-//			ssd1306_UpdateScreen();
-//
-//			char ch = message[0];
-//			memmove(message, message + 1, sizeof(message) - 2);
-//			message[sizeof(message) - 2] = ch;
-//
-//			fps++;
-//			end = HAL_GetTick();
-//		} while ((end - start) < 5000);
-//
-//		tmo5000ms++;
-//		if (tmo5000ms == 50) {
-//			tmo5000ms = 0;
-//			char buff[64];
-//			fps = (float) fps / ((end - start) / 1000.0);
-//			snprintf(buff, sizeof(buff), "~%d FPS", fps);
-//
-//			ssd1306_Fill(White);
-//			ssd1306_SetCursor(2, 2);
-//			ssd1306_WriteString(buff, Font_11x18, Black);
-//		}
-//	}
-//}
-//
+void testScreen() {
+	static uint8_t tmo5000ms = 0;
+
+	if (IS100MS) {
+		IS100MS = 0;
+		ssd1306_Fill(White);
+
+		uint32_t start = HAL_GetTick();
+		uint32_t end = start;
+
+		int fps = 0;
+		char message[] = "ABCDEFGHIJK";
+
+		ssd1306_SetCursor(2, 0);
+		ssd1306_WriteString("Testing...", Font_11x18, Black);
+		ssd1306_SetCursor(2, 18 * 2);
+		ssd1306_WriteString("0123456789A", Font_11x18, Black);
+
+		do {
+			ssd1306_SetCursor(2, 18);
+			ssd1306_WriteString(message, Font_11x18, Black);
+			ssd1306_UpdateScreen();
+
+			char ch = message[0];
+			memmove(message, message + 1, sizeof(message) - 2);
+			message[sizeof(message) - 2] = ch;
+
+			fps++;
+			end = HAL_GetTick();
+		} while ((end - start) < 5000);
+
+		tmo5000ms++;
+		if (tmo5000ms == 50) {
+			tmo5000ms = 0;
+			char buff[64];
+			fps = (float) fps / ((end - start) / 1000.0);
+			snprintf(buff, sizeof(buff), "~%d FPS", fps);
+
+			ssd1306_Fill(White);
+			ssd1306_SetCursor(2, 2);
+			ssd1306_WriteString(buff, Font_11x18, Black);
+		}
+	}
+}
+
 
 
 /* USER CODE END 0 */
@@ -342,8 +343,8 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		do10ms();
 		USBTask();
-		ssd1306Data();
-		//TestScreen();
+		//ssd1306Data();
+		testScreen();
 		ssd1306_UpdateScreenDMA();
 	}
   /* USER CODE END 3 */

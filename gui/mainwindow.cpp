@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_sendUdp,&QPushButton::clicked,this,&MainWindow::sendDataUDP);
 
     //connect(ui->actionScanPorts, &QAction::triggered, settingPorts,&SettingsDialog::show);
-    connect(ui->actionPROTOCOL_DATA, &QAction::triggered, myDebug, &Debug::show);
+    //connect(ui->actionPROTOCOL_DATA, &QAction::triggered, myDebug, &Debug::show);
 
     //añadimos los comandos
     ui->comboBox_CMD->addItem("ALIVE", 0xF0);

@@ -12,8 +12,6 @@
 #include <QTimer>
 #include <QTime>
 #include <QSerialPortInfo>
-#include <qpaintbox.h>
-#include "debug.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -115,7 +113,7 @@ private:
     // QPaintBox *QPaintBox2;
     QLabel *statusMode;
 
-    Debug *myDebug;
+    //Debug *myDebug;
 
     //timers
     QTimer  *timer1;

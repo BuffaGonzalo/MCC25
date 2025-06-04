@@ -117,3 +117,16 @@ void MPU6050_GetGyro(int16_t *gx, int16_t *gy, int16_t *gz) {
 }
 
 
+//void MPU6050_Read_Temp(MPU6050_t *DataStruct)
+//{
+//    uint8_t Rec_Data[2];
+//    int16_t temp;
+//
+//    // Read 2 BYTES of data starting from TEMP_OUT_H_REG register
+//
+//    HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, TEMP_OUT_H_REG, 1, Rec_Data, 2, i2c_timeout);
+//
+//    temp = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+//    DataStruct->Temperature = (float)((int16_t)temp / (float)340.0 + (float)36.53);
+//}
+

@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>650</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>650</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>AMC -AutoMazeCar</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../../../Imágenes/Icons/mazeIcon.jpg</normaloff>../../../../Imágenes/Icons/mazeIcon.jpg</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <widget class="QTextBrowser" name="textBrowserUnProcessed">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>360</y>
+      <width>271</width>
+      <height>221</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowserProcessed">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>360</y>
+      <width>271</width>
+      <height>221</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_udp_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>320</y>
+      <width>78</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>DEBUG</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>12</y>
+      <width>338</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Orientation::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_CMD">
+    <property name="geometry">
+     <rect>
+      <x>13</x>
+      <y>52</y>
+      <width>82</width>
+      <height>28</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_devide_port">
+    <property name="geometry">
+     <rect>
+      <x>187</x>
+      <y>277</y>
+      <width>94</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>DEVICE PORT</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_device_port">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>277</y>
+      <width>77</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_udp">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>173</y>
+      <width>78</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>WIFI - UDP</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_serial">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>88</y>
+      <width>50</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>SERIAL</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_sensors">
+    <property name="geometry">
+     <rect>
+      <x>438</x>
+      <y>10</y>
+      <width>65</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>SENSORS</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_communications">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>24</y>
+      <width>140</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>COMMUNICATIONS</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_left_encoder_data">
+    <property name="geometry">
+     <rect>
+      <x>439</x>
+      <y>80</y>
+      <width>152</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>ENCODER DATA</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_left_encoder">
+    <property name="geometry">
+     <rect>
+      <x>439</x>
+      <y>53</y>
+      <width>106</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>LEFT ENCODER</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_sendSerial">
+    <property name="geometry">
+     <rect>
+      <x>225</x>
+      <y>117</y>
+      <width>97</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SEND SERIAL</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_connectSerial">
+    <property name="geometry">
+     <rect>
+      <x>138</x>
+      <y>117</y>
+      <width>80</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CONNECT</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_PORT">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>117</y>
+      <width>82</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>PORTS</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_right_encoder">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>53</y>
+      <width>119</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>RIGHT ENCODER</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_right_encoder_data">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>80</y>
+      <width>152</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>ENCODER DATA</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_connectUdp">
+    <property name="geometry">
+     <rect>
+      <x>187</x>
+      <y>202</y>
+      <width>80</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CONNECT</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_local_port">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>202</y>
+      <width>77</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>30010</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_sendUdp">
+    <property name="geometry">
+     <rect>
+      <x>274</x>
+      <y>202</y>
+      <width>80</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>SEND UDP</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_device_ip">
+    <property name="geometry">
+     <rect>
+      <x>177</x>
+      <y>240</y>
+      <width>69</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>DEVICE IP</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_device_ip">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>240</y>
+      <width>72</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="PosX">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>160</y>
+      <width>113</width>
+      <height>28</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="PosY">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>190</y>
+      <width>113</width>
+      <height>28</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_sensors_2">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>160</y>
+      <width>65</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>POS X</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_sensors_3">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>190</y>
+      <width>65</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>POS Y</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionQUIT">
+   <property name="text">
+    <string>QUIT</string>
+   </property>
+  </action>
+  <action name="actionPROTOCOL_DATA">
+   <property name="text">
+    <string>PROTOCOL DATA</string>
+   </property>
+  </action>
+  <action name="actionCAR_MODE">
+   <property name="text">
+    <string>CAR MODE</string>
+   </property>
+  </action>
+  <action name="actionHELP">
+   <property name="text">
+    <string>HELP</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

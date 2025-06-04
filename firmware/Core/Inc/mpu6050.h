@@ -38,9 +38,6 @@
 #define OFFSET_GY  350
 #define OFFSET_GZ  350
 
-extern int16_t ax_real, ay_real, az_real;
-extern int16_t gx_real, gy_real, gz_real;
-
 // ------------------------------------------------------
 // ➤ Parámetros de escala
 // ------------------------------------------------------
@@ -56,30 +53,30 @@ extern int16_t gx_real, gy_real, gz_real;
 // ------------------------------------------------------
 
 // Inicializa el sensor: saca del modo sleep y configura escala de medición
-void MPU6050_Init(void);
+void mpu6050_Init(void);
 
 // Lee el acelerómetro, aplica offset y escala a m/s² ×100
-void MPU6050_Read_Accel(void);
+void mpu6050_Read_Accel(void);
 
 // Lee el giroscopio, aplica offset y escala a °/s ×100
-void MPU6050_Read_Gyro(void);
+void mpu6050_Read_Gyro(void);
 
-/**
- * @brief  Obtiene la última lectura de aceleración escalada.
- * @param  ax Pointer al entero donde se copiará ax_real.
- * @param  ay Pointer al entero donde se copiará ay_real.
- * @param  az Pointer al entero donde se copiará az_real.
- */
-void MPU6050_GetAccel(int16_t *ax, int16_t *ay, int16_t *az);
-
-/**
- * @brief  Obtiene la última lectura de velocidad angular escalada.
- * @param  gx Pointer al entero donde se copiará gx_real.
- * @param  gy Pointer al entero donde se copiará gy_real.
- * @param  gz Pointer al entero donde se copiará gz_real.
- */
-void MPU6050_GetGyro(int16_t *gx, int16_t *gy, int16_t *gz);
-
+///**
+// * @brief  Obtiene la última lectura de aceleración escalada.
+// * @param  ax Pointer al entero donde se copiará ax_real.
+// * @param  ay Pointer al entero donde se copiará ay_real.
+// * @param  az Pointer al entero donde se copiará az_real.
+// */
+//void MPU6050_GetAccel(int16_t *ax, int16_t *ay, int16_t *az);
+//
+///**
+// * @brief  Obtiene la última lectura de velocidad angular escalada.
+// * @param  gx Pointer al entero donde se copiará gx_real.
+// * @param  gy Pointer al entero donde se copiará gy_real.
+// * @param  gz Pointer al entero donde se copiará gz_real.
+// */
+//void MPU6050_GetGyro(int16_t *gx, int16_t *gy, int16_t *gz);
+//
 
 
 #endif /* INC_MPU6050_H_ */

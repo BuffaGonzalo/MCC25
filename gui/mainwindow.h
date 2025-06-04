@@ -47,6 +47,8 @@ private slots:
 
     void on_pushButton_sendUdp_clicked();
 
+    void getData();
+
     /**
      * @brief sendSerial - Comando utilizado para enviar datos por el puerto serial en segundo plano
      * @param buf - Comando enviado por serial
@@ -117,7 +119,7 @@ private:
 
     //timers
     QTimer  *timer1;
-    // QTimer  *timer2;
+    QTimer  *timer2;
     // QTimer  *timer3;
     // QTimer  *timer4;
     // QTimer  *timer5;
@@ -175,6 +177,7 @@ private:
         ACK=0x0D,
         GETALIVE=0xF0,
         GETFIRMWARE=0xF1,
+        GETMPU=0xF2,
         UNKNOWCMD=0xFF,
         GETFLANKS=0xA8,
         POSITION=0xA9,

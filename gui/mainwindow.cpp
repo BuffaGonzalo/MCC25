@@ -7,9 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     timer1 = new QTimer(this);
+    timer2 = new QTimer(this);
 
     //comunicacion
-    QSerialPort1=new QSerialPort(this);
+    QSerialPort1 = new QSerialPort(this);
     QUdpSocket1 = new QUdpSocket(this);
 
     ui->comboBox_PORT->installEventFilter(this);
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //connects de los timers con las funciones
     connect(timer1,&QTimer::timeout,this,&MainWindow::timeOut);
+    connect(timer2,&QTimer::timeout,this,&MainWindow::getData);
 
     //connects de udp
     connect(QUdpSocket1,&QUdpSocket::readyRead,this,&MainWindow::OnUdpRxData);
@@ -31,8 +33,8 @@ MainWindow::MainWindow(QWidget *parent)
     //añadimos los comandos
     ui->comboBox_CMD->addItem("ALIVE", 0xF0);
     ui->comboBox_CMD->addItem("FIRMWARE", 0xF1);
-    ui->comboBox_CMD->addItem("FLANCOS", 0xA8);
-    ui->comboBox_CMD->addItem("POSICION", 0xA9);
+    ui->comboBox_CMD->addItem("GETMPU", 0xF2);
+    ui->comboBox_CMD->addItem("*", 0xA9);
 
     //inicializamos
     estadoProtocolo=START;
@@ -42,7 +44,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_sendUdp->setEnabled(false);
     ui->pushButton_sendSerial->setEnabled(false);
 
+    statusMode = new QLabel(ui->statusBar);
+    statusMode->setText("HOLA");
+
     timer1->start(100);
+    timer2->start(500);
 }
 
 MainWindow::~MainWindow()
@@ -53,7 +59,7 @@ MainWindow::~MainWindow()
 void MainWindow::dataReceived(){
     unsigned char *incomingBuffer;
     int count;
-    uint8_t xId;
+    //uint8_t xId;
 
     count = QSerialPort1->bytesAvailable();
 
@@ -191,36 +197,58 @@ void MainWindow::decodeData(uint8_t *datosRx, uint8_t source){
         }
         ui->textBrowserProcessed->append(str);
     break;
-    case GETFLANKS:
+    case GETMPU:
 
+        //Datos acelerometro
         w.ui8[0] = datosRx[2];
         w.ui8[1] = datosRx[3];
 
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
-
-        strOut = "LEFT IR: " + str;
+        strOut = "Ax: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //Mostramos
-        ui->label_left_encoder_data->setText(str);
+        ui->ax_data->setText(str);
 
-        //GUARDAMOS DATOS
         w.ui8[0] = datosRx[4];
         w.ui8[1] = datosRx[5];
 
-        //CONFIG MOSTRAR DATOS
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
-        //COMANDO CONSOLA
-        strOut = "RIGHT IR: " + str;
+        strOut = "Ay: " + str;
         ui->textBrowserProcessed->append(strOut);
+        ui->ay_data->setText(str);
 
-        ui->label_right_encoder_data->setText(str);
+        w.ui8[0] = datosRx[6];
+        w.ui8[1] = datosRx[7];
 
-    break;
-    case POSITION:
-/*
-        w.ui8[0] = ui->PosX->;
-        w.ui8[1] = ui->PosY;
-*/
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "Az: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        ui->az_data->setText(str);
+
+        //Datos giroscopio
+        w.ui8[0] = datosRx[8];
+        w.ui8[1] = datosRx[9];
+
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "Gx: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        ui->gx_data->setText(str);
+
+        w.ui8[0] = datosRx[10];
+        w.ui8[1] = datosRx[11];
+
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "Gy: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        ui->gy_data->setText(str);
+
+        w.ui8[0] = datosRx[12];
+        w.ui8[1] = datosRx[13];
+
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "Gz: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        ui->gz_data->setText(str);
+
     break;
     default:
         str = str + "Comando DESCONOCIDO!!!!";
@@ -247,6 +275,7 @@ void MainWindow::sendDataSerial(){
     cmdId = ui->comboBox_CMD->currentData().toInt();
     switch (cmdId) {
     case GETALIVE:
+    case GETMPU:
     case GETFIRMWARE:// GETFIRMWARE=0xF1
         dato[indice++]=cmdId;
         dato[NBYTES]=0x02;
@@ -395,6 +424,7 @@ void MainWindow::timeOut(){
             estadoProtocolo=START;
         }
     }
+    //getData();
 }
 
 void MainWindow::OnUdpRxData(){
@@ -545,6 +575,20 @@ void MainWindow::sendDataUDP(){
     }
     str=str + clientAddress.toString() + "  " +  QString().number(puertoremoto,10);
     ui->textBrowserUnProcessed->append("PC--UDP-->MBED ( " + str + " )");
+}
+
+void MainWindow::getData(){
+    uint8_t cmd, buf[24];
+    uint8_t n;
+
+    cmd=GETMPU;
+    n=1;
+    buf[0] = cmd;
+    sendSerial(buf,n);
+
+    if(!QSerialPort1->isOpen() && !QUdpSocket1->isOpen()) //colocamos un estadopredeterminado en caso de no estar conectado
+        statusMode->setText("CURRENT STATE --> IDLE");
+
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event){ //utilizado para mostrar los puestos disponibles

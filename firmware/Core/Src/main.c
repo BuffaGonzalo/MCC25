@@ -29,6 +29,7 @@
 #include "img.h"
 
 #include "ssd1306.h"
+#include "mpu6050.h"
 #include "fonts.h"
 //#include "ssd1306_tests.h"
 
@@ -85,10 +86,16 @@ _sTx USBTx, USBRx;
 volatile uint8_t buffUSBTx[RXBUFSIZE];
 volatile uint8_t buffUSBRx[TXBUFSIZE];
 uint8_t nBytesTx = 0;
+_uWord myWord;
 //Control
 _uFlag myFlags;
 //Variables pantalla
-volatile uint8_t SSD1306_TxCplt = 0;
+volatile uint8_t ssd1306_TxCplt = 0;
+volatile uint8_t mpu6050_RxCplt = 0;
+//mpu6050
+int16_t ax_real, ay_real, az_real;
+int16_t gx_real, gy_real, gz_real;
+
 
 /* USER CODE END PV */
 
@@ -128,7 +135,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 }
 
 void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c){
-    SSD1306_TxCplt = 1;
+    ssd1306_TxCplt = 1;
+}
+
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c){
+	mpu6050_RxCplt = 1;
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
@@ -182,6 +193,28 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 		unerPrtcl_PutStrOntx(dataTx, firmware);
 		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
 		break;
+	case GETMPU:
+		unerPrtcl_PutHeaderOnTx(dataTx, GETMPU, 13);
+		myWord.ui16[0] = ax_real;
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = ay_real;
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = az_real;
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = gx_real;
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = gy_real;
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = gz_real;
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
+		break;
 	default:
 		unerPrtcl_PutHeaderOnTx(dataTx, (_eCmd) dataRx->buff[dataRx->indexData], 2);
 		unerPrtcl_PutByteOnTx(dataTx, UNKNOWN);
@@ -220,13 +253,49 @@ void heartBeatTask() {
 
 void ssd1306Data() {
 	static uint8_t init = TRUE;
+	uint8_t y = 0, x = 2;
 	if (init) {
 		init = FALSE;
 		ssd1306_Fill(Black);
 		ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
+	} else{
+		char data[8];
+	    ssd1306_SetCursor(x, y);
+	    snprintf(data, sizeof(data), "ax:%u", ax_real);
+	    ssd1306_WriteString(data, Font_6x8, Black);
+	    x += 48;
+	    ssd1306_SetCursor(x, y);
+	    snprintf(data, sizeof(data), "gx:%u", gx_real);
+	    ssd1306_WriteString(data, Font_6x8, Black);
+	    x =2;
+	    y += 8;
+	    ssd1306_SetCursor(2, y);
+	    snprintf(data, sizeof(data), "ay:%u", ay_real);
+	    ssd1306_WriteString(data, Font_6x8, Black);
+	    x += 48;
+	    ssd1306_SetCursor(x, y);
+	    snprintf(data, sizeof(data), "gy:%u", gy_real);
+	    ssd1306_WriteString(data, Font_6x8, Black);
+	    x =2;
+	    y += 8;
+	    ssd1306_SetCursor(2, y);
+	    snprintf(data, sizeof(data), "az:%u", az_real);
+	    ssd1306_WriteString(data, Font_6x8, Black);
+	    x += 48;
+	    ssd1306_SetCursor(x, y);
+	    snprintf(data, sizeof(data), "gz:%u", gz_real);
+	    ssd1306_WriteString(data, Font_6x8, Black);
 	}
 }
 
+
+void mpuTask(){
+	if (IS100MS) {
+		IS100MS = FALSE;
+		mpu6050_Read_Accel();
+		mpu6050_Read_Gyro();
+	}
+}
 
 /* USER CODE END 0 */
 
@@ -273,11 +342,12 @@ int main(void)
 	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
 
 	//Display
-	ssd1306_ADC_ConfCpltCallback(&SSD1306_TxCplt);
+	ssd1306_ADC_ConfCpltCallback(&ssd1306_TxCplt);
 	ssd1306_Attach_MemWrite(HAL_I2C_Mem_Write);
 	ssd1306_Attach_MemWriteDMA(HAL_I2C_Mem_Write_DMA);
 	ssd1306_Init();
-
+	//mpu6050
+	mpu6050_Init();
 
 	//Inicializacion de protocolo
 	unerPrtcl_Init(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
@@ -296,8 +366,10 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		do10ms();
 		USBTask();
-		ssd1306Data();
-		ssd1306_UpdateScreenDMA();
+
+		mpuTask();
+		//ssd1306Data();
+		//ssd1306_UpdateScreenDMA();
 	}
   /* USER CODE END 3 */
 }

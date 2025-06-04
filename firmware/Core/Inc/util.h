@@ -44,6 +44,7 @@ typedef union{
 typedef enum {
 	ALIVE = 0xF0,
 	FIRMWARE = 0xF1,
+	GETMPU = 0xF2,
 	ACK = 0x0D,
 	UNKNOWN = 0xFF
 } _eCmd;

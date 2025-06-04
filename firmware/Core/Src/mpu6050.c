@@ -5,7 +5,7 @@
  *      Author: gonza
  */
 
-#include "MPU6050.h"
+#include "mpu6050.h"
 #include "main.h"
 #include <stdlib.h>
 
@@ -17,18 +17,18 @@ extern int16_t gx_real, gy_real, gz_real;
 
 
 // Variables convertidas a unidades físicas con escala ×100 (2 decimales fijos)
-int16_t ax_real; // Aceleración en X [centésimas de m/s²]
-int16_t ay_real;
-int16_t az_real;
-
-int16_t gx_real; // Velocidad angular en X [centésimas de grados/segundo]
-int16_t gy_real;
-int16_t gz_real;
+//int16_t ax_real; // Aceleración en X [centésimas de m/s²]
+//int16_t ay_real;
+//int16_t az_real;
+//
+//int16_t gx_real; // Velocidad angular en X [centésimas de grados/segundo]
+//int16_t gy_real;
+//int16_t gz_real;
 
 // Variables RAW leídas directamente del sensor (int16_t = complemento a dos)
 int32_t ax, ay, az, gx, gy, gz;
 
-void MPU6050_Init(void)
+void mpu6050_Init(void)
 {
     uint8_t data;
 
@@ -46,7 +46,7 @@ void MPU6050_Init(void)
     HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &data, 1, HAL_MAX_DELAY);
 }
 
-void MPU6050_Read_Accel(void)
+void mpu6050_Read_Accel(void)
 {
     uint8_t Rec_Data[6];
 
@@ -75,7 +75,7 @@ void MPU6050_Read_Accel(void)
         az_real = (az / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
 }
 
-void MPU6050_Read_Gyro(void)
+void mpu6050_Read_Gyro(void)
 {
     uint8_t Rec_Data[6];
 
@@ -104,18 +104,17 @@ void MPU6050_Read_Gyro(void)
         gz_real = (gz / 131.0f) * MULTIPLICADORFLOAT;
 }
 
-void MPU6050_GetAccel(int16_t *ax, int16_t *ay, int16_t *az) {
-    if (ax) *ax = ax_real;
-    if (ay) *ay = ay_real;
-    if (az) *az = az_real;
-}
-
-void MPU6050_GetGyro(int16_t *gx, int16_t *gy, int16_t *gz) {
-    if (gx) *gx = gx_real;
-    if (gy) *gy = gy_real;
-    if (gz) *gz = gz_real;
-}
-
+//void MPU6050_GetAccel(int16_t *ax, int16_t *ay, int16_t *az) {
+//    if (ax) *ax = ax_real;
+//    if (ay) *ay = ay_real;
+//    if (az) *az = az_real;
+//}
+//
+//void MPU6050_GetGyro(int16_t *gx, int16_t *gy, int16_t *gz) {
+//    if (gx) *gx = gx_real;
+//    if (gy) *gy = gy_real;
+//    if (gz) *gz = gz_real;
+//}
 
 //void MPU6050_Read_Temp(MPU6050_t *DataStruct)
 //{

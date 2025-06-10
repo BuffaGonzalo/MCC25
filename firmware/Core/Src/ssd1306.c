@@ -5,8 +5,8 @@
 
 //extern volatile uint8_t SSD1306_TxCplt;
 static uint8_t *SSD1306_TxCplt = NULL;
-static HAL_StatusTypeDef (*memWrite)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout) = NULL;
-static HAL_StatusTypeDef (*memWriteDMA)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size) = NULL;
+static void (*memWrite)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type) = NULL;
+static void (*memWriteDMA)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type) = NULL;
 
 #if defined(SSD1306_USE_I2C)
 
@@ -16,23 +16,23 @@ void ssd1306_Reset(void) {
 
 // Send a byte to the command register
 void ssd1306_WriteCommand(uint8_t byte) {
-	memWrite(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+	memWrite(SSD1306_I2C_ADDR, &byte, 1, 0x00);
 	//HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
 }
 
 void ssd1306_WriteCommandDMA(uint8_t byte) {
-	memWriteDMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
+	memWriteDMA(SSD1306_I2C_ADDR, &byte, 1, 0x00);
 	//HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1);
 }
 
 // Send data
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
-    memWrite(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+    memWrite(SSD1306_I2C_ADDR, buffer, buff_size, 0x40);
 	//HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
 }
 
 void ssd1306_WriteDataDMA(uint8_t* buffer, size_t buff_size) {
-	memWriteDMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
+	memWriteDMA(SSD1306_I2C_ADDR, buffer, buff_size, 0x40);
 	//HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
 }
 
@@ -86,11 +86,11 @@ SSD1306_Error_t ssd1306_FillBuffer(uint8_t* buf, uint32_t len) {
     return ret;
 }
 
-void ssd1306_Attach_MemWriteDMA(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size)){
+void ssd1306_Attach_MemWriteDMA(void(*PtrRx)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type)){
 	memWriteDMA = PtrRx;
 }
 
-void ssd1306_Attach_MemWrite(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout)){
+void ssd1306_Attach_MemWrite(void(*PtrRx)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type)){
 	memWrite = PtrRx;
 }
 

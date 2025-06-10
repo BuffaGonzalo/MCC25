@@ -45,10 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_sendSerial->setEnabled(false);
 
     statusMode = new QLabel(ui->statusBar);
-    statusMode->setText("HOLA");
 
     timer1->start(100);
-    timer2->start(500);
+    timer2->start(100);
 }
 
 MainWindow::~MainWindow()

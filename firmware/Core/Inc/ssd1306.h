@@ -154,8 +154,8 @@ typedef struct {
 } SSD1306_Font_t;
 
 //Init definitions
-void ssd1306_Attach_MemWriteDMA(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size));
-void ssd1306_Attach_MemWrite(HAL_StatusTypeDef(*PtrRx)(I2C_HandleTypeDef *hi2c, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout));
+void ssd1306_Attach_MemWrite(void(*PtrRx)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type));
+void ssd1306_Attach_MemWriteDMA(void(*PtrRx)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type));
 void ssd1306_ADC_ConfCpltCallback(volatile uint8_t *PtrRx);
 
 

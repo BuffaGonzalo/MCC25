@@ -1,8 +1,8 @@
 ../Core/Src/ssd1306.c:13:6:ssd1306_Reset	4	static
-../Core/Src/ssd1306.c:18:6:ssd1306_WriteCommand	40	static
-../Core/Src/ssd1306.c:23:6:ssd1306_WriteCommandDMA	32	static
-../Core/Src/ssd1306.c:29:6:ssd1306_WriteData	40	static
-../Core/Src/ssd1306.c:34:6:ssd1306_WriteDataDMA	32	static
+../Core/Src/ssd1306.c:18:6:ssd1306_WriteCommand	24	static
+../Core/Src/ssd1306.c:23:6:ssd1306_WriteCommandDMA	24	static
+../Core/Src/ssd1306.c:29:6:ssd1306_WriteData	24	static
+../Core/Src/ssd1306.c:34:6:ssd1306_WriteDataDMA	24	static
 ../Core/Src/ssd1306.c:80:17:ssd1306_FillBuffer	24	static
 ../Core/Src/ssd1306.c:89:6:ssd1306_Attach_MemWriteDMA	16	static
 ../Core/Src/ssd1306.c:93:6:ssd1306_Attach_MemWrite	16	static

@@ -50,7 +50,8 @@
 //banderas
 #define ALLFLAGS          	myFlags.bytes
 #define IS10MS				myFlags.bits.bit0
-#define IS100MS				myFlags.bits.bit1
+#define IS20MS				myFlags.bits.bit1
+#define IS100MS				myFlags.bits.bit2
 
 #define TEST				myFlags.bits.bit7
 /* USER CODE END PD */
@@ -77,7 +78,8 @@ const char firmware[] = "EX100923v01\n";
 
 //Tiempos
 uint8_t time10ms;
-uint32_t tmo100ms = 10;
+uint8_t tmo100ms = 10;
+uint8_t tmo20ms = 2;
 //ADC
 uint16_t adcData[8], adcDataTx[8]; //ADC
 
@@ -120,7 +122,9 @@ void do100ms();
 void heartBeatTask();
 
 //Display
-void ssd1306Data();
+void displayData();
+void displayMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
+void displayMemWriteDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
 
 
 /* USER CODE END PFP */
@@ -224,12 +228,17 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 }
 
 void do10ms() {
-	if(IS10MS){
-		IS10MS=FALSE;
+	if (IS10MS) {
+		IS10MS = FALSE;
 		tmo100ms--;
-		if (tmo100ms == 0) {
+		tmo20ms--;
+		if (!tmo20ms) {
+			tmo20ms = 2;
+			IS20MS = TRUE;
+		}
+		if (!tmo100ms) {
 			tmo100ms = 10;
-			IS100MS=TRUE;
+			IS100MS = TRUE;
 			heartBeatTask();
 		}
 	}
@@ -251,47 +260,58 @@ void heartBeatTask() {
 	times &= 31;
 }
 
-void ssd1306Data() {
+void displayData() {
 	static uint8_t init = TRUE;
 	uint8_t y = 0, x = 2;
-	if (init) {
-		init = FALSE;
-		ssd1306_Fill(Black);
-		ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
-	} else{
-		char data[8];
-	    ssd1306_SetCursor(x, y);
-	    snprintf(data, sizeof(data), "ax:%u", ax_real);
-	    ssd1306_WriteString(data, Font_6x8, Black);
-	    x += 48;
-	    ssd1306_SetCursor(x, y);
-	    snprintf(data, sizeof(data), "gx:%u", gx_real);
-	    ssd1306_WriteString(data, Font_6x8, Black);
-	    x =2;
-	    y += 8;
-	    ssd1306_SetCursor(2, y);
-	    snprintf(data, sizeof(data), "ay:%u", ay_real);
-	    ssd1306_WriteString(data, Font_6x8, Black);
-	    x += 48;
-	    ssd1306_SetCursor(x, y);
-	    snprintf(data, sizeof(data), "gy:%u", gy_real);
-	    ssd1306_WriteString(data, Font_6x8, Black);
-	    x =2;
-	    y += 8;
-	    ssd1306_SetCursor(2, y);
-	    snprintf(data, sizeof(data), "az:%u", az_real);
-	    ssd1306_WriteString(data, Font_6x8, Black);
-	    x += 48;
-	    ssd1306_SetCursor(x, y);
-	    snprintf(data, sizeof(data), "gz:%u", gz_real);
-	    ssd1306_WriteString(data, Font_6x8, Black);
+	if (IS100MS) {
+		IS100MS=FALSE;
+		if (init) {
+			init = FALSE;
+			ssd1306_Fill(Black);
+			ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
+		} else {
+			char data[8];
+			ssd1306_SetCursor(x, y);
+			snprintf(data, sizeof(data), "ax:%u", ax_real);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x += 48;
+			ssd1306_SetCursor(x, y);
+			snprintf(data, sizeof(data), "gx:%u", gx_real);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x = 2;
+			y += 8;
+			ssd1306_SetCursor(2, y);
+			snprintf(data, sizeof(data), "ay:%u", ay_real);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x += 48;
+			ssd1306_SetCursor(x, y);
+			snprintf(data, sizeof(data), "gy:%u", gy_real);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x = 2;
+			y += 8;
+			ssd1306_SetCursor(2, y);
+			snprintf(data, sizeof(data), "az:%u", az_real);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x += 48;
+			ssd1306_SetCursor(x, y);
+			snprintf(data, sizeof(data), "gz:%u", gz_real);
+			ssd1306_WriteString(data, Font_6x8, Black);
+		}
 	}
+}
+
+void displayMemWriteDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+	HAL_I2C_Mem_Write_DMA(&hi2c1, address , type, 1, data, size);
+}
+
+void displayMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+	HAL_I2C_Mem_Write(&hi2c1, address , type, 1, data, size, HAL_MAX_DELAY);
 }
 
 
 void mpuTask(){
-	if (IS100MS) {
-		IS100MS = FALSE;
+	if (IS20MS) {
+		IS20MS = FALSE;
 		mpu6050_Read_Accel();
 		mpu6050_Read_Gyro();
 	}
@@ -343,9 +363,12 @@ int main(void)
 
 	//Display
 	ssd1306_ADC_ConfCpltCallback(&ssd1306_TxCplt);
-	ssd1306_Attach_MemWrite(HAL_I2C_Mem_Write);
-	ssd1306_Attach_MemWriteDMA(HAL_I2C_Mem_Write_DMA);
+
+	ssd1306_Attach_MemWrite(displayMemWrite);
+	ssd1306_Attach_MemWriteDMA(displayMemWriteDMA);
+
 	ssd1306_Init();
+
 	//mpu6050
 	mpu6050_Init();
 
@@ -368,8 +391,8 @@ int main(void)
 		USBTask();
 
 		mpuTask();
-		//ssd1306Data();
-		//ssd1306_UpdateScreenDMA();
+		displayData();
+		ssd1306_UpdateScreenDMA();
 	}
   /* USER CODE END 3 */
 }

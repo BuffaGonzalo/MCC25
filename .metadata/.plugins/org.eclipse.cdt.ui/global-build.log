@@ -616,3 +616,888 @@ arm-none-eabi-size  firmware.elf
   62056	    384	   8160	  70600	  113c8	firmware.elf
 Finished building: default.size.stdout
  
+17:37:08 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/ssd1306.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ssd1306.d" -MT"Core/Src/ssd1306.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ssd1306.o"
+../Core/Src/main.c: In function 'displayMemWrite':
+../Core/Src/main.c:310:74: error: 'byte' undeclared (first use in this function)
+  310 |         HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+      |                                                                          ^~~~
+../Core/Src/main.c:310:74: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:396:17: warning: implicit declaration of function 'displayData'; did you mean 'displayTask'? [-Wimplicit-function-declaration]
+  396 |                 displayData();
+      |                 ^~~~~~~~~~~
+      |                 displayTask
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+17:37:23 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayMemWrite':
+../Core/Src/main.c:310:74: error: 'byte' undeclared (first use in this function)
+  310 |         HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+      |                                                                          ^~~~
+../Core/Src/main.c:310:74: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+17:37:40 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62056	    384	   8160	  70600	  113c8	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+17:37:53 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62056	    384	   8160	  70600	  113c8	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+18:00:45 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/main.c: In function 'mpuTask':
+../Core/Src/main.c:316:35: error: 'ax' undeclared (first use in this function)
+  316 |                 MPU6050_GetAccel(&ax, &ay, &az)
+      |                                   ^~
+../Core/Src/main.c:316:35: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:316:40: error: 'ay' undeclared (first use in this function)
+  316 |                 MPU6050_GetAccel(&ax, &ay, &az)
+      |                                        ^~
+../Core/Src/main.c:316:45: error: 'az' undeclared (first use in this function)
+  316 |                 MPU6050_GetAccel(&ax, &ay, &az)
+      |                                             ^~
+../Core/Src/main.c:316:48: error: expected ';' before 'MPU6050_GetGyro'
+  316 |                 MPU6050_GetAccel(&ax, &ay, &az)
+      |                                                ^
+      |                                                ;
+  317 |                 MPU6050_GetGyro(&ax, &ay, &az)
+      |                 ~~~~~~~~~~~~~~~                 
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:01:53 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/main.c: In function 'mpuTask':
+../Core/Src/main.c:316:35: error: 'ax' undeclared (first use in this function)
+  316 |                 mpu6050_GetAccel(&ax, &ay, &az);
+      |                                   ^~
+../Core/Src/main.c:316:35: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:316:40: error: 'ay' undeclared (first use in this function)
+  316 |                 mpu6050_GetAccel(&ax, &ay, &az);
+      |                                        ^~
+../Core/Src/main.c:316:45: error: 'az' undeclared (first use in this function)
+  316 |                 mpu6050_GetAccel(&ax, &ay, &az);
+      |                                             ^~
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:02:33 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'decodeCommand':
+../Core/Src/main.c:201:34: error: 'ax_real' undeclared (first use in this function)
+  201 |                 myWord.ui16[0] = ax_real;
+      |                                  ^~~~~~~
+../Core/Src/main.c:201:34: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:204:34: error: 'ay_real' undeclared (first use in this function)
+  204 |                 myWord.ui16[0] = ay_real;
+      |                                  ^~~~~~~
+../Core/Src/main.c:207:34: error: 'az_real' undeclared (first use in this function)
+  207 |                 myWord.ui16[0] = az_real;
+      |                                  ^~~~~~~
+../Core/Src/main.c:210:34: error: 'gx_real' undeclared (first use in this function)
+  210 |                 myWord.ui16[0] = gx_real;
+      |                                  ^~~~~~~
+../Core/Src/main.c:213:34: error: 'gy_real' undeclared (first use in this function)
+  213 |                 myWord.ui16[0] = gy_real;
+      |                                  ^~~~~~~
+../Core/Src/main.c:216:34: error: 'gz_real' undeclared (first use in this function)
+  216 |                 myWord.ui16[0] = gz_real;
+      |                                  ^~~~~~~
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:274:63: error: 'ax_real' undeclared (first use in this function)
+  274 |                         snprintf(data, sizeof(data), "ax:%u", ax_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:278:63: error: 'gx_real' undeclared (first use in this function)
+  278 |                         snprintf(data, sizeof(data), "gx:%u", gx_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:283:63: error: 'ay_real' undeclared (first use in this function)
+  283 |                         snprintf(data, sizeof(data), "ay:%u", ay_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:287:63: error: 'gy_real' undeclared (first use in this function)
+  287 |                         snprintf(data, sizeof(data), "gy:%u", gy_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:292:63: error: 'az_real' undeclared (first use in this function)
+  292 |                         snprintf(data, sizeof(data), "az:%u", az_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:296:63: error: 'gz_real' undeclared (first use in this function)
+  296 |                         snprintf(data, sizeof(data), "gz:%u", gz_real);
+      |                                                               ^~~~~~~
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:03:26 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:274:63: error: 'ax_real' undeclared (first use in this function)
+  274 |                         snprintf(data, sizeof(data), "ax:%u", ax_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:274:63: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:278:63: error: 'gx_real' undeclared (first use in this function)
+  278 |                         snprintf(data, sizeof(data), "gx:%u", gx_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:283:63: error: 'ay_real' undeclared (first use in this function)
+  283 |                         snprintf(data, sizeof(data), "ay:%u", ay_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:287:63: error: 'gy_real' undeclared (first use in this function)
+  287 |                         snprintf(data, sizeof(data), "gy:%u", gy_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:292:63: error: 'az_real' undeclared (first use in this function)
+  292 |                         snprintf(data, sizeof(data), "az:%u", az_real);
+      |                                                               ^~~~~~~
+../Core/Src/main.c:296:63: error: 'gz_real' undeclared (first use in this function)
+  296 |                         snprintf(data, sizeof(data), "gz:%u", gz_real);
+      |                                                               ^~~~~~~
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:04:04 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:33: multiple definition of `ax'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:98: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:33: multiple definition of `ay'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:98: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:33: multiple definition of `az'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:98: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:33: multiple definition of `gx'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:99: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:33: multiple definition of `gy'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:99: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:33: multiple definition of `gz'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:99: first defined here
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+18:08:24 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62256	    384	   8168	  70808	  11498	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+18:17:01 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:374:9: warning: implicit declaration of function 'mpu6050_ADC_ConfCpltCallback'; did you mean 'ssd1306_ADC_ConfCpltCallback'? [-Wimplicit-function-declaration]
+  374 |         mpu6050_ADC_ConfCpltCallback(&mpu6050_RxCplt);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_ADC_ConfCpltCallback
+../Core/Src/main.c:375:9: warning: implicit declaration of function 'mpu6050_Attach_MemWrite'; did you mean 'ssd1306_Attach_MemWrite'? [-Wimplicit-function-declaration]
+  375 |         mpu6050_Attach_MemWrite(displayMemWrite);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_Attach_MemWrite
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62336	    384	   8176	  70896	  114f0	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+21:00:55 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/mpu6050.c: In function 'mpu6050_Init':
+../Core/Src/mpu6050.c:78:23: warning: passing argument 1 of 'mpu6050_WriteData' makes integer from pointer without a cast [-Wint-conversion]
+   78 |     mpu6050_WriteData(&data, PWR_MGMT_1_REG);
+      |                       ^~~~~
+      |                       |
+      |                       uint8_t * {aka unsigned char *}
+../Core/Src/mpu6050.c:56:32: note: expected 'uint8_t' {aka 'unsigned char'} but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+   56 | void mpu6050_WriteData(uint8_t byte, uint8_t type) {
+      |                        ~~~~~~~~^~~~
+../Core/Src/mpu6050.c:86:23: warning: passing argument 1 of 'mpu6050_WriteData' makes integer from pointer without a cast [-Wint-conversion]
+   86 |     mpu6050_WriteData(&data, ACCEL_CONFIG_REG);
+      |                       ^~~~~
+      |                       |
+      |                       uint8_t * {aka unsigned char *}
+../Core/Src/mpu6050.c:56:32: note: expected 'uint8_t' {aka 'unsigned char'} but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+   56 | void mpu6050_WriteData(uint8_t byte, uint8_t type) {
+      |                        ~~~~~~~~^~~~
+../Core/Src/mpu6050.c:91:23: warning: passing argument 1 of 'mpu6050_WriteData' makes integer from pointer without a cast [-Wint-conversion]
+   91 |     mpu6050_WriteData(&data, GYRO_CONFIG_REG);
+      |                       ^~~~~
+      |                       |
+      |                       uint8_t * {aka unsigned char *}
+../Core/Src/mpu6050.c:56:32: note: expected 'uint8_t' {aka 'unsigned char'} but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+   56 | void mpu6050_WriteData(uint8_t byte, uint8_t type) {
+      |                        ~~~~~~~~^~~~
+../Core/Src/mpu6050.c: In function 'mpu6050_Read':
+../Core/Src/mpu6050.c:107:45: error: 'rec_Data' undeclared (first use in this function); did you mean 'Rec_Data'?
+  107 |                         mpu6050_ReadDataDMA(rec_Data, 14, GYTO_XOUT_H_REG);
+      |                                             ^~~~~~~~
+      |                                             Rec_Data
+../Core/Src/mpu6050.c:107:45: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/mpu6050.c:107:59: error: 'GYTO_XOUT_H_REG' undeclared (first use in this function); did you mean 'GYRO_XOUT_H_REG'?
+  107 |                         mpu6050_ReadDataDMA(rec_Data, 14, GYTO_XOUT_H_REG);
+      |                                                           ^~~~~~~~~~~~~~~
+      |                                                           GYRO_XOUT_H_REG
+../Core/Src/mpu6050.c:117:25: error: 't' undeclared (first use in this function)
+  117 |                         t = (int16_t) (Rec_Data[6] << 8 | Rec_Data[7]);
+      |                         ^
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/main.c: In function 'mpuTask':
+../Core/Src/main.c:329:9: warning: implicit declaration of function 'mpu6050_Read'; did you mean 'mpu6050_Init'? [-Wimplicit-function-declaration]
+  329 |         mpu6050_Read();
+      |         ^~~~~~~~~~~~
+      |         mpu6050_Init
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:390:9: warning: implicit declaration of function 'mpu6050_ADC_ConfCpltCallback'; did you mean 'ssd1306_ADC_ConfCpltCallback'? [-Wimplicit-function-declaration]
+  390 |         mpu6050_ADC_ConfCpltCallback(&mpu6050_RxCplt);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_ADC_ConfCpltCallback
+../Core/Src/main.c:391:9: warning: implicit declaration of function 'mpu6050_Attach_MemWrite'; did you mean 'ssd1306_Attach_MemWrite'? [-Wimplicit-function-declaration]
+  391 |         mpu6050_Attach_MemWrite(mpuMemWrite);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_Attach_MemWrite
+../Core/Src/main.c:392:9: warning: implicit declaration of function 'mpu6050_Attach_MemWriteDMA'; did you mean 'ssd1306_Attach_MemWriteDMA'? [-Wimplicit-function-declaration]
+  392 |         mpu6050_Attach_MemWriteDMA(mpuMemWrite);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_Attach_MemWriteDMA
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:01:43 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/mpu6050.c: In function 'mpu6050_WriteData':
+../Core/Src/mpu6050.c:57:32: warning: passing argument 2 of 'memWrite' from incompatible pointer type [-Wincompatible-pointer-types]
+   57 |         memWrite(MPU6050_ADDR, &byte, 1, type);
+      |                                ^~~~~
+      |                                |
+      |                                uint8_t ** {aka unsigned char **}
+../Core/Src/mpu6050.c:57:32: note: expected 'uint8_t *' {aka 'unsigned char *'} but argument is of type 'uint8_t **' {aka 'unsigned char **'}
+../Core/Src/mpu6050.c: In function 'mpu6050_Read':
+../Core/Src/mpu6050.c:107:45: error: 'rec_Data' undeclared (first use in this function); did you mean 'Rec_Data'?
+  107 |                         mpu6050_ReadDataDMA(rec_Data, 14, GYTO_XOUT_H_REG);
+      |                                             ^~~~~~~~
+      |                                             Rec_Data
+../Core/Src/mpu6050.c:107:45: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/mpu6050.c:107:59: error: 'GYTO_XOUT_H_REG' undeclared (first use in this function); did you mean 'GYRO_XOUT_H_REG'?
+  107 |                         mpu6050_ReadDataDMA(rec_Data, 14, GYTO_XOUT_H_REG);
+      |                                                           ^~~~~~~~~~~~~~~
+      |                                                           GYRO_XOUT_H_REG
+../Core/Src/mpu6050.c:117:25: error: 't' undeclared (first use in this function)
+  117 |                         t = (int16_t) (Rec_Data[6] << 8 | Rec_Data[7]);
+      |                         ^
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:02:01 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/mpu6050.c: In function 'mpu6050_Read':
+../Core/Src/mpu6050.c:107:45: error: 'rec_Data' undeclared (first use in this function); did you mean 'Rec_Data'?
+  107 |                         mpu6050_ReadDataDMA(rec_Data, 14, GYTO_XOUT_H_REG);
+      |                                             ^~~~~~~~
+      |                                             Rec_Data
+../Core/Src/mpu6050.c:107:45: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/mpu6050.c:107:59: error: 'GYTO_XOUT_H_REG' undeclared (first use in this function); did you mean 'GYRO_XOUT_H_REG'?
+  107 |                         mpu6050_ReadDataDMA(rec_Data, 14, GYTO_XOUT_H_REG);
+      |                                                           ^~~~~~~~~~~~~~~
+      |                                                           GYRO_XOUT_H_REG
+../Core/Src/mpu6050.c:117:25: error: 't' undeclared (first use in this function)
+  117 |                         t = (int16_t) (Rec_Data[6] << 8 | Rec_Data[7]);
+      |                         ^
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:02:18 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/mpu6050.c: In function 'mpu6050_Read':
+../Core/Src/mpu6050.c:107:59: error: 'GYTO_XOUT_H_REG' undeclared (first use in this function); did you mean 'GYRO_XOUT_H_REG'?
+  107 |                         mpu6050_ReadDataDMA(Rec_Data, 14, GYTO_XOUT_H_REG);
+      |                                                           ^~~~~~~~~~~~~~~
+      |                                                           GYRO_XOUT_H_REG
+../Core/Src/mpu6050.c:107:59: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/mpu6050.c:117:25: error: 't' undeclared (first use in this function)
+  117 |                         t = (int16_t) (Rec_Data[6] << 8 | Rec_Data[7]);
+      |                         ^
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:02:57 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/mpu6050.c: In function 'mpu6050_Read':
+../Core/Src/mpu6050.c:117:25: error: 't' undeclared (first use in this function)
+  117 |                         t = (int16_t) (Rec_Data[6] << 8 | Rec_Data[7]);
+      |                         ^
+../Core/Src/mpu6050.c:117:25: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:03:26 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `main':
+C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:392:(.text.main+0x60): undefined reference to `mpu6050_Attach_MemWriteDMA'
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:411:(.text.main+0xa8): undefined reference to `displayMemWriteDMA'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:04:22 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'mpuTask':
+../Core/Src/main.c:329:9: warning: implicit declaration of function 'mpu6050_Read'; did you mean 'mpu6050_Init'? [-Wimplicit-function-declaration]
+  329 |         mpu6050_Read();
+      |         ^~~~~~~~~~~~
+      |         mpu6050_Init
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:390:9: warning: implicit declaration of function 'mpu6050_ADC_ConfCpltCallback'; did you mean 'ssd1306_ADC_ConfCpltCallback'? [-Wimplicit-function-declaration]
+  390 |         mpu6050_ADC_ConfCpltCallback(&mpu6050_RxCplt);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_ADC_ConfCpltCallback
+../Core/Src/main.c:391:9: warning: implicit declaration of function 'mpu6050_Attach_MemWrite'; did you mean 'ssd1306_Attach_MemWrite'? [-Wimplicit-function-declaration]
+  391 |         mpu6050_Attach_MemWrite(mpuMemWrite);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_Attach_MemWrite
+../Core/Src/main.c:392:9: warning: implicit declaration of function 'mpu6050_Attach_MemReadDMA' [-Wimplicit-function-declaration]
+  392 |         mpu6050_Attach_MemReadDMA(mpuMemWrite);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `main':
+C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:411:(.text.main+0xa8): undefined reference to `displayMemWriteDMA'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:05:33 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:390:9: warning: implicit declaration of function 'mpu6050_ADC_ConfCpltCallback'; did you mean 'ssd1306_ADC_ConfCpltCallback'? [-Wimplicit-function-declaration]
+  390 |         mpu6050_ADC_ConfCpltCallback(&mpu6050_RxCplt);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_ADC_ConfCpltCallback
+../Core/Src/main.c:391:9: warning: implicit declaration of function 'mpu6050_Attach_MemWrite'; did you mean 'ssd1306_Attach_MemWrite'? [-Wimplicit-function-declaration]
+  391 |         mpu6050_Attach_MemWrite(mpuMemWrite);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~
+      |         ssd1306_Attach_MemWrite
+../Core/Src/main.c:392:9: warning: implicit declaration of function 'mpu6050_Attach_MemReadDMA' [-Wimplicit-function-declaration]
+  392 |         mpu6050_Attach_MemReadDMA(mpuMemWrite);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `main':
+C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:411:(.text.main+0xa8): undefined reference to `displayMemWriteDMA'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:07:39 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `main':
+C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:412:(.text.main+0xa8): undefined reference to `displayMemWriteDMA'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+21:09:05 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  60788	    388	   8204	  69380	  10f04	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+21:09:20 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  60788	    388	   8204	  69380	  10f04	firmware.elf
+Finished building: default.size.stdout
+ 
+23:08:46 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62124	    388	   8204	  70716	  1143c	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.bin
+Finished building: firmware.hex
+ 
+ 
+Finished building: firmware.list
+ 
+23:14:58 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62124	    388	   8204	  70716	  1143c	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:46:35 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/fonts.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/fonts.d" -MT"Core/Src/fonts.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/fonts.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc "../Core/Src/ssd1306.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ssd1306.d" -MT"Core/Src/ssd1306.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ssd1306.o"
+arm-none-eabi-gcc "../Core/Src/ssd1306_tests.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ssd1306_tests.d" -MT"Core/Src/ssd1306_tests.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/ssd1306_tests.o"
+../Core/Src/mpu6050.c: In function 'mpu6050_GetData':
+../Core/Src/mpu6050.c:237:5: note: '-Wmisleading-indentation' is disabled from this point onwards, since column-tracking was disabled due to the size of the code/headers
+  237 |     if (gz) *gz = gz_real;
+      |     ^~
+../Core/Src/mpu6050.c:237:5: note: adding '-flarge-source-files' will allow for more column-tracking support, at the expense of compilation time and memory
+../Core/Src/mpu6050.c:237:5: error: expected declaration or statement at end of input
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+make: *** Waiting for unfinished jobs....
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:309:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  309 |                 if (ssd1306_UpdateScreenDMA())
+      |                 ^~
+../Core/Src/main.c:57:41: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   57 | #define ONMPU                           myFlags.bits.bit6
+      |                                         ^~~~~~~
+../Core/Src/main.c:311:25: note: in expansion of macro 'ONMPU'
+  311 |                         ONMPU=TRUE;
+      |                         ^~~~~
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+23:46:47 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62224	    388	   8204	  70816	  114a0	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:46:52 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62224	    388	   8204	  70816	  114a0	firmware.elf
+Finished building: default.size.stdout
+ 
+23:50:16 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:309:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  309 |                 if (ssd1306_UpdateScreenDMA())
+      |                 ^~
+../Core/Src/main.c:57:41: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   57 | #define ONMPU                           myFlags.bits.bit6
+      |                                         ^~~~~~~
+../Core/Src/main.c:311:25: note: in expansion of macro 'ONMPU'
+  311 |                         ONMPU=TRUE; //Permite obtención de datos MPU posterior a actualizar pantalla
+      |                         ^~~~~
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62224	    388	   8204	  70816	  114a0	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:51:08 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62224	    388	   8204	  70816	  114a0	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+23:51:19 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62224	    388	   8204	  70816	  114a0	firmware.elf
+Finished building: default.size.stdout
+ 
+23:58:17 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  60996	    388	   8204	  69588	  10fd4	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+10:31:28 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+In file included from ../Core/Src/mpu6050.c:8:
+../Core/Inc/MPU6050.h:33:19: error: macro names must be identifiers
+   33 | #define           450
+      |                   ^~~
+../Core/Src/mpu6050.c: In function 'MPU6050_Read_Accel':
+../Core/Src/mpu6050.c:95:20: error: 'OFFSET_AX' undeclared (first use in this function); did you mean 'OFFSET_GX'?
+   95 |     if (abs(ax) <= OFFSET_AX)
+      |                    ^~~~~~~~~
+      |                    OFFSET_GX
+../Core/Src/mpu6050.c:95:20: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from ../Core/Src/main.c:32:
+../Core/Inc/mpu6050.h:33:19: error: macro names must be identifiers
+   33 | #define           450
+      |                   ^~~
+../Core/Src/main.c: In function 'mpuTask':
+../Core/Src/main.c:349:25: error: 'MPU6050_READ' undeclared (first use in this function); did you mean 'MPU6050_ADDR'?
+  349 |                         MPU6050_READ
+      |                         ^~~~~~~~~~~~
+      |                         MPU6050_ADDR
+../Core/Src/main.c:349:25: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:349:37: error: expected ';' before '}' token
+  349 |                         MPU6050_READ
+      |                                     ^
+      |                                     ;
+  350 |         }
+      |         ~                            
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:32:50 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+In file included from ../Core/Src/mpu6050.c:8:
+../Core/Inc/MPU6050.h:33:19: error: macro names must be identifiers
+   33 | #define           450
+      |                   ^~~
+../Core/Src/mpu6050.c: In function 'MPU6050_Read_Accel':
+../Core/Src/mpu6050.c:95:20: error: 'OFFSET_AX' undeclared (first use in this function); did you mean 'OFFSET_GX'?
+   95 |     if (abs(ax) <= OFFSET_AX)
+      |                    ^~~~~~~~~
+      |                    OFFSET_GX
+../Core/Src/mpu6050.c:95:20: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from ../Core/Src/main.c:32:
+../Core/Inc/mpu6050.h:33:19: error: macro names must be identifiers
+   33 | #define           450
+      |                   ^~~
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:33:06 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/mpu6050.c: In function 'MPU6050_Read_Accel':
+../Core/Src/mpu6050.c:95:20: error: 'OFFSET_AX' undeclared (first use in this function); did you mean 'OFFSET_GX'?
+   95 |     if (abs(ax) <= OFFSET_AX)
+      |                    ^~~~~~~~~
+      |                    OFFSET_GX
+../Core/Src/mpu6050.c:95:20: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:33:17 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:32: multiple definition of `ax'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:101: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:32: multiple definition of `ay'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:101: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:32: multiple definition of `az'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:101: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:32: multiple definition of `gx'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:102: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:32: multiple definition of `gy'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:102: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/mpu6050.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/mpu6050.c:32: multiple definition of `gz'; ./Core/Src/main.o:C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:102: first defined here
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `main':
+C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:418:(.text.main+0x64): undefined reference to `mpu6050_Init'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:34:00 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `main':
+C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:418:(.text.main+0x64): undefined reference to `mpu6050_Init'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:34:21 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:418:9: warning: implicit declaration of function 'MPU6050_Init'; did you mean 'mpu6050_Init'? [-Wimplicit-function-declaration]
+  418 |         MPU6050_Init();
+      |         ^~~~~~~~~~~~
+      |         mpu6050_Init
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+   text	   data	    bss	    dec	    hex	filename
+  62192	    384	   8184	  70760	  11468	firmware.elf
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+10:34:40 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:419:9: error: unknown type name 'MPU6050'
+  419 |         MPU6050
+      |         ^~~~~~~
+../Core/Src/main.c:422:24: error: expected declaration specifiers or '...' before '&' token
+  422 |         unerPrtcl_Init(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
+      |                        ^
+../Core/Src/main.c:422:32: error: expected declaration specifiers or '...' before '&' token
+  422 |         unerPrtcl_Init(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
+      |                                ^
+../Core/Src/main.c:422:40: error: expected declaration specifiers or '...' before 'buffUSBRx'
+  422 |         unerPrtcl_Init(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
+      |                                        ^~~~~~~~~
+../Core/Src/main.c:422:51: error: expected declaration specifiers or '...' before 'buffUSBTx'
+  422 |         unerPrtcl_Init(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
+      |                                                   ^~~~~~~~~
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:34:46 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62192	    384	   8184	  70760	  11468	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+10:35:12 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62192	    384	   8184	  70760	  11468	firmware.elf
+Finished building: default.size.stdout
+ 
+10:43:37 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/main.c: In function 'mpuTask':
+../Core/Src/main.c:351:25: warning: implicit declaration of function 'MPU6050_GetData'; did you mean 'mpu6050_GetData'? [-Wimplicit-function-declaration]
+  351 |                         MPU6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
+      |                         ^~~~~~~~~~~~~~~
+      |                         mpu6050_GetData
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `mpuTask':
+C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:351:(.text.mpuTask+0x36): undefined reference to `MPU6050_GetData'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:44:00 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62172	    384	   8184	  70740	  11454	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+10:44:14 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62172	    384	   8184	  70740	  11454	firmware.elf
+Finished building: default.size.stdout
+ 
+10:50:35 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/ST/STM32CubeIDE_1.18.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.win32_1.0.0.202411081344/tools/bin/../lib/gcc/arm-none-eabi/13.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o: in function `mpuTask':
+C:/Users/gonza/Documents/Workspace/MCC25/firmware/Debug/../Core/Src/main.c:349:(.text.mpuTask+0x1e): undefined reference to `mpu6050_Read'
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:74: firmware.elf] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:50:54 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62128	    384	   8184	  70696	  11428	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+10:51:01 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62128	    384	   8184	  70696	  11428	firmware.elf
+Finished building: default.size.stdout
+ 

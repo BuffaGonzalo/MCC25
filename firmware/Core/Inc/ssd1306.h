@@ -163,7 +163,7 @@ void ssd1306_ADC_ConfCpltCallback(volatile uint8_t *PtrRx);
 void ssd1306_Init(void);
 void ssd1306_Fill(SSD1306_COLOR color);
 void ssd1306_UpdateScreen(void);
-void ssd1306_UpdateScreenDMA(void);
+char ssd1306_UpdateScreenDMA(void);
 void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
 char ssd1306_WriteChar(char ch, SSD1306_Font_t Font, SSD1306_COLOR color);
 char ssd1306_WriteString(char* str, SSD1306_Font_t Font, SSD1306_COLOR color);

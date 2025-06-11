@@ -1,3 +1,8 @@
-../Core/Src/mpu6050.c:31:6:mpu6050_Init	32	static
-../Core/Src/mpu6050.c:49:6:mpu6050_Read_Accel	32	static
-../Core/Src/mpu6050.c:78:6:mpu6050_Read_Gyro	32	static
+../Core/Src/mpu6050.c:32:6:mpu6050_Attach_MemReadDMA	16	static
+../Core/Src/mpu6050.c:36:6:mpu6050_Attach_MemWrite	16	static
+../Core/Src/mpu6050.c:40:6:mpu6050_ADC_ConfCpltCallback	16	static
+../Core/Src/mpu6050.c:46:6:mpu6050_WriteData	24	static
+../Core/Src/mpu6050.c:51:6:mpu6050_ReadDataDMA	32	static
+../Core/Src/mpu6050.c:57:6:MPU6050_Init	16	static
+../Core/Src/mpu6050.c:79:6:mpu6050_Read	40	static
+../Core/Src/mpu6050.c:131:6:mpu6050_GetData	24	static

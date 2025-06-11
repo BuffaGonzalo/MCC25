@@ -53,6 +53,9 @@
 #define IS20MS				myFlags.bits.bit1
 #define IS100MS				myFlags.bits.bit2
 
+#define	ONDISPLAY			myFlags.bits.bit5
+#define ONMPU				myFlags.bits.bit6
+
 #define TEST				myFlags.bits.bit7
 /* USER CODE END PD */
 
@@ -95,9 +98,8 @@ _uFlag myFlags;
 volatile uint8_t ssd1306_TxCplt = 0;
 volatile uint8_t mpu6050_RxCplt = 0;
 //mpu6050
-int16_t ax_real, ay_real, az_real;
-int16_t gx_real, gy_real, gz_real;
-
+int16_t ax=0, ay=0, az=0;
+int16_t gx=0, gy=0, gz=0;
 
 /* USER CODE END PV */
 
@@ -122,10 +124,12 @@ void do100ms();
 void heartBeatTask();
 
 //Display
-void displayData();
+void displayTask();
 void displayMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
 void displayMemWriteDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
-
+//MPU6050
+void mpuMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
+void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
 
 /* USER CODE END PFP */
 
@@ -133,16 +137,17 @@ void displayMemWriteDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t ty
 /* USER CODE BEGIN 0 */
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+	//Revisar tiempos de ejecución de esta sección con respecto a la mpu
 	for (int i = 0; i < 8; i++) {
 		adcDataTx[i] = adcData[i];
 	}
 }
 
-void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c){
-    ssd1306_TxCplt = 1;
+void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c){ //Pantalla
+	ssd1306_TxCplt = 1;
 }
 
-void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c){
+void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c){ //MPU
 	mpu6050_RxCplt = 1;
 }
 
@@ -199,22 +204,22 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 		break;
 	case GETMPU:
 		unerPrtcl_PutHeaderOnTx(dataTx, GETMPU, 13);
-		myWord.ui16[0] = ax_real;
+		myWord.ui16[0] = ax;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = ay_real;
+		myWord.ui16[0] = ay;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = az_real;
+		myWord.ui16[0] = az;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = gx_real;
+		myWord.ui16[0] = gx;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = gy_real;
+		myWord.ui16[0] = gy;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = gz_real;
+		myWord.ui16[0] = gz;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
 		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
@@ -260,61 +265,95 @@ void heartBeatTask() {
 	times &= 31;
 }
 
-void displayData() {
+void displayTask() {
 	static uint8_t init = TRUE;
 	uint8_t y = 0, x = 2;
 	if (IS100MS) {
+		ONDISPLAY=TRUE;
 		IS100MS=FALSE;
 		if (init) {
 			init = FALSE;
-			ssd1306_Fill(Black);
-			ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
+			ssd1306_Fill(White);
+			//ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
 		} else {
 			char data[8];
 			ssd1306_SetCursor(x, y);
-			snprintf(data, sizeof(data), "ax:%u", ax_real);
+			snprintf(data, sizeof(data), "ax:%u", ax);
 			ssd1306_WriteString(data, Font_6x8, Black);
 			x += 48;
 			ssd1306_SetCursor(x, y);
-			snprintf(data, sizeof(data), "gx:%u", gx_real);
+			snprintf(data, sizeof(data), "gx:%u", gx);
 			ssd1306_WriteString(data, Font_6x8, Black);
 			x = 2;
 			y += 8;
 			ssd1306_SetCursor(2, y);
-			snprintf(data, sizeof(data), "ay:%u", ay_real);
+			snprintf(data, sizeof(data), "ay:%u", ay);
 			ssd1306_WriteString(data, Font_6x8, Black);
 			x += 48;
 			ssd1306_SetCursor(x, y);
-			snprintf(data, sizeof(data), "gy:%u", gy_real);
+			snprintf(data, sizeof(data), "gy:%u", gy);
 			ssd1306_WriteString(data, Font_6x8, Black);
 			x = 2;
 			y += 8;
 			ssd1306_SetCursor(2, y);
-			snprintf(data, sizeof(data), "az:%u", az_real);
+			snprintf(data, sizeof(data), "az:%u", az);
 			ssd1306_WriteString(data, Font_6x8, Black);
 			x += 48;
 			ssd1306_SetCursor(x, y);
-			snprintf(data, sizeof(data), "gz:%u", gz_real);
+			snprintf(data, sizeof(data), "gz:%u", gz);
 			ssd1306_WriteString(data, Font_6x8, Black);
 		}
 	}
+	if (ONDISPLAY) {
+		ONMPU=FALSE;
+		if (ssd1306_UpdateScreenDMA()){
+			ONDISPLAY = FALSE; //Sali de la pantalla
+			ONMPU=TRUE; //Permite obtención de datos MPU posterior a actualizar pantalla
+		}
+	}
+}
+
+
+void displayMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+	HAL_I2C_Mem_Write(&hi2c1, address , type, 1, data, size, HAL_MAX_DELAY);
 }
 
 void displayMemWriteDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
 	HAL_I2C_Mem_Write_DMA(&hi2c1, address , type, 1, data, size);
 }
 
-void displayMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+void mpuMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
 	HAL_I2C_Mem_Write(&hi2c1, address , type, 1, data, size, HAL_MAX_DELAY);
 }
 
+void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+	HAL_I2C_Mem_Read_DMA(&hi2c1, address , type, 1, data, size);
+}
 
 void mpuTask(){
-	if (IS20MS) {
-		IS20MS = FALSE;
-		mpu6050_Read_Accel();
-		mpu6050_Read_Gyro();
+//	if (ONMPU) {
+//		ONDISPLAY=FALSE;
+//		if (mpu6050_Read()){
+//			ONMPU = FALSE;
+//			mpu6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
+//		}
+//	}
+//	if (IS20MS) {
+//		ONMPU=TRUE;
+//		IS20MS = FALSE;
+//	}
+
+
+	if (ONMPU) {
+		ONDISPLAY=FALSE;
+			mpu6050_Read();
+			mpu6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
 	}
+	if (IS20MS) {
+		ONMPU=TRUE;
+		IS20MS = FALSE;
+	}
+
 }
 
 /* USER CODE END 0 */
@@ -363,14 +402,19 @@ int main(void)
 
 	//Display
 	ssd1306_ADC_ConfCpltCallback(&ssd1306_TxCplt);
-
 	ssd1306_Attach_MemWrite(displayMemWrite);
 	ssd1306_Attach_MemWriteDMA(displayMemWriteDMA);
 
 	ssd1306_Init();
 
 	//mpu6050
-	mpu6050_Init();
+
+	mpu6050_ADC_ConfCpltCallback(&mpu6050_RxCplt);
+	mpu6050_Attach_MemWrite(mpuMemWrite);
+	mpu6050_Attach_MemReadDMA(mpuMemReadDMA);
+
+	MPU6050_Init();
+
 
 	//Inicializacion de protocolo
 	unerPrtcl_Init(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
@@ -391,8 +435,7 @@ int main(void)
 		USBTask();
 
 		mpuTask();
-		displayData();
-		ssd1306_UpdateScreenDMA();
+		displayTask();
 	}
   /* USER CODE END 3 */
 }

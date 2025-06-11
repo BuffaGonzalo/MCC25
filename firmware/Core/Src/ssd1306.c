@@ -224,7 +224,7 @@ void ssd1306_UpdateScreen(void) {
 
 
 /* Write the screenbuffer with changed to the screen */
-void ssd1306_UpdateScreenDMA(void) {
+char ssd1306_UpdateScreenDMA(void) {
     // Write data to each page of RAM. Number of pages
     // depends on the screen height:
     //
@@ -259,11 +259,13 @@ void ssd1306_UpdateScreenDMA(void) {
 
 			if (current_page > 7){//SSD1306_HEIGHT/8) {
 				current_page = 0;
+				return 1;
 			}
 			state = 1;  // Start over with next page
 			break;
 		}
 	}
+	return 0;
 }
 
 /*

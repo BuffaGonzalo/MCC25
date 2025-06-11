@@ -28,17 +28,16 @@ int16_t gz_real;
 // Variables RAW leídas directamente del sensor (int16_t = complemento a dos)
 static int32_t ax, ay, az, gx, gy, gz;
 
-
-void mpu6050_Attach_MemReadDMA(void(*PtrRx)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type)){
-	memReadDMA = PtrRx;
+void mpu6050_ADC_ConfCpltCallback(volatile uint8_t *PtrRx){
+	MPU6050_RxCplt = (uint8_t *)PtrRx;
 }
 
 void mpu6050_Attach_MemWrite(void(*PtrRx)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type)){
 	memWrite = PtrRx;
 }
 
-void mpu6050_ADC_ConfCpltCallback(volatile uint8_t *PtrRx){
-	MPU6050_RxCplt = (uint8_t *)PtrRx;
+void mpu6050_Attach_MemReadDMA(void(*PtrRx)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type)){
+	memReadDMA = PtrRx;
 }
 
 
@@ -50,7 +49,7 @@ void mpu6050_WriteData(uint8_t *byte, uint8_t type) {
 
 void mpu6050_ReadDataDMA(uint8_t* buffer, size_t buff_size, uint8_t type) {
 	memReadDMA(MPU6050_ADDR, buffer, buff_size, type);
-	//HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
+	//HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, GYRO_XOUT_H_REG, 1, Rec_Data,14, 1000);
 }
 
 
@@ -76,56 +75,125 @@ void MPU6050_Init(void)
 
 }
 
-void mpu6050_Read(void)
+char mpu6050_Read(void)
 {
-    uint8_t Rec_Data[14];
 
-    // Leer 6 bytes desde ACCEL_XOUT_H (registro 0x3B)
-    HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 14, HAL_MAX_DELAY);
+	static uint8_t Rec_Data[14];
+	static uint8_t state = 1;
 
-    // Combinar bytes altos y bajos en variables de 16 bits con signo
-    ax = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
-    ay = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
-    az = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
+	if (*MPU6050_RxCplt || state == 1) {
+		*MPU6050_RxCplt = 0;  // Reset completion flag
+		switch (state) {
+		case 1:
+			// Leer 6 bytes desde ACCEL_XOUT_H (registro 0x3B)
+			state=2;
+			//HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, GYRO_XOUT_H_REG, 1, Rec_Data,14, 1000);
+			mpu6050_ReadDataDMA(Rec_Data, 14, GYRO_XOUT_H_REG);
+
+			break;
+		case 2:
+			state=1;
+			// Combinar bytes altos y bajos en variables de 16 bits con signo
+			//Valores accelerometro
+			ax = (int16_t) (Rec_Data[0] << 8 | Rec_Data[1]); //primer byte  es la parte alta, segundo parte baja
+			ay = (int16_t) (Rec_Data[2] << 8 | Rec_Data[3]);
+			az = (int16_t) (Rec_Data[4] << 8 | Rec_Data[5]);
+			//Medida temperatura
+			//t = (int16_t) (Rec_Data[6] << 8 | Rec_Data[7]);
+			//Valoresd el giroscopio
+			gx = (int16_t) (Rec_Data[8] << 8 | Rec_Data[9]);
+			gy = (int16_t) (Rec_Data[10] << 8 | Rec_Data[11]);
+			gz = (int16_t) (Rec_Data[12] << 8 | Rec_Data[13]);
 
 
-    // Combinar bytes altos y bajos
-    gx = (int16_t)(Rec_Data[8] << 8 | Rec_Data[9]);
-    gy = (int16_t)(Rec_Data[10] << 8 | Rec_Data[11]);
-    gz = (int16_t)(Rec_Data[12] << 8 | Rec_Data[13]);
+			if (abs(ax) <= OFFSET_AX)
+				ax_real = 0;
+			else
+				ax_real = (ax / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
 
+			if (abs(ay) <= OFFSET_AY)
+				ay_real = 0;
+			else
+				ay_real = (ay / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
 
-    // Aplicar offset y escalar a m/s² (con 2 decimales fijos)
-    if (abs(ax) <= OFFSET_AX)
-        ax_real = 0;
-    else
-        ax_real = (ax / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+			if (abs(az) <= OFFSET_AZ)
+				az_real = 9.81 * MULTIPLICADORFLOAT; // en reposo debería medir ~1g hacia Z
+			else
+				az_real = (az / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
 
-    if (abs(ay) <= OFFSET_AY)
-        ay_real = 0;
-    else
-        ay_real = (ay / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+			// Aplicar offset y escalar a grados/segundo (centésimas)
+			if (abs(gx) <= OFFSET_GX)
+				gx_real = 0;
+			else
+				gx_real = (gx / 131.0f) * MULTIPLICADORFLOAT;
 
-    if (abs(az) <= OFFSET_AZ)
-        az_real = 9.81 * MULTIPLICADORFLOAT;  // en reposo debería medir ~1g hacia Z
-    else
-        az_real = (az / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+			if (abs(gy) <= OFFSET_GY)
+				gy_real = 0;
+			else
+				gy_real = (gy / 131.0f) * MULTIPLICADORFLOAT;
 
-    // Aplicar offset y escalar a grados/segundo (centésimas)
-    if (abs(gx) <= OFFSET_GX)
-        gx_real = 0;
-    else
-        gx_real = (gx / 131.0f) * MULTIPLICADORFLOAT;
+			if (abs(gz) <= OFFSET_GZ)
+				gz_real = 0;
+			else
+				gz_real = (gz / 131.0f) * MULTIPLICADORFLOAT;
 
-    if (abs(gy) <= OFFSET_GY)
-        gy_real = 0;
-    else
-        gy_real = (gy / 131.0f) * MULTIPLICADORFLOAT;
+			return 1;
+			break;
+		}
+	}
+	return 0;
 
-    if (abs(gz) <= OFFSET_GZ)
-        gz_real = 0;
-    else
-        gz_real = (gz / 131.0f) * MULTIPLICADORFLOAT;
+//
+//    uint8_t Rec_Data[14];
+//
+//    // Leer 6 bytes desde ACCEL_XOUT_H (registro 0x3B)
+//    HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 14, HAL_MAX_DELAY);
+//
+//    // Combinar bytes altos y bajos en variables de 16 bits con signo
+//    ax = (int16_t)(Rec_Data[0] << 8 | Rec_Data[1]);
+//    ay = (int16_t)(Rec_Data[2] << 8 | Rec_Data[3]);
+//    az = (int16_t)(Rec_Data[4] << 8 | Rec_Data[5]);
+//
+//    // Combinar bytes altos y bajos
+//    gx = (int16_t)(Rec_Data[8] << 8 | Rec_Data[9]);
+//    gy = (int16_t)(Rec_Data[10] << 8 | Rec_Data[11]);
+//    gz = (int16_t)(Rec_Data[12] << 8 | Rec_Data[13]);
+//
+//
+//    // Aplicar offset y escalar a m/s² (con 2 decimales fijos)
+//    if (abs(ax) <= OFFSET_AX)
+//        ax_real = 0;
+//    else
+//        ax_real = (ax / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+//
+//    if (abs(ay) <= OFFSET_AY)
+//        ay_real = 0;
+//    else
+//        ay_real = (ay / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+//
+//    if (abs(az) <= OFFSET_AZ)
+//        az_real = 9.81 * MULTIPLICADORFLOAT;  // en reposo debería medir ~1g hacia Z
+//    else
+//        az_real = (az / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+//
+//    // Aplicar offset y escalar a grados/segundo (centésimas)
+//    if (abs(gx) <= OFFSET_GX)
+//        gx_real = 0;
+//    else
+//        gx_real = (gx / 131.0f) * MULTIPLICADORFLOAT;
+//
+//    if (abs(gy) <= OFFSET_GY)
+//        gy_real = 0;
+//    else
+//        gy_real = (gy / 131.0f) * MULTIPLICADORFLOAT;
+//
+//    if (abs(gz) <= OFFSET_GZ)
+//        gz_real = 0;
+//    else
+//        gz_real = (gz / 131.0f) * MULTIPLICADORFLOAT;
+//
+//    return 1;
+
 }
 
 void mpu6050_GetData(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx, int16_t *gy, int16_t *gz) {

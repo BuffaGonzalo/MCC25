@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_CMD->addItem("ALIVE", 0xF0);
     ui->comboBox_CMD->addItem("FIRMWARE", 0xF1);
     ui->comboBox_CMD->addItem("GETMPU", 0xF2);
+    ui->comboBox_CMD->addItem("GETADC", 0xF3);
     ui->comboBox_CMD->addItem("*", 0xA9);
 
     //inicializamos
@@ -249,6 +250,65 @@ void MainWindow::decodeData(uint8_t *datosRx, uint8_t source){
         ui->gz_data->setText(str);
 
     break;
+    case GETADC:
+        //Datos acelerometro
+        w.ui8[0] = datosRx[2];
+        w.ui8[1] = datosRx[3];
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "IR1: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        //ui->ax_data->setText(str);
+
+        w.ui8[0] = datosRx[4];
+        w.ui8[1] = datosRx[5];
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "IR2: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        //ui->ax_data->setText(str);
+
+        w.ui8[0] = datosRx[6];
+        w.ui8[1] = datosRx[7];
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "IR3: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        //ui->ax_data->setText(str);
+
+        w.ui8[0] = datosRx[8];
+        w.ui8[1] = datosRx[9];
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "IR4: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        //ui->ax_data->setText(str);
+
+        w.ui8[0] = datosRx[10];
+        w.ui8[1] = datosRx[11];
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "IR5: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        //ui->ax_data->setText(str);
+
+        w.ui8[0] = datosRx[12];
+        w.ui8[1] = datosRx[13];
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "IR6: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        //ui->ax_data->setText(str);
+
+        w.ui8[0] = datosRx[14];
+        w.ui8[1] = datosRx[15];
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "IR7: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        //ui->ax_data->setText(str);
+
+        w.ui8[0] = datosRx[16];
+        w.ui8[1] = datosRx[17];
+        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        strOut = "IR8: " + str;
+        ui->textBrowserProcessed->append(strOut);
+        //ui->ax_data->setText(str);
+
+        break;
     default:
         str = str + "Comando DESCONOCIDO!!!!";
         ui->textBrowserProcessed->append(str);
@@ -275,6 +335,7 @@ void MainWindow::sendDataSerial(){
     switch (cmdId) {
     case GETALIVE:
     case GETMPU:
+    case GETADC:
     case GETFIRMWARE:// GETFIRMWARE=0xF1
         dato[indice++]=cmdId;
         dato[NBYTES]=0x02;
@@ -544,6 +605,8 @@ void MainWindow::sendDataUDP(){
     cmdId = ui->comboBox_CMD->currentData().toInt();
     switch (cmdId) {
     case GETALIVE:
+    case GETADC:
+    case GETMPU:
     case GETFIRMWARE:// GETFIRMWARE=0xF1
         dato[indice++]=cmdId;
         dato[NBYTES]=0x02;
@@ -580,10 +643,12 @@ void MainWindow::getData(){
     uint8_t cmd, buf[24];
     uint8_t n;
 
+    /*
     cmd=GETMPU;
     n=1;
     buf[0] = cmd;
     sendSerial(buf,n);
+*/
 
     if(!QSerialPort1->isOpen() && !QUdpSocket1->isOpen()) //colocamos un estadopredeterminado en caso de no estar conectado
         statusMode->setText("CURRENT STATE --> IDLE");

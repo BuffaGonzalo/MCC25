@@ -1501,3 +1501,314 @@ arm-none-eabi-size  firmware.elf
   62128	    384	   8184	  70696	  11428	firmware.elf
 Finished building: default.size.stdout
  
+10:56:56 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62128	    384	   8184	  70696	  11428	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+10:57:00 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62128	    384	   8184	  70696	  11428	firmware.elf
+Finished building: default.size.stdout
+ 
+11:02:29 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+../Core/Src/mpu6050.c: In function 'mpu6050_Read':
+../Core/Src/mpu6050.c:102:25: error: 't' undeclared (first use in this function)
+  102 |                         t = (int16_t) (Rec_Data[6] << 8 | Rec_Data[7]);
+      |                         ^
+../Core/Src/mpu6050.c:102:25: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:49: Core/Src/mpu6050.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+11:02:47 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  60952	    388	   8196	  69536	  10fa0	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+11:02:54 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  60952	    388	   8196	  69536	  10fa0	firmware.elf
+Finished building: default.size.stdout
+ 
+12:24:05 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+   text	   data	    bss	    dec	    hex	filename
+  60960	    388	   8196	  69544	  10fa8	firmware.elf
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+12:24:13 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  60960	    388	   8196	  69544	  10fa8	firmware.elf
+Finished building: default.size.stdout
+ 
+12:41:28 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  60960	    388	   8196	  69544	  10fa8	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+14:32:12 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  60872	    388	   8196	  69456	  10f50	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+14:36:30 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  60960	    388	   8196	  69544	  10fa8	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+15:04:52 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  61132	    388	   8196	  69716	  11054	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.bin
+Finished building: firmware.hex
+ 
+ 
+Finished building: firmware.list
+ 
+15:05:24 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  61132	    388	   8196	  69716	  11054	firmware.elf
+Finished building: default.size.stdout
+ 
+15:29:49 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/unerPrtcl.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/unerPrtcl.d" -MT"Core/Src/unerPrtcl.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/unerPrtcl.o"
+../Core/Src/main.c: In function 'decodeCommand':
+../Core/Src/main.c:229:28: error: assignment to expression with array type
+  229 |                 myWord.ui8 = adcDataTx[0];
+      |                            ^
+../Core/Src/main.c:231:28: error: assignment to expression with array type
+  231 |                 myWord.ui8 = adcDataTx[1];
+      |                            ^
+../Core/Src/main.c:233:28: error: assignment to expression with array type
+  233 |                 myWord.ui8 = adcDataTx[2];
+      |                            ^
+../Core/Src/main.c:235:28: error: assignment to expression with array type
+  235 |                 myWord.ui8 = adcDataTx[3];
+      |                            ^
+../Core/Src/main.c:237:28: error: assignment to expression with array type
+  237 |                 myWord.ui8 = adcDataTx[4];
+      |                            ^
+../Core/Src/main.c:239:28: error: assignment to expression with array type
+  239 |                 myWord.ui8 = adcDataTx[5];
+      |                            ^
+../Core/Src/main.c:241:28: error: assignment to expression with array type
+  241 |                 myWord.ui8 = adcDataTx[6];
+      |                            ^
+../Core/Src/main.c:243:28: error: assignment to expression with array type
+  243 |                 myWord.ui8 = adcDataTx[7];
+      |                            ^
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+15:30:36 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  61332	    388	   8196	  69916	  1111c	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+15:36:26 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  61332	    388	   8196	  69916	  1111c	firmware.elf
+Finished building: default.size.stdout
+ 
+15:36:36 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  61332	    388	   8196	  69916	  1111c	firmware.elf
+Finished building: default.size.stdout
+ 
+15:36:39 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  61332	    388	   8196	  69916	  1111c	firmware.elf
+Finished building: default.size.stdout
+ 
+15:53:05 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  61492	    388	   8196	  70076	  111bc	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+15:53:12 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  61492	    388	   8196	  70076	  111bc	firmware.elf
+Finished building: default.size.stdout
+ 
+15:53:25 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  61492	    388	   8196	  70076	  111bc	firmware.elf
+Finished building: default.size.stdout
+ 
+16:00:39 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  61428	    388	   8196	  70012	  1117c	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 

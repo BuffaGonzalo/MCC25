@@ -62,7 +62,7 @@ void MPU6050_Init(void);
 //void mpu6050_Read_Gyro(void);
 
 //Lectura de acelerómetro y giroscopio
-void mpu6050_Read();
+char mpu6050_Read();
 
 
 void mpu6050_Attach_MemReadDMA(void(*PtrRx)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type));
@@ -88,12 +88,6 @@ void mpu6050_GetData(int16_t *ax, int16_t *ay, int16_t *az, int16_t *gx, int16_t
 //void mpu6050_GetGyro();
 ////
 
-
-// Lee el acelerómetro, aplica offset y escala a m/s² ×100
-void MPU6050_Read_Accel(void);
-
-// Lee el giroscopio, aplica offset y escala a °/s ×100
-void MPU6050_Read_Gyro(void);
 
 
 

@@ -45,6 +45,7 @@ typedef enum {
 	ALIVE = 0xF0,
 	FIRMWARE = 0xF1,
 	GETMPU = 0xF2,
+	GETADC = 0xF3,
 	ACK = 0x0D,
 	UNKNOWN = 0xFF
 } _eCmd;

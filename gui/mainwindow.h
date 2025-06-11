@@ -178,6 +178,7 @@ private:
         GETALIVE=0xF0,
         GETFIRMWARE=0xF1,
         GETMPU=0xF2,
+        GETADC=0xF3,
         UNKNOWCMD=0xFF,
         GETFLANKS=0xA8,
         POSITION=0xA9,

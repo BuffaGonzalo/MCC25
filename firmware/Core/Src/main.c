@@ -224,6 +224,35 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
 		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
 		break;
+	case GETADC:
+		unerPrtcl_PutHeaderOnTx(dataTx, GETADC, 17);
+		myWord.ui16[0] = adcDataTx[0];
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = adcDataTx[1];
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = adcDataTx[2];
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = adcDataTx[3];
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = adcDataTx[4];
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = adcDataTx[5];
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = adcDataTx[6];
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		myWord.ui16[0] = adcDataTx[7];
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
+		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
+		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
+		break;
+		break;
 	default:
 		unerPrtcl_PutHeaderOnTx(dataTx, (_eCmd) dataRx->buff[dataRx->indexData], 2);
 		unerPrtcl_PutByteOnTx(dataTx, UNKNOWN);
@@ -302,6 +331,8 @@ void displayTask() {
 			ssd1306_SetCursor(x, y);
 			snprintf(data, sizeof(data), "gz:%u", gz);
 			ssd1306_WriteString(data, Font_6x8, Black);
+
+			ssd1306_FillRectangle(55, 30, 80, 55, Black);
 		}
 	}
 	if (ONDISPLAY) {
@@ -346,14 +377,15 @@ void mpuTask(){
 
 	if (ONMPU) {
 		ONDISPLAY=FALSE;
-			mpu6050_Read();
+		if(mpu6050_Read()){
 			mpu6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
+			ONMPU=FALSE;
+		}
 	}
 	if (IS20MS) {
 		ONMPU=TRUE;
 		IS20MS = FALSE;
 	}
-
 }
 
 /* USER CODE END 0 */

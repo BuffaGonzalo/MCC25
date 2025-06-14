@@ -73,6 +73,8 @@ DMA_HandleTypeDef hdma_i2c1_rx;
 DMA_HandleTypeDef hdma_i2c1_tx;
 
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
 uint32_t heartBeatMask[] = {0x55555555, 0x1, 0x2010080, 0x5F, 0x5, 0x28140A00, 0x15F, 0x15, 0x2A150A08, 0x55F};
@@ -110,6 +112,8 @@ static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_TIM2_Init(void);
+static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
 //USB-Serial Communication
@@ -152,7 +156,7 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c){ //MPU
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	if (htim->Instance == TIM1) {
+	if (htim->Instance == TIM1) { //250us
 		time10ms++;
 		if (time10ms == TO10MS) {
 			time10ms = 0;
@@ -160,7 +164,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		}
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adcData, 8);
 	}
+
+	if(htim->Instance == TIM2){ //20ms
+		ONMPU=TRUE;
+	}
+
+	if(htim->Instance ==TIM3){ //100ms
+		ONDISPLAY=TRUE;
+	}
 }
+
 
 void USBRxData(uint8_t *buf, uint32_t len) { //Recibimos datos -> Enviamos datos
 
@@ -204,22 +217,22 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 		break;
 	case GETMPU:
 		unerPrtcl_PutHeaderOnTx(dataTx, GETMPU, 13);
-		myWord.ui16[0] = ax;
+		myWord.i16[0] = ax;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = ay;
+		myWord.i16[0] = ay;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = az;
+		myWord.i16[0] = az;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = gx;
+		myWord.i16[0] = gx;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = gy;
+		myWord.i16[0] = gy;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
-		myWord.ui16[0] = gz;
+		myWord.i16[0] = gz;
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[0]);
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
 		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
@@ -294,18 +307,34 @@ void heartBeatTask() {
 	times &= 31;
 }
 
+void displayMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+	HAL_I2C_Mem_Write(&hi2c1, address , type, 1, data, size, HAL_MAX_DELAY);
+}
+
+void displayMemWriteDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+	HAL_I2C_Mem_Write_DMA(&hi2c1, address , type, 1, data, size);
+}
+
+void mpuMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+	HAL_I2C_Mem_Write(&hi2c1, address , type, 1, data, size, HAL_MAX_DELAY);
+}
+
+void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
+	HAL_I2C_Mem_Read_DMA(&hi2c1, address , type, 1, data, size);
+}
+
 void displayTask() {
-	static uint8_t init = TRUE;
 	uint8_t y = 0, x = 2;
-	if (IS100MS) {
-		ONDISPLAY=TRUE;
-		IS100MS=FALSE;
-		if (init) {
-			init = FALSE;
-			ssd1306_Fill(White);
-			//ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
-		} else {
+
+	static uint8_t update = TRUE;
+	if (ONDISPLAY) {
+		if (update) {
 			char data[8];
+			update = FALSE;
+			ssd1306_Fill(White);
+
+			//ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
+
 			ssd1306_SetCursor(x, y);
 			snprintf(data, sizeof(data), "ax:%u", ax);
 			ssd1306_WriteString(data, Font_6x8, Black);
@@ -331,61 +360,39 @@ void displayTask() {
 			ssd1306_SetCursor(x, y);
 			snprintf(data, sizeof(data), "gz:%u", gz);
 			ssd1306_WriteString(data, Font_6x8, Black);
+		}
 
-			ssd1306_FillRectangle(55, 30, 80, 55, Black);
+		//ssd1306_FillRectangle(55, 30, 80, 55, Black);
+
+		if (ssd1306_UpdateScreenDMA()) {
+			ONDISPLAY = FALSE;
+			ONMPU = TRUE;
+			update = TRUE;
 		}
 	}
-	if (ONDISPLAY) {
-		ONMPU=FALSE;
-		if (ssd1306_UpdateScreenDMA()){
-			ONDISPLAY = FALSE; //Sali de la pantalla
-			ONMPU=TRUE; //Permite obtención de datos MPU posterior a actualizar pantalla
-		}
-	}
-}
-
-
-void displayMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
-	HAL_I2C_Mem_Write(&hi2c1, address , type, 1, data, size, HAL_MAX_DELAY);
-}
-
-void displayMemWriteDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
-	HAL_I2C_Mem_Write_DMA(&hi2c1, address , type, 1, data, size);
-}
-
-void mpuMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
-	HAL_I2C_Mem_Write(&hi2c1, address , type, 1, data, size, HAL_MAX_DELAY);
-}
-
-void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
-	HAL_I2C_Mem_Read_DMA(&hi2c1, address , type, 1, data, size);
-}
-
-void mpuTask(){
-//	if (ONMPU) {
-//		ONDISPLAY=FALSE;
-//		if (mpu6050_Read()){
-//			ONMPU = FALSE;
-//			mpu6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
+//	if (ONDISPLAY) {
+//		ONMPU=FALSE;
+//		if (ssd1306_UpdateScreenDMA()){
+//			ONDISPLAY = FALSE; //Sali de la pantalla
+//			ONMPU=TRUE; //Permite obtención de datos MPU posterior a actualizar pantalla
 //		}
 //	}
+}
+
+
+void mpuTask(){
+
 //	if (IS20MS) {
-//		ONMPU=TRUE;
+//		ONMPU = TRUE;
 //		IS20MS = FALSE;
 //	}
-
-
 	if (ONMPU) {
-		ONDISPLAY=FALSE;
-		if(mpu6050_Read()){
+		if (mpu6050_Read()) {
+			ONMPU = FALSE;
 			mpu6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
-			ONMPU=FALSE;
 		}
 	}
-	if (IS20MS) {
-		ONMPU=TRUE;
-		IS20MS = FALSE;
-	}
+
 }
 
 /* USER CODE END 0 */
@@ -424,11 +431,16 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM1_Init();
   MX_USB_DEVICE_Init();
+  MX_TIM2_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
 	CDC_Attach_Rx(USBRxData); //Attach a la función que tenia en el .C
 
 	HAL_TIM_Base_Start_IT(&htim1); //timer
+	HAL_TIM_Base_Start_IT(&htim2);
+	HAL_TIM_Base_Start_IT(&htim3);
+
 
 	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
 
@@ -436,7 +448,6 @@ int main(void)
 	ssd1306_ADC_ConfCpltCallback(&ssd1306_TxCplt);
 	ssd1306_Attach_MemWrite(displayMemWrite);
 	ssd1306_Attach_MemWriteDMA(displayMemWriteDMA);
-
 	ssd1306_Init();
 
 	//mpu6050
@@ -444,9 +455,7 @@ int main(void)
 	mpu6050_ADC_ConfCpltCallback(&mpu6050_RxCplt);
 	mpu6050_Attach_MemWrite(mpuMemWrite);
 	mpu6050_Attach_MemReadDMA(mpuMemReadDMA);
-
 	MPU6050_Init();
-
 
 	//Inicializacion de protocolo
 	unerPrtcl_Init(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
@@ -467,7 +476,7 @@ int main(void)
 		USBTask();
 
 		mpuTask();
-		displayTask();
+		//displayTask();
 	}
   /* USER CODE END 3 */
 }
@@ -716,6 +725,110 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_SlaveConfigTypeDef sSlaveConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 95;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 9999;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sSlaveConfig.SlaveMode = TIM_SLAVEMODE_DISABLE;
+  sSlaveConfig.InputTrigger = TIM_TS_ITR0;
+  if (HAL_TIM_SlaveConfigSynchro(&htim2, &sSlaveConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_SlaveConfigTypeDef sSlaveConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 95;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 49999;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sSlaveConfig.SlaveMode = TIM_SLAVEMODE_DISABLE;
+  sSlaveConfig.InputTrigger = TIM_TS_ITR0;
+  if (HAL_TIM_SlaveConfigSynchro(&htim3, &sSlaveConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
 
 }
 

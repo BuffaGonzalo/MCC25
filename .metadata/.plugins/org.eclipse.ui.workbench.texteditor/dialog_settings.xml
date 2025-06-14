@@ -3,8 +3,9 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
-		<item value="IS20MS"/>
 		<item value="mpu6050_RxCplt"/>
+		<item value="ONDISPLAY"/>
+		<item value="IS20MS"/>
 		<item value="ssd1306_WriteData"/>
 	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">

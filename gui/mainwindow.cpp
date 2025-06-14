@@ -200,51 +200,51 @@ void MainWindow::decodeData(uint8_t *datosRx, uint8_t source){
     case GETMPU:
 
         //Datos acelerometro
-        w.ui8[0] = datosRx[2];
-        w.ui8[1] = datosRx[3];
+        w.i8[0] = datosRx[2];
+        w.i8[1] = datosRx[3];
 
-        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        str = QString("%1").arg(w.i16[0], 5, 10, QChar('0'));
         strOut = "Ax: " + str;
         ui->textBrowserProcessed->append(strOut);
         ui->ax_data->setText(str);
 
-        w.ui8[0] = datosRx[4];
-        w.ui8[1] = datosRx[5];
+        w.i8[0] = datosRx[4];
+        w.i8[1] = datosRx[5];
 
-        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        str = QString("%1").arg(w.i16[0], 5, 10, QChar('0'));
         strOut = "Ay: " + str;
         ui->textBrowserProcessed->append(strOut);
         ui->ay_data->setText(str);
 
-        w.ui8[0] = datosRx[6];
-        w.ui8[1] = datosRx[7];
+        w.i8[0] = datosRx[6];
+        w.i8[1] = datosRx[7];
 
-        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        str = QString("%1").arg(w.i16[0], 5, 10, QChar('0'));
         strOut = "Az: " + str;
         ui->textBrowserProcessed->append(strOut);
         ui->az_data->setText(str);
 
         //Datos giroscopio
-        w.ui8[0] = datosRx[8];
-        w.ui8[1] = datosRx[9];
+        w.i8[0] = datosRx[8];
+        w.i8[1] = datosRx[9];
 
-        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        str = QString("%1").arg(w.i16[0], 5, 10, QChar('0'));
         strOut = "Gx: " + str;
         ui->textBrowserProcessed->append(strOut);
         ui->gx_data->setText(str);
 
-        w.ui8[0] = datosRx[10];
-        w.ui8[1] = datosRx[11];
+        w.i8[0] = datosRx[10];
+        w.i8[1] = datosRx[11];
 
-        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        str = QString("%1").arg(w.i16[0], 5, 10, QChar('0'));
         strOut = "Gy: " + str;
         ui->textBrowserProcessed->append(strOut);
         ui->gy_data->setText(str);
 
-        w.ui8[0] = datosRx[12];
-        w.ui8[1] = datosRx[13];
+        w.i8[0] = datosRx[12];
+        w.i8[1] = datosRx[13];
 
-        str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
+        str = QString("%1").arg(w.i16[0], 5, 10, QChar('0'));
         strOut = "Gz: " + str;
         ui->textBrowserProcessed->append(strOut);
         ui->gz_data->setText(str);
@@ -257,56 +257,56 @@ void MainWindow::decodeData(uint8_t *datosRx, uint8_t source){
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
         strOut = "IR1: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //ui->ax_data->setText(str);
+        ui->ir1_data->setText(str);
 
         w.ui8[0] = datosRx[4];
         w.ui8[1] = datosRx[5];
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
         strOut = "IR2: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //ui->ax_data->setText(str);
+        ui->ir2_data->setText(str);
 
         w.ui8[0] = datosRx[6];
         w.ui8[1] = datosRx[7];
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
         strOut = "IR3: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //ui->ax_data->setText(str);
+        ui->ir3_data->setText(str);
 
         w.ui8[0] = datosRx[8];
         w.ui8[1] = datosRx[9];
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
         strOut = "IR4: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //ui->ax_data->setText(str);
+        ui->ir4_data->setText(str);
 
         w.ui8[0] = datosRx[10];
         w.ui8[1] = datosRx[11];
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
         strOut = "IR5: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //ui->ax_data->setText(str);
+        ui->ir5_data->setText(str);
 
         w.ui8[0] = datosRx[12];
         w.ui8[1] = datosRx[13];
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
         strOut = "IR6: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //ui->ax_data->setText(str);
+        ui->ir6_data->setText(str);
 
         w.ui8[0] = datosRx[14];
         w.ui8[1] = datosRx[15];
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
         strOut = "IR7: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //ui->ax_data->setText(str);
+        ui->ir7_data->setText(str);
 
         w.ui8[0] = datosRx[16];
         w.ui8[1] = datosRx[17];
         str = QString("%1").arg(w.ui16[0], 5, 10, QChar('0'));
         strOut = "IR8: " + str;
         ui->textBrowserProcessed->append(strOut);
-        //ui->ax_data->setText(str);
+        ui->ir8_data->setText(str);
 
         break;
     default:
@@ -643,12 +643,17 @@ void MainWindow::getData(){
     uint8_t cmd, buf[24];
     uint8_t n;
 
-    /*
+/*
     cmd=GETMPU;
     n=1;
     buf[0] = cmd;
     sendSerial(buf,n);
 */
+
+    cmd=GETADC;
+    n=1;
+    buf[0] = cmd;
+    sendSerial(buf,n);
 
     if(!QSerialPort1->isOpen() && !QUdpSocket1->isOpen()) //colocamos un estadopredeterminado en caso de no estar conectado
         statusMode->setText("CURRENT STATE --> IDLE");

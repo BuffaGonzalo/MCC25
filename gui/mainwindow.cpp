@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent)
     statusMode = new QLabel(ui->statusBar);
 
     timer1->start(100);
-    timer2->start(100);
+    timer2->start(500);
 }
 
 MainWindow::~MainWindow()
@@ -643,12 +643,10 @@ void MainWindow::getData(){
     uint8_t cmd, buf[24];
     uint8_t n;
 
-/*
     cmd=GETMPU;
     n=1;
     buf[0] = cmd;
     sendSerial(buf,n);
-*/
 
     cmd=GETADC;
     n=1;

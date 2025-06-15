@@ -5,4 +5,4 @@
 ../Core/Src/mpu6050.c:50:6:mpu6050_ReadDataDMA	1
 ../Core/Src/mpu6050.c:56:6:MPU6050_Init	1
 ../Core/Src/mpu6050.c:78:6:mpu6050_Read	17
-../Core/Src/mpu6050.c:193:6:mpu6050_GetData	7
+../Core/Src/mpu6050.c:191:6:mpu6050_GetData	7

@@ -256,12 +256,12 @@ char ssd1306_UpdateScreenDMA(void) {
 		case 4:  // Write page data
 			ssd1306_WriteDataDMA(&SSD1306_Buffer[SSD1306_WIDTH*current_page],SSD1306_WIDTH);
 			current_page++;
-			state = 1;  // Start over with next page
 
 			if (current_page > 7){//SSD1306_HEIGHT/8) {
 				current_page = 0;
 				return 1;
 			}
+			state = 1;  // Start over with next page
 			break;
 		}
 	}

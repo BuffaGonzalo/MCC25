@@ -87,14 +87,15 @@ public:
     QLabel *ir7_data;
     QLabel *ir8_label;
     QLabel *ir8_data;
-    QWidget *layoutWidget4;
-    QVBoxLayout *verticalLayout_3;
+    QWidget *widget;
+    QVBoxLayout *verticalLayout_4;
     QHBoxLayout *horizontalLayout_7;
     QLineEdit *lineEdit_local_port;
     QSpacerItem *horizontalSpacer_3;
     QHBoxLayout *horizontalLayout_3;
     QPushButton *pushButton_sendUdp;
     QPushButton *pushButton_connectUdp;
+    QVBoxLayout *verticalLayout_3;
     QHBoxLayout *horizontalLayout_5;
     QLineEdit *lineEdit_device_ip;
     QSpacerItem *horizontalSpacer;
@@ -138,7 +139,7 @@ public:
         line_3->setFrameShadow(QFrame::Shadow::Sunken);
         comboBox_CMD = new QComboBox(centralwidget);
         comboBox_CMD->setObjectName("comboBox_CMD");
-        comboBox_CMD->setGeometry(QRect(13, 52, 241, 28));
+        comboBox_CMD->setGeometry(QRect(13, 52, 481, 28));
         label_udp = new QLabel(centralwidget);
         label_udp->setObjectName("label_udp");
         label_udp->setGeometry(QRect(20, 173, 78, 20));
@@ -390,15 +391,15 @@ public:
 
         verticalLayout_2->addWidget(ir8_data);
 
-        layoutWidget4 = new QWidget(centralwidget);
-        layoutWidget4->setObjectName("layoutWidget4");
-        layoutWidget4->setGeometry(QRect(21, 203, 471, 109));
-        verticalLayout_3 = new QVBoxLayout(layoutWidget4);
-        verticalLayout_3->setObjectName("verticalLayout_3");
-        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
+        widget = new QWidget(centralwidget);
+        widget->setObjectName("widget");
+        widget->setGeometry(QRect(22, 204, 471, 109));
+        verticalLayout_4 = new QVBoxLayout(widget);
+        verticalLayout_4->setObjectName("verticalLayout_4");
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
         horizontalLayout_7 = new QHBoxLayout();
         horizontalLayout_7->setObjectName("horizontalLayout_7");
-        lineEdit_local_port = new QLineEdit(layoutWidget4);
+        lineEdit_local_port = new QLineEdit(widget);
         lineEdit_local_port->setObjectName("lineEdit_local_port");
 
         horizontalLayout_7->addWidget(lineEdit_local_port);
@@ -409,12 +410,12 @@ public:
 
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName("horizontalLayout_3");
-        pushButton_sendUdp = new QPushButton(layoutWidget4);
+        pushButton_sendUdp = new QPushButton(widget);
         pushButton_sendUdp->setObjectName("pushButton_sendUdp");
 
         horizontalLayout_3->addWidget(pushButton_sendUdp);
 
-        pushButton_connectUdp = new QPushButton(layoutWidget4);
+        pushButton_connectUdp = new QPushButton(widget);
         pushButton_connectUdp->setObjectName("pushButton_connectUdp");
 
         horizontalLayout_3->addWidget(pushButton_connectUdp);
@@ -423,11 +424,13 @@ public:
         horizontalLayout_7->addLayout(horizontalLayout_3);
 
 
-        verticalLayout_3->addLayout(horizontalLayout_7);
+        verticalLayout_4->addLayout(horizontalLayout_7);
 
+        verticalLayout_3 = new QVBoxLayout();
+        verticalLayout_3->setObjectName("verticalLayout_3");
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setObjectName("horizontalLayout_5");
-        lineEdit_device_ip = new QLineEdit(layoutWidget4);
+        lineEdit_device_ip = new QLineEdit(widget);
         lineEdit_device_ip->setObjectName("lineEdit_device_ip");
         QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Fixed);
         sizePolicy.setHorizontalStretch(0);
@@ -441,7 +444,7 @@ public:
 
         horizontalLayout_5->addItem(horizontalSpacer);
 
-        label_device_ip = new QLabel(layoutWidget4);
+        label_device_ip = new QLabel(widget);
         label_device_ip->setObjectName("label_device_ip");
         label_device_ip->setFont(font);
 
@@ -452,7 +455,7 @@ public:
 
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setObjectName("horizontalLayout_6");
-        lineEdit_device_port = new QLineEdit(layoutWidget4);
+        lineEdit_device_port = new QLineEdit(widget);
         lineEdit_device_port->setObjectName("lineEdit_device_port");
 
         horizontalLayout_6->addWidget(lineEdit_device_port);
@@ -461,7 +464,7 @@ public:
 
         horizontalLayout_6->addItem(horizontalSpacer_2);
 
-        label_devide_port = new QLabel(layoutWidget4);
+        label_devide_port = new QLabel(widget);
         label_devide_port->setObjectName("label_devide_port");
         label_devide_port->setFont(font);
 
@@ -469,6 +472,9 @@ public:
 
 
         verticalLayout_3->addLayout(horizontalLayout_6);
+
+
+        verticalLayout_4->addLayout(verticalLayout_3);
 
         MainWindow->setCentralWidget(centralwidget);
         statusBar = new QStatusBar(MainWindow);

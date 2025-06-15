@@ -131,9 +131,11 @@ char mpu6050_Read(void)
 		*mpu6050_RxCplt = 0;  // Reset completion flag
 		switch (state) {
 		case 1:
-			state=2;
 			// Leer 6 bytes desde ACCEL_XOUT_H (registro 0x3B)
+			state=2;
 			mpu6050_ReadDataDMA(Rec_Data, 14, ACCEL_XOUT_H_REG);
+			//HAL_I2C_Mem_Read_DMA(&hi2c1, MPU6050_ADDR , ACCEL_XOUT_H_REG, 1, Rec_Data, 14);
+
 			break;
 		case 2:
 			state=1;

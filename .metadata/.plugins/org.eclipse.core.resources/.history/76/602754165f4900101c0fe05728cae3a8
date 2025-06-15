@@ -166,11 +166,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	}
 
 	if(htim->Instance == TIM2){ //20ms
-		//ONMPU=TRUE;
+		ONMPU=TRUE;
 	}
 
 	if(htim->Instance ==TIM3){ //100ms
-		//ONDISPLAY=TRUE;
+		ONDISPLAY=TRUE;
 	}
 }
 
@@ -282,12 +282,10 @@ void do10ms() {
 		if (!tmo20ms) {
 			tmo20ms = 2;
 			IS20MS = TRUE;
-			ONMPU = TRUE;
 		}
 		if (!tmo100ms) {
 			tmo100ms = 10;
 			IS100MS = TRUE;
-			ONDISPLAY = TRUE;
 			heartBeatTask();
 		}
 	}
@@ -327,14 +325,12 @@ void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
 
 void displayTask() {
 	uint8_t y = 0, x = 2;
-	static uint8_t update = TRUE;
 
+	static uint8_t update = TRUE;
 	if (ONDISPLAY) {
-		ONMPU=FALSE;
 		if (update) {
 			char data[8];
 			update = FALSE;
-
 			ssd1306_Fill(White);
 
 			//ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
@@ -364,21 +360,32 @@ void displayTask() {
 			ssd1306_SetCursor(x, y);
 			snprintf(data, sizeof(data), "gz:%u", gz);
 			ssd1306_WriteString(data, Font_6x8, Black);
-
-			//ssd1306_FillRectangle(55, 30, 80, 55, Black);
 		}
+
+		//ssd1306_FillRectangle(55, 30, 80, 55, Black);
 
 		if (ssd1306_UpdateScreenDMA()) {
 			ONDISPLAY = FALSE;
-			//ONMPU = TRUE;
+			ONMPU = TRUE;
 			update = TRUE;
 		}
 	}
+//	if (ONDISPLAY) {
+//		ONMPU=FALSE;
+//		if (ssd1306_UpdateScreenDMA()){
+//			ONDISPLAY = FALSE; //Sali de la pantalla
+//			ONMPU=TRUE; //Permite obtención de datos MPU posterior a actualizar pantalla
+//		}
+//	}
 }
 
 
 void mpuTask(){
 
+//	if (IS20MS) {
+//		ONMPU = TRUE;
+//		IS20MS = FALSE;
+//	}
 	if (ONMPU) {
 		if (mpu6050_Read()) {
 			ONMPU = FALSE;
@@ -468,9 +475,8 @@ int main(void)
 		do10ms();
 		USBTask();
 
-
-		displayTask();
 		mpuTask();
+		//displayTask();
 	}
   /* USER CODE END 3 */
 }

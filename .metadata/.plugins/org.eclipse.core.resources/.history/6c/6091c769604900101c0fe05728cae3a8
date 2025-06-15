@@ -166,11 +166,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	}
 
 	if(htim->Instance == TIM2){ //20ms
-		//ONMPU=TRUE;
+		ONMPU=TRUE;
 	}
 
 	if(htim->Instance ==TIM3){ //100ms
-		//ONDISPLAY=TRUE;
+		ONDISPLAY=TRUE;
 	}
 }
 
@@ -282,12 +282,10 @@ void do10ms() {
 		if (!tmo20ms) {
 			tmo20ms = 2;
 			IS20MS = TRUE;
-			ONMPU = TRUE;
 		}
 		if (!tmo100ms) {
 			tmo100ms = 10;
 			IS100MS = TRUE;
-			ONDISPLAY = TRUE;
 			heartBeatTask();
 		}
 	}
@@ -327,10 +325,9 @@ void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
 
 void displayTask() {
 	uint8_t y = 0, x = 2;
-	static uint8_t update = TRUE;
 
+	static uint8_t update = TRUE;
 	if (ONDISPLAY) {
-		ONMPU=FALSE;
 		if (update) {
 			char data[8];
 			update = FALSE;
@@ -370,7 +367,7 @@ void displayTask() {
 
 		if (ssd1306_UpdateScreenDMA()) {
 			ONDISPLAY = FALSE;
-			//ONMPU = TRUE;
+			ONMPU = TRUE;
 			update = TRUE;
 		}
 	}
@@ -468,9 +465,8 @@ int main(void)
 		do10ms();
 		USBTask();
 
-
-		displayTask();
 		mpuTask();
+		//displayTask();
 	}
   /* USER CODE END 3 */
 }

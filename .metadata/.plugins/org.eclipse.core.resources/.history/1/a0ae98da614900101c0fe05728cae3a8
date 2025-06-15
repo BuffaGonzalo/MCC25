@@ -370,7 +370,7 @@ void displayTask() {
 
 		if (ssd1306_UpdateScreenDMA()) {
 			ONDISPLAY = FALSE;
-			//ONMPU = TRUE;
+			ONMPU = TRUE;
 			update = TRUE;
 		}
 	}
@@ -468,9 +468,8 @@ int main(void)
 		do10ms();
 		USBTask();
 
-
-		displayTask();
 		mpuTask();
+		displayTask();
 	}
   /* USER CODE END 3 */
 }

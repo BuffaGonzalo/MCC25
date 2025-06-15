@@ -370,7 +370,7 @@ void displayTask() {
 
 		if (ssd1306_UpdateScreenDMA()) {
 			ONDISPLAY = FALSE;
-			//ONMPU = TRUE;
+			ONMPU = TRUE;
 			update = TRUE;
 		}
 	}

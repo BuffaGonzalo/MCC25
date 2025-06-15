@@ -332,31 +332,26 @@ void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
 void displayTask() {
 	char data[8];
 	uint8_t y = 0, x = 2;
-	static uint8_t init = FALSE;
+	static uint8_t init = TRUE;
 	static uint8_t wait = FALSE;
-	static uint8_t over = TRUE;
 
-	if(!over){
-		ONMPU=FALSE;
+	if (!OVERDISPLAY) {
+		ONMPU = FALSE;
 	}
 
-	if (ONMPU) { //Espera de la pantalla
+	if (ONMPU && ONDISPLAY) { //Espera de la pantalla
 		wait = TRUE;
 		ONDISPLAY = FALSE;
 		return;
 	}
-
 	if (wait && !ONMPU) { //MPU terminó, entra pantalla
 		wait = FALSE;
-		init = TRUE;
 		ONDISPLAY = TRUE;
 	}
 
-	//OVERDISPLAY = FALSE;
-	if(ONDISPLAY){
+	OVERDISPLAY = FALSE;
 	if (init) {
 		init = FALSE;
-		over = FALSE;
 		ssd1306_Fill(White);
 		//ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
 		//ssd1306_FillRectangle(55, 30, 80, 55, Black);
@@ -399,16 +394,15 @@ void displayTask() {
 
 	if (ssd1306_UpdateScreenDMA()) {
 		ONDISPLAY = FALSE;
-		over = TRUE;
+		OVERDISPLAY = TRUE;
 		init = TRUE;
-	}
 	}
 }
 
 
 void mpuTask() {
 
-	if (ONMPU) {
+	if (ONMPU && !ONDISPLAY) {
 		if (mpu6050_Read()) {
 			ONMPU = FALSE;
 			mpu6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
@@ -484,7 +478,7 @@ int main(void)
 
 	//Variables
 	ALLFLAGS = RESET;
-	OVERDISPLAY = TRUE;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -53,9 +53,7 @@
 #define IS20MS				myFlags.bits.bit1
 #define IS100MS				myFlags.bits.bit2
 
-
-#define	ONDISPLAY			myFlags.bits.bit4
-#define	OVERDISPLAY			myFlags.bits.bit5
+#define	ONDISPLAY			myFlags.bits.bit5
 #define ONMPU				myFlags.bits.bit6
 
 #define TEST				myFlags.bits.bit7
@@ -104,8 +102,6 @@ volatile uint8_t mpu6050_RxCplt = 0;
 //mpu6050
 int16_t ax=0, ay=0, az=0;
 int16_t gx=0, gy=0, gz=0;
-
-uint8_t screenOver=TRUE;
 
 /* USER CODE END PV */
 
@@ -280,13 +276,13 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 
 void do10ms() {
 	if (IS10MS) {
+		ONMPU = TRUE;
 		IS10MS = FALSE;
 		tmo100ms--;
 		tmo20ms--;
 		if (!tmo20ms) {
 			tmo20ms = 2;
 			IS20MS = TRUE;
-			ONMPU = TRUE;
 		}
 		if (!tmo100ms) {
 			tmo100ms = 10;
@@ -330,78 +326,61 @@ void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
 }
 
 void displayTask() {
-	char data[8];
 	uint8_t y = 0, x = 2;
-	static uint8_t init = FALSE;
-	static uint8_t wait = FALSE;
-	static uint8_t over = TRUE;
+	static uint8_t update = TRUE;
 
-	if(!over){
-		ONMPU=FALSE;
-	}
+	if (ONDISPLAY) {
+		ONMPU = FALSE;
+		if (update) {
+			char data[8];
+			update = FALSE;
 
-	if (ONMPU) { //Espera de la pantalla
-		wait = TRUE;
-		ONDISPLAY = FALSE;
-		return;
-	}
+			ssd1306_Fill(White);
+			//ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
 
-	if (wait && !ONMPU) { //MPU terminó, entra pantalla
-		wait = FALSE;
-		init = TRUE;
-		ONDISPLAY = TRUE;
-	}
+			ssd1306_SetCursor(x, y);
+			snprintf(data, sizeof(data), "ax:%u", ax);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x += 48;
+			ssd1306_SetCursor(x, y);
+			snprintf(data, sizeof(data), "gx:%u", gx);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x = 2;
+			y += 8;
+			ssd1306_SetCursor(2, y);
+			snprintf(data, sizeof(data), "ay:%u", ay);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x += 48;
+			ssd1306_SetCursor(x, y);
+			snprintf(data, sizeof(data), "gy:%u", gy);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x = 2;
+			y += 8;
+			ssd1306_SetCursor(2, y);
+			snprintf(data, sizeof(data), "az:%u", az);
+			ssd1306_WriteString(data, Font_6x8, Black);
+			x += 48;
+			ssd1306_SetCursor(x, y);
+			snprintf(data, sizeof(data), "gz:%u", gz);
+			ssd1306_WriteString(data, Font_6x8, Black);
 
-	//OVERDISPLAY = FALSE;
-	if(ONDISPLAY){
-	if (init) {
-		init = FALSE;
-		over = FALSE;
-		ssd1306_Fill(White);
-		//ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
-		//ssd1306_FillRectangle(55, 30, 80, 55, Black);
+			ssd1306_FillRectangle(55, 30, 80, 55, Black);
+		}
 
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "ax:%u", ax);
-		ssd1306_WriteString(data, Font_6x8, Black);
-		x += 48;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "gx:%u", gx);
-		ssd1306_WriteString(data, Font_6x8, Black);
-		x = 2;
-		y += 8;
-		ssd1306_SetCursor(2, y);
-		snprintf(data, sizeof(data), "ay:%u", ay);
-		ssd1306_WriteString(data, Font_6x8, Black);
-		x += 48;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "gy:%u", gy);
-		ssd1306_WriteString(data, Font_6x8, Black);
-		x = 2;
-		y += 8;
-		ssd1306_SetCursor(2, y);
-		snprintf(data, sizeof(data), "az:%u", az);
-		ssd1306_WriteString(data, Font_6x8, Black);
-		x += 48;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "gz:%u", gz);
-		ssd1306_WriteString(data, Font_6x8, Black);
+		ssd1306_Line(5,60,5,(((adcDataTx[0]*100)/4090)*25)+25, Black);
+		ssd1306_Line(7,60,7,(((adcDataTx[1]*100)/4090)*25)+25, Black);
+		ssd1306_Line(9,60,9,(((adcDataTx[2]*100)/4090)*25)+25, Black);
+		ssd1306_Line(11,60,11,(((adcDataTx[3]*100)/4090)*25)+25, Black);
+		ssd1306_Line(13,60,13,(((adcDataTx[4]*100)/4090)*25)+25, Black);
+		ssd1306_Line(15,60,15,(((adcDataTx[5]*100)/4090)*25)+25, Black);
+		ssd1306_Line(17,60,17,(((adcDataTx[6]*100)/4090)*25)+25, Black);
+		ssd1306_Line(19,60,19,(((adcDataTx[7]*100)/4090)*25)+25, Black);
 
-		ssd1306_Line(5, 60, 5, (60 - (adcDataTx[0] / 4090) * 25), Black);
-		ssd1306_Line(7, 60, 7, (60 - (adcDataTx[1] / 4090) * 25), Black);
-		ssd1306_Line(9, 60, 9, (60 - (adcDataTx[2] / 4090) * 25), Black);
-		ssd1306_Line(11, 60, 11, (60 - (adcDataTx[3] / 4090) * 25), Black);
-		ssd1306_Line(13, 60, 13, (60 - (adcDataTx[4] / 4090) * 25), Black);
-		ssd1306_Line(15, 60, 15, (60 - (adcDataTx[5] / 4090) * 25), Black);
-		ssd1306_Line(17, 60, 17, (60 - (adcDataTx[6] / 4090) * 25), Black);
-		ssd1306_Line(19, 60, 19, (60 - (adcDataTx[7] / 4090) * 25), Black);
-	}
-
-	if (ssd1306_UpdateScreenDMA()) {
-		ONDISPLAY = FALSE;
-		over = TRUE;
-		init = TRUE;
-	}
+		if (ssd1306_UpdateScreenDMA()) {
+			ONDISPLAY = FALSE;
+			//ONMPU = TRUE;
+			update = TRUE;
+		}
 	}
 }
 
@@ -484,7 +463,7 @@ int main(void)
 
 	//Variables
 	ALLFLAGS = RESET;
-	OVERDISPLAY = TRUE;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -2786,3 +2786,722 @@ Finished building: firmware.bin
  
 Finished building: firmware.list
  
+23:31:41 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:367:25: error: too few arguments to function 'ssd1306_Line'
+  367 |                         ssd1306_Line(5,60,5,40);
+      |                         ^~~~~~~~~~~~
+In file included from ../Core/Src/main.c:31:
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+23:31:46 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:367:25: error: too few arguments to function 'ssd1306_Line'
+  367 |                         ssd1306_Line(5,60,5,40);
+      |                         ^~~~~~~~~~~~
+In file included from ../Core/Src/main.c:31:
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+23:32:16 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62168	    388	   8340	  70896	  114f0	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:51:07 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62688	    388	   8340	  71416	  116f8	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:52:19 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62664	    388	   8340	  71392	  116e0	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:53:19 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62664	    388	   8340	  71392	  116e0	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:54:35 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62280	    388	   8340	  71008	  11560	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:55:40 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62280	    388	   8340	  71008	  11560	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+23:57:50 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:379:17: error: too few arguments to function 'ssd1306_Line'
+  379 |                 ssd1306_Line(5,60,5,60-((adcDataTx[0]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+In file included from ../Core/Src/main.c:31:
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:379:69: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  379 |                 ssd1306_Line(5,60,5,60-((adcDataTx[0]*100)/4090)*25), Black);
+      |                                                                     ^
+../Core/Src/main.c:379:69: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:379:76: error: expected ';' before ')' token
+  379 |                 ssd1306_Line(5,60,5,60-((adcDataTx[0]*100)/4090)*25), Black);
+      |                                                                            ^
+      |                                                                            ;
+../Core/Src/main.c:379:76: error: expected statement before ')' token
+../Core/Src/main.c:380:17: error: too few arguments to function 'ssd1306_Line'
+  380 |                 ssd1306_Line(7,60,7,60-((adcDataTx[1]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:380:69: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  380 |                 ssd1306_Line(7,60,7,60-((adcDataTx[1]*100)/4090)*25), Black);
+      |                                                                     ^
+../Core/Src/main.c:380:69: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:380:76: error: expected ';' before ')' token
+  380 |                 ssd1306_Line(7,60,7,60-((adcDataTx[1]*100)/4090)*25), Black);
+      |                                                                            ^
+      |                                                                            ;
+../Core/Src/main.c:380:76: error: expected statement before ')' token
+../Core/Src/main.c:381:17: error: too few arguments to function 'ssd1306_Line'
+  381 |                 ssd1306_Line(9,60,9,60-((adcDataTx[2]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:381:69: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  381 |                 ssd1306_Line(9,60,9,60-((adcDataTx[2]*100)/4090)*25), Black);
+      |                                                                     ^
+../Core/Src/main.c:381:69: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:381:76: error: expected ';' before ')' token
+  381 |                 ssd1306_Line(9,60,9,60-((adcDataTx[2]*100)/4090)*25), Black);
+      |                                                                            ^
+      |                                                                            ;
+../Core/Src/main.c:381:76: error: expected statement before ')' token
+../Core/Src/main.c:382:17: error: too few arguments to function 'ssd1306_Line'
+  382 |                 ssd1306_Line(11,60,11,60-((adcDataTx[3]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:382:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  382 |                 ssd1306_Line(11,60,11,60-((adcDataTx[3]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:382:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:382:78: error: expected ';' before ')' token
+  382 |                 ssd1306_Line(11,60,11,60-((adcDataTx[3]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:382:78: error: expected statement before ')' token
+../Core/Src/main.c:383:17: error: too few arguments to function 'ssd1306_Line'
+  383 |                 ssd1306_Line(13,60,13,60-((adcDataTx[4]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:383:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  383 |                 ssd1306_Line(13,60,13,60-((adcDataTx[4]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:383:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:383:78: error: expected ';' before ')' token
+  383 |                 ssd1306_Line(13,60,13,60-((adcDataTx[4]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:383:78: error: expected statement before ')' token
+../Core/Src/main.c:384:17: error: too few arguments to function 'ssd1306_Line'
+  384 |                 ssd1306_Line(15,60,15,60-((adcDataTx[5]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:384:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  384 |                 ssd1306_Line(15,60,15,60-((adcDataTx[5]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:384:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:384:78: error: expected ';' before ')' token
+  384 |                 ssd1306_Line(15,60,15,60-((adcDataTx[5]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:384:78: error: expected statement before ')' token
+../Core/Src/main.c:385:17: error: too few arguments to function 'ssd1306_Line'
+  385 |                 ssd1306_Line(17,60,17,60-((adcDataTx[6]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:385:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  385 |                 ssd1306_Line(17,60,17,60-((adcDataTx[6]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:385:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:385:78: error: expected ';' before ')' token
+  385 |                 ssd1306_Line(17,60,17,60-((adcDataTx[6]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:385:78: error: expected statement before ')' token
+../Core/Src/main.c:386:39: error: expected expression before ',' token
+  386 |                 ssd1306_Line(19,60,19,, Black);
+      |                                       ^
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+23:58:01 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:379:17: error: too few arguments to function 'ssd1306_Line'
+  379 |                 ssd1306_Line(5,60,5,60-((adcDataTx[0]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+In file included from ../Core/Src/main.c:31:
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:379:69: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  379 |                 ssd1306_Line(5,60,5,60-((adcDataTx[0]*100)/4090)*25), Black);
+      |                                                                     ^
+../Core/Src/main.c:379:69: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:379:76: error: expected ';' before ')' token
+  379 |                 ssd1306_Line(5,60,5,60-((adcDataTx[0]*100)/4090)*25), Black);
+      |                                                                            ^
+      |                                                                            ;
+../Core/Src/main.c:379:76: error: expected statement before ')' token
+../Core/Src/main.c:380:17: error: too few arguments to function 'ssd1306_Line'
+  380 |                 ssd1306_Line(7,60,7,60-((adcDataTx[1]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:380:69: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  380 |                 ssd1306_Line(7,60,7,60-((adcDataTx[1]*100)/4090)*25), Black);
+      |                                                                     ^
+../Core/Src/main.c:380:69: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:380:76: error: expected ';' before ')' token
+  380 |                 ssd1306_Line(7,60,7,60-((adcDataTx[1]*100)/4090)*25), Black);
+      |                                                                            ^
+      |                                                                            ;
+../Core/Src/main.c:380:76: error: expected statement before ')' token
+../Core/Src/main.c:381:17: error: too few arguments to function 'ssd1306_Line'
+  381 |                 ssd1306_Line(9,60,9,60-((adcDataTx[2]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:381:69: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  381 |                 ssd1306_Line(9,60,9,60-((adcDataTx[2]*100)/4090)*25), Black);
+      |                                                                     ^
+../Core/Src/main.c:381:69: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:381:76: error: expected ';' before ')' token
+  381 |                 ssd1306_Line(9,60,9,60-((adcDataTx[2]*100)/4090)*25), Black);
+      |                                                                            ^
+      |                                                                            ;
+../Core/Src/main.c:381:76: error: expected statement before ')' token
+../Core/Src/main.c:382:17: error: too few arguments to function 'ssd1306_Line'
+  382 |                 ssd1306_Line(11,60,11,60-((adcDataTx[3]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:382:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  382 |                 ssd1306_Line(11,60,11,60-((adcDataTx[3]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:382:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:382:78: error: expected ';' before ')' token
+  382 |                 ssd1306_Line(11,60,11,60-((adcDataTx[3]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:382:78: error: expected statement before ')' token
+../Core/Src/main.c:383:17: error: too few arguments to function 'ssd1306_Line'
+  383 |                 ssd1306_Line(13,60,13,60-((adcDataTx[4]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:383:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  383 |                 ssd1306_Line(13,60,13,60-((adcDataTx[4]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:383:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:383:78: error: expected ';' before ')' token
+  383 |                 ssd1306_Line(13,60,13,60-((adcDataTx[4]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:383:78: error: expected statement before ')' token
+../Core/Src/main.c:384:17: error: too few arguments to function 'ssd1306_Line'
+  384 |                 ssd1306_Line(15,60,15,60-((adcDataTx[5]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:384:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  384 |                 ssd1306_Line(15,60,15,60-((adcDataTx[5]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:384:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:384:78: error: expected ';' before ')' token
+  384 |                 ssd1306_Line(15,60,15,60-((adcDataTx[5]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:384:78: error: expected statement before ')' token
+../Core/Src/main.c:385:17: error: too few arguments to function 'ssd1306_Line'
+  385 |                 ssd1306_Line(17,60,17,60-((adcDataTx[6]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:385:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  385 |                 ssd1306_Line(17,60,17,60-((adcDataTx[6]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:385:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:385:78: error: expected ';' before ')' token
+  385 |                 ssd1306_Line(17,60,17,60-((adcDataTx[6]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:385:78: error: expected statement before ')' token
+../Core/Src/main.c:386:17: error: too few arguments to function 'ssd1306_Line'
+  386 |                 ssd1306_Line(19,60,19,60-((adcDataTx[7]*100)/4090)*25), Black);
+      |                 ^~~~~~~~~~~~
+../Core/Inc/ssd1306.h:171:6: note: declared here
+  171 | void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+      |      ^~~~~~~~~~~~
+../Core/Src/main.c:386:71: warning: left-hand operand of comma expression has no effect [-Wunused-value]
+  386 |                 ssd1306_Line(19,60,19,60-((adcDataTx[7]*100)/4090)*25), Black);
+      |                                                                       ^
+../Core/Src/main.c:386:71: warning: statement with no effect [-Wunused-value]
+../Core/Src/main.c:386:78: error: expected ';' before ')' token
+  386 |                 ssd1306_Line(19,60,19,60-((adcDataTx[7]*100)/4090)*25), Black);
+      |                                                                              ^
+      |                                                                              ;
+../Core/Src/main.c:386:78: error: expected statement before ')' token
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+23:58:29 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62688	    388	   8340	  71416	  116f8	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+23:58:36 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62688	    388	   8340	  71416	  116f8	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+23:58:42 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62688	    388	   8340	  71416	  116f8	firmware.elf
+Finished building: default.size.stdout
+ 
+10:32:25 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+   text	   data	    bss	    dec	    hex	filename
+  62584	    388	   8340	  71312	  11690	firmware.elf
+Finished building: default.size.stdout
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.list
+ 
+10:36:53 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  61936	    388	   8340	  70664	  11408	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+10:39:19 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:336:30: warning: unused variable 'data' [-Wunused-variable]
+  336 |                         char data[8];
+      |                              ^~~~
+../Core/Src/main.c:345:26: error: 'data' undeclared (first use in this function)
+  345 |                 snprintf(data, sizeof(data), "ax:%u", ax);
+      |                          ^~~~
+../Core/Src/main.c:345:26: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c:383:25: error: 'update' undeclared (first use in this function)
+  383 |                         update = TRUE;
+      |                         ^~~~~~
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:39:43 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'displayTask':
+../Core/Src/main.c:382:25: error: 'update' undeclared (first use in this function)
+  382 |                         update = TRUE;
+      |                         ^~~~~~
+../Core/Src/main.c:382:25: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:49: Core/Src/main.o] Error 1
+"make -j8 all" terminated with exit code 2. Build might be incomplete.
+10:40:04 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62404	    388	   8340	  71132	  115dc	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+10:57:42 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'mpuTask':
+../Core/Src/main.c:397:24: warning: unused variable 'wait' [-Wunused-variable]
+  397 |         static uint8_t wait = FALSE;
+      |                        ^~~~
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62540	    388	   8340	  71268	  11664	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+10:57:54 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62540	    388	   8340	  71268	  11664	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+10:57:58 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62540	    388	   8340	  71268	  11664	firmware.elf
+Finished building: default.size.stdout
+ 
+10:58:42 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62540	    388	   8340	  71268	  11664	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+11:11:27 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62580	    388	   8340	  71308	  1168c	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+11:16:37 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62588	    388	   8340	  71316	  11694	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+11:59:11 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62540	    388	   8340	  71268	  11664	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+12:00:39 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62548	    388	   8340	  71276	  1166c	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+ 
+Finished building: firmware.bin
+ 
+Finished building: firmware.list
+ 
+12:12:51 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62540	    388	   8340	  71268	  11664	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 
+12:12:55 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-size  firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  62540	    388	   8340	  71268	  11664	firmware.elf
+Finished building: default.size.stdout
+ 
+12:17:14 **** Incremental Build of configuration Debug for project firmware ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: firmware.elf
+ 
+arm-none-eabi-size  firmware.elf 
+arm-none-eabi-objdump -h -S firmware.elf  > "firmware.list"
+arm-none-eabi-objcopy  -O ihex firmware.elf  "firmware.hex"
+   text	   data	    bss	    dec	    hex	filename
+  62540	    388	   8340	  71268	  11664	firmware.elf
+arm-none-eabi-objcopy  -O binary firmware.elf  "firmware.bin"
+Finished building: default.size.stdout
+ 
+Finished building: firmware.hex
+Finished building: firmware.bin
+ 
+ 
+Finished building: firmware.list
+ 

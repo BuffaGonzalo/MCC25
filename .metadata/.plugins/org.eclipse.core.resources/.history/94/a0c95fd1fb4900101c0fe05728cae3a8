@@ -348,12 +348,11 @@ void displayTask() {
 
 	if (wait && !ONMPU) { //MPU terminó, entra pantalla
 		wait = FALSE;
-		init = TRUE;
 		ONDISPLAY = TRUE;
+		init = TRUE;
 	}
 
 	//OVERDISPLAY = FALSE;
-	if(ONDISPLAY){
 	if (init) {
 		init = FALSE;
 		over = FALSE;
@@ -397,11 +396,10 @@ void displayTask() {
 		ssd1306_Line(19, 60, 19, (60 - (adcDataTx[7] / 4090) * 25), Black);
 	}
 
-	if (ssd1306_UpdateScreenDMA()) {
+	if (ssd1306_UpdateScreenDMA() && ONDISPLAY) {
 		ONDISPLAY = FALSE;
 		over = TRUE;
 		init = TRUE;
-	}
 	}
 }
 

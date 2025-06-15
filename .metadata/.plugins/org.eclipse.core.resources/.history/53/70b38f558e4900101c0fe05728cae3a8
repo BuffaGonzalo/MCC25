@@ -276,13 +276,13 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 
 void do10ms() {
 	if (IS10MS) {
-		ONMPU = TRUE;
 		IS10MS = FALSE;
 		tmo100ms--;
 		tmo20ms--;
 		if (!tmo20ms) {
 			tmo20ms = 2;
 			IS20MS = TRUE;
+			ONMPU = TRUE;
 		}
 		if (!tmo100ms) {
 			tmo100ms = 10;

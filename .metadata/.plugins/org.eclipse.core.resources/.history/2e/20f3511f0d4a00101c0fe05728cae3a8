@@ -9,6 +9,9 @@
 #include "main.h"
 #include <stdlib.h>
 
+// Referencia al bus I2C usado
+extern I2C_HandleTypeDef hi2c1;
+
 static uint8_t *mpu6050_RxCplt = NULL;
 static void (*memWrite)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type) = NULL;
 static void (*memReadDMA)(uint8_t address, uint8_t *data, uint8_t size, uint8_t type) = NULL;
@@ -61,12 +64,12 @@ void MPU6050_Init(void)
     mpu6050_WriteData(&data, PWR_MGMT_1_REG);
 
     // Configurar acelerómetro con rango ±2g (registro ACCEL_CONFIG = 0x1C, valor 0x00)
-    //data = 0x00;
+    data = 0x00;
     //HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, ACCEL_CONFIG_REG, 1, &data, 1, HAL_MAX_DELAY);
     mpu6050_WriteData(&data, ACCEL_CONFIG_REG);
 
     // Configurar giroscopio con rango ±250°/s (registro GYRO_CONFIG = 0x1B, valor 0x00)
-    //data = 0x00;
+    data = 0x00;
     //HAL_I2C_Mem_Write(&hi2c1, MPU6050_ADDR, GYRO_CONFIG_REG, 1, &data, 1, HAL_MAX_DELAY);
     mpu6050_WriteData(&data, GYRO_CONFIG_REG);
 
@@ -76,6 +79,53 @@ char mpu6050_Read(void)
 {
 	static uint8_t Rec_Data[14];
 	static uint8_t state = 1;
+
+//	HAL_I2C_Mem_Read(&hi2c1, MPU6050_ADDR, ACCEL_XOUT_H_REG, 1, Rec_Data, 14, HAL_MAX_DELAY);
+//
+//	ax = (int16_t) (Rec_Data[0] << 8 | Rec_Data[1]); //primer byte  es la parte alta, segundo parte baja
+//	ay = (int16_t) (Rec_Data[2] << 8 | Rec_Data[3]);
+//	az = (int16_t) (Rec_Data[4] << 8 | Rec_Data[5]);
+//	//Medida temperatura
+//	//t = (int16_t) (Rec_Data[6] << 8 | Rec_Data[7]);
+//	//Valores del giroscopio
+//	gx = (int16_t) (Rec_Data[8] << 8 | Rec_Data[9]);
+//	gy = (int16_t) (Rec_Data[10] << 8 | Rec_Data[11]);
+//	gz = (int16_t) (Rec_Data[12] << 8 | Rec_Data[13]);
+//
+//
+//	if (abs(ax) <= OFFSET_AX)
+//		ax_real = 0;
+//	else
+//		ax_real = (ax / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+//
+//	if (abs(ay) <= OFFSET_AY)
+//		ay_real = 0;
+//	else
+//		ay_real = (ay / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+//
+//	if (abs(az) <= OFFSET_AZ)
+//		az_real = 9.81 * MULTIPLICADORFLOAT; // en reposo debería medir ~1g hacia Z
+//	else
+//		az_real = (az / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
+//
+//	// Aplicar offset y escalar a grados/segundo (centésimas)
+//	if (abs(gx) <= OFFSET_GX)
+//		gx_real = 0;
+//	else
+//		gx_real = (gx / 131.0f) * MULTIPLICADORFLOAT;
+//
+//	if (abs(gy) <= OFFSET_GY)
+//		gy_real = 0;
+//	else
+//		gy_real = (gy / 131.0f) * MULTIPLICADORFLOAT;
+//
+//	if (abs(gz) <= OFFSET_GZ)
+//		gz_real = 0;
+//	else
+//		gz_real = (gz / 131.0f) * MULTIPLICADORFLOAT;
+//
+//	return 1;
+
 
 	if (*mpu6050_RxCplt || state == 1) {
 		*mpu6050_RxCplt = 0;  // Reset completion flag

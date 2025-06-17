@@ -564,3 +564,45 @@ C Model Exception: C Model Status [Element main.c does not exist.]
 
 !ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2025-06-15 14:21:31.115
 !MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2025-06-15 14:24:26.351
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 68 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2025-06-15 14:24:26.352
+!MESSAGE Existing sessions are:
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2025-06-15 14:24:26.353
+!MESSAGE Error - No active DSF-Session. tmpSessionId = 68 (contextManager row 121)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug 4 0 2025-06-15 14:24:26.353
+!MESSAGE Existing sessions are:
+!SESSION 2025-06-15 17:16:57.913 -----------------------------------------------
+eclipse.buildId=Version 1.18.1
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=es_419
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-06-15 17:17:37.064
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-06-15 17:17:37.066
+!MESSAGE Log4j2 initialized with config file C:\Users\gonza\Documents\Workspace\MCC25\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-06-15 17:17:52.001
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2025-06-16 23:58:37.629 -----------------------------------------------
+eclipse.buildId=Version 1.18.1
+java.version=21.0.3
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=es_419
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2025-06-17 00:02:04.135
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2025-06-17 00:02:04.147
+!MESSAGE Log4j2 initialized with config file C:\Users\gonza\Documents\Workspace\MCC25\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2025-06-17 00:02:28.021
+!MESSAGE Started RMI Server, listening on port 41337

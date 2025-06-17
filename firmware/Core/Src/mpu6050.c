@@ -111,7 +111,7 @@ char mpu6050_Read(void)
 				ay_real = (ay / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
 
 			if (abs(az) <= OFFSET_AZ)
-				az_real = 9.81 * MULTIPLICADORFLOAT; // en reposo debería medir ~1g hacia Z
+				az_real = 0;//9.81 * MULTIPLICADORFLOAT; // en reposo debería medir ~1g hacia Z
 			else
 				az_real = (az / 16384.0f) * GRAVEDAD * MULTIPLICADORFLOAT;
 

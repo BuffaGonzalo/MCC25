@@ -45,7 +45,13 @@
 /* USER CODE BEGIN PD */
 //time
 #define	TO10MS				40
-
+#define SSD1306_MAXVER		64
+#define	SSD1306_MAXHOR		128
+#define	SSD1306_MAXADC		30
+#define	SSD1306_MINADC		60
+#define SSD1306_FSTCOL		0
+#define	SSD1306_SNDCOL		40
+#define	SSD1306_TRDCOL		85
 
 //banderas
 #define ALLFLAGS          	myFlags.bytes
@@ -360,53 +366,61 @@ void displayTask() {
 		init = FALSE;
 		over = FALSE;
 		ssd1306_Fill(White);
-		//ssd1306_DrawBitmap(0, 0, chat_gpt_128x64, 128, 64, White);
-		//ssd1306_FillRectangle(55, 30, 80, 55, Black);
 
-		x += 48;
+		ssd1306_FillRectangle(30, 0, 32, 64, Black);
+
+		ssd1306_FillRectangle(0, 20, 128, 22, Black);
+
+		ssd1306_FillRectangle(80,0, 82, 64, Black);
+
+		x = SSD1306_SNDCOL;
 		y = 0;
 		ssd1306_SetCursor(x, y);
 		snprintf(data, sizeof(data), "ACC");
 		ssd1306_WriteString(data, Font_11x18, Black);
-		x += 33;
+		x = SSD1306_TRDCOL;
 		ssd1306_SetCursor(x, y);
 		snprintf(data, sizeof(data), "GYR");
 		ssd1306_WriteString(data, Font_11x18, Black);
 
-//		ssd1306_SetCursor(x, y);
-//			snprintf(data, sizeof(data), "ax:%u", ax);
-//			ssd1306_WriteString(data, Font_6x8, Black);
-//			x += 48;
-//			ssd1306_SetCursor(x, y);
-//			snprintf(data, sizeof(data), "gx:%u", gx);
-//			ssd1306_WriteString(data, Font_6x8, Black);
-//			x = 2;
-//			y += 8;
-//			ssd1306_SetCursor(2, y);
-//			snprintf(data, sizeof(data), "ay:%u", ay);
-//			ssd1306_WriteString(data, Font_6x8, Black);
-//			x += 48;
-//			ssd1306_SetCursor(x, y);
-//			snprintf(data, sizeof(data), "gy:%u", gy);
-//			ssd1306_WriteString(data, Font_6x8, Black);
-//			x = 2;
-//			y += 8;
-//			ssd1306_SetCursor(2, y);
-//			snprintf(data, sizeof(data), "az:%u", az);
-//			ssd1306_WriteString(data, Font_6x8, Black);
-//			x += 48;
-//			ssd1306_SetCursor(x, y);
-//			snprintf(data, sizeof(data), "gz:%u", gz);
-//			ssd1306_WriteString(data, Font_6x8, Black);
+		x = SSD1306_SNDCOL;
+		y+=25;
+		ssd1306_SetCursor(x, y);
+		snprintf(data, sizeof(data), "%d", ax);
+		ssd1306_WriteString(data, Font_7x10, Black);
+		x = SSD1306_TRDCOL;
+		ssd1306_SetCursor(x, y);
+		snprintf(data, sizeof(data), "%d", gx);
+		ssd1306_WriteString(data, Font_7x10, Black);
 
-		ssd1306_Line(5, 60, 5, (60 - (adcDataTx[0] / 4090) * 25), Black);
-		ssd1306_Line(7, 60, 7, (60 - (adcDataTx[1] / 4090) * 25), Black);
-		ssd1306_Line(9, 60, 9, (60 - (adcDataTx[2] / 4090) * 25), Black);
-		ssd1306_Line(11, 60, 11, (60 - (adcDataTx[3] / 4090) * 25), Black);
-		ssd1306_Line(13, 60, 13, (60 - (adcDataTx[4] / 4090) * 25), Black);
-		ssd1306_Line(15, 60, 15, (60 - (adcDataTx[5] / 4090) * 25), Black);
-		ssd1306_Line(17, 60, 17, (60 - (adcDataTx[6] / 4090) * 25), Black);
-		ssd1306_Line(19, 60, 19, (60 - (adcDataTx[7] / 4090) * 25), Black);
+		x = SSD1306_SNDCOL;
+		y+=12;
+		ssd1306_SetCursor(x, y);
+		snprintf(data, sizeof(data), "%d", ay);
+		ssd1306_WriteString(data, Font_7x10, Black);
+		x = SSD1306_TRDCOL;
+		ssd1306_SetCursor(x, y);
+		snprintf(data, sizeof(data), "%d", gy);
+		ssd1306_WriteString(data, Font_7x10, Black);
+
+		x = SSD1306_SNDCOL;
+		y+=12;
+		ssd1306_SetCursor(x, y);
+		snprintf(data, sizeof(data), "%d", az);
+		ssd1306_WriteString(data, Font_7x10, Black);
+		x = SSD1306_TRDCOL;
+		ssd1306_SetCursor(x, y);
+		snprintf(data, sizeof(data), "%d", gz);
+		ssd1306_WriteString(data, Font_7x10, Black);
+
+		ssd1306_Line(3, 60, 3, (SSD1306_MINADC - (adcDataTx[0] / 4090) * SSD1306_MAXADC), Black);
+		ssd1306_Line(6, 60, 6, (SSD1306_MINADC - (adcDataTx[1] / 4090) * SSD1306_MAXADC), Black);
+		ssd1306_Line(9, 60, 9, (SSD1306_MINADC - (adcDataTx[2] / 4090) * SSD1306_MAXADC), Black);
+		ssd1306_Line(12, 60, 12, (SSD1306_MINADC - (adcDataTx[3] / 4090) * SSD1306_MAXADC), Black);
+		ssd1306_Line(15, 60, 15, (SSD1306_MINADC - (adcDataTx[4] / 4090) * SSD1306_MAXADC), Black);
+		ssd1306_Line(18, 60, 18, (SSD1306_MINADC - (adcDataTx[5] / 4090) * SSD1306_MAXADC), Black);
+		ssd1306_Line(21, 60, 21, (SSD1306_MINADC - (adcDataTx[6] / 4090) * SSD1306_MAXADC), Black);
+		ssd1306_Line(24, 60, 24, (SSD1306_MINADC - (adcDataTx[7] / 4090) * SSD1306_MAXADC), Black);
 	}
 
 	if (ssd1306_UpdateScreenDMA()) {

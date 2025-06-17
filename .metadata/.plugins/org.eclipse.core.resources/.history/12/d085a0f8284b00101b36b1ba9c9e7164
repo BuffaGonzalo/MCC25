@@ -27,11 +27,11 @@
 
 #include "util.h"
 #include "img.h"
-#include "fonts.h"
 
 #include "ssd1306.h"
 #include "mpu6050.h"
-#include "esp01.h"
+#include "fonts.h"
+//#include "ssd1306_tests.h"
 
 #include <stdio.h>
 #include <unerPrtcl.h>
@@ -61,6 +61,7 @@
 
 
 #define	ONDISPLAY			myFlags.bits.bit4
+#define	OVERDISPLAY			myFlags.bits.bit5
 #define ONMPU				myFlags.bits.bit6
 
 #define TEST				myFlags.bits.bit7
@@ -359,6 +360,7 @@ void displayTask() {
 		ONDISPLAY = TRUE;
 	}
 
+	//OVERDISPLAY = FALSE;
 	if(ONDISPLAY){
 	if (init) {
 		init = FALSE;
@@ -509,7 +511,7 @@ int main(void)
 
 	//Variables
 	ALLFLAGS = RESET;
-
+	OVERDISPLAY = TRUE;
   /* USER CODE END 2 */
 
   /* Infinite loop */

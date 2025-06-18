@@ -1,15 +1,6 @@
-13:46:45 **** Incremental Build of configuration Debug for project firmware ****
+14:36:25 **** Incremental Build of configuration Debug for project firmware ****
 make -j8 all 
 arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c:548:13: warning: 'FeedRxBuf' defined but not used [-Wunused-function]
-  548 | static void FeedRxBuf(uint8_t byte)
-      |             ^~~~~~~~~
-../Core/Src/main.c:538:13: warning: 'USART_SendByte' defined but not used [-Wunused-function]
-  538 | static void USART_SendByte(uint8_t byte)
-      |             ^~~~~~~~~~~~~~
-../Core/Src/main.c:528:13: warning: 'CHPD_Control' defined but not used [-Wunused-function]
-  528 | static void CHPD_Control(uint8_t state)
-      |             ^~~~~~~~~~~~
 arm-none-eabi-gcc -o "firmware.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gonza\Documents\Workspace\MCC25\firmware\STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="firmware.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: firmware.elf
  
@@ -28,5 +19,5 @@ Finished building: firmware.bin
 Finished building: firmware.list
  
 
-13:46:49 Build Finished. 0 errors, 3 warnings. (took 3s.509ms)
+14:36:27 Build Finished. 0 errors, 0 warnings. (took 2s.108ms)
 

@@ -60,8 +60,6 @@
 #define ON					1
 #define OFF					0
 
-#define TIM3CP				9999
-
 
 //banderas
 #define ALLFLAGS          	myFlags.bytes
@@ -137,8 +135,6 @@ _eDMA myDMA;
 
 uint8_t tmo100 = 5;
 uint8_t IS100 = 0;
-
-uint32_t rPwm, lPwm;
 
 //Wifi
 _sESP01Handle esp01Handler;
@@ -320,20 +316,6 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
 		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
 		break;
-	case SETPWM:
-        unerPrtcl_PutHeaderOnTx(dataTx, SETPWM, 2);
-        unerPrtcl_PutByteOnTx(dataTx, ACK );
-        unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
-        myWord.ui8[0]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[1]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[2]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[3]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        lPwm = myWord.i32;
-        myWord.ui8[0]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[1]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[2]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[3]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        rPwm = myWord.i32;
 		break;
 	default:
 		unerPrtcl_PutHeaderOnTx(dataTx, (_eCmd) dataRx->buff[dataRx->indexData], 2);
@@ -473,12 +455,12 @@ void i2cTask() {
 			break;
 		}
 
-//		if (Pila[j]) { //mpu6050
-//			i = ONMPU;
-//			j++;
-//			j&=(I2CSIZE-1);
-//			break;
-//		}
+		if (Pila[j]) { //mpu6050
+			i = ONMPU;
+			j++;
+			j&=(I2CSIZE-1);
+			break;
+		}
 		if(!Pila[j]){
 			i = DATA_DISPLAY;
 			j++;
@@ -508,19 +490,19 @@ void i2cTask() {
 	}
 }
 
-//void ssd(){
-//	static uint8_t init = TRUE;
-//	if(IS100MS){
-//	if(init){
-//		init=FALSE;
-//		ssd1306Data();
-//	}
-//	if(ssd1306_UpdateScreenDMA()){
-//		IS100MS=FALSE;
-//		init=TRUE;
-//	}
-//	}
-//}
+void ssd(){
+	static uint8_t init = TRUE;
+	if(IS100MS){
+	if(init){
+		init=FALSE;
+		ssd1306Data();
+	}
+	if(ssd1306_UpdateScreenDMA()){
+		IS100MS=FALSE;
+		init=TRUE;
+	}
+	}
+}
 
 
 //void displayTask() {
@@ -564,11 +546,13 @@ void i2cTask() {
 //}
 
 
-void PWM_Control(){
+void PWM_Control(uint8_t lPwr, uint8_t rPwr){
 
+	  uint32_t period = htim3.Init.Period;
 	  // Calcula CCRx = period * percent / 100
-	  uint32_t lPulse = TIM3CP * lPwm / 100UL;
-	  uint32_t rPulse = TIM3CP * rPwm / 100UL;
+	  uint32_t lPulse = (period + 1UL) * (uint32_t)lPwr / 100UL;
+
+	  uint32_t rPulse = (period + 1UL) * (uint32_t)rPwr / 100UL;
 
 	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,lPulse);
 	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,lPulse);
@@ -656,11 +640,6 @@ int main(void)
 	HAL_TIM_Base_Start_IT(&htim3);
 	HAL_TIM_Base_Start_IT(&htim4);
 
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_3);
-	HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_4);
-
 	HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET); //Apagamos el LED
 
 	//Display
@@ -682,7 +661,7 @@ int main(void)
 //	esp01Handler.WriteByteToBufRX = USART_SendByte();
 //	esp01Handler.WriteUSARTByte = FeedRxBuf(byte);
 
-	//ESP01_Init(&esp01Handler);
+	ESP01_Init(&esp01Handler);
 
 	//ESP01_SetWIFI("FCAL","fcalconcordia.06-2019");
 	//ESP01_StartUDP("192.168.0.10", 30010, 30001);
@@ -707,9 +686,8 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		do10ms();
 		USBTask();
-		PWM_Control();
 		//i2cTask();
-		//ssd();
+		ssd();
 
 
 	}

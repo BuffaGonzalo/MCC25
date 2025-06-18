@@ -138,8 +138,6 @@ _eDMA myDMA;
 uint8_t tmo100 = 5;
 uint8_t IS100 = 0;
 
-uint32_t rPwm, lPwm;
-
 //Wifi
 _sESP01Handle esp01Handler;
 
@@ -320,20 +318,6 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
 		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
 		break;
-	case SETPWM:
-        unerPrtcl_PutHeaderOnTx(dataTx, SETPWM, 2);
-        unerPrtcl_PutByteOnTx(dataTx, ACK );
-        unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
-        myWord.ui8[0]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[1]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[2]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[3]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        lPwm = myWord.i32;
-        myWord.ui8[0]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[1]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[2]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[3]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        rPwm = myWord.i32;
 		break;
 	default:
 		unerPrtcl_PutHeaderOnTx(dataTx, (_eCmd) dataRx->buff[dataRx->indexData], 2);
@@ -564,11 +548,12 @@ void i2cTask() {
 //}
 
 
-void PWM_Control(){
+void PWM_Control(uint8_t lPwr, uint8_t rPwr){
 
 	  // Calcula CCRx = period * percent / 100
-	  uint32_t lPulse = TIM3CP * lPwm / 100UL;
-	  uint32_t rPulse = TIM3CP * rPwm / 100UL;
+	  uint32_t lPulse = TIM3CP * (uint32_t)lPwr / 100UL;
+
+	  uint32_t rPulse = TIM3CP * (uint32_t)rPwr / 100UL;
 
 	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,lPulse);
 	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,lPulse);
@@ -707,8 +692,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		do10ms();
 		USBTask();
-		PWM_Control();
-		//i2cTask();
+		i2cTask();
 		//ssd();
 
 

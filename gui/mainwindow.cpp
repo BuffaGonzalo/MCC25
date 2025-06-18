@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     statusMode = new QLabel(ui->statusBar);
 
     timer1->start(100);
-    timer2->start(500);
+    //timer2->start(500);
 }
 
 MainWindow::~MainWindow()

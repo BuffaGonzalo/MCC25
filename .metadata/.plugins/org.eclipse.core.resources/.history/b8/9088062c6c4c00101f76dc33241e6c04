@@ -136,10 +136,6 @@ _eDMA myDMA;
 uint8_t tmo100 = 5;
 uint8_t IS100 = 0;
 
-//Motors
-uint8_t lPwr;
-uint8_t rPwr;
-
 //Wifi
 _sESP01Handle esp01Handler;
 
@@ -179,8 +175,6 @@ void mpuMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
 void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
 //i2C
 void i2cTask();
-//motors
-void PWMControl();
 
 
 /* USER CODE END PFP */
@@ -322,20 +316,6 @@ void decodeCommand(_sTx *dataRx, _sTx *dataTx) {
 		unerPrtcl_PutByteOnTx(dataTx, myWord.ui8[1]);
 		unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
 		break;
-	case SETPWM:
-		unerPrtcl_PutHeaderOnTx(dataTx, SETPWM, 2);
-        unerPrtcl_PutByteOnTx(dataTx, ACK );
-        unerPrtcl_PutByteOnTx(dataTx, dataTx->chk);
-        myWord.ui8[0]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[1]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[2]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[3]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        lPwr = myWord.ui32;
-        myWord.ui8[0]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[1]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[2]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        myWord.ui8[3]=unerPrtcl_GetByteFromRx(dataRx,1,0);
-        rPwr = myWord.ui32;
 		break;
 	default:
 		unerPrtcl_PutHeaderOnTx(dataTx, (_eCmd) dataRx->buff[dataRx->indexData], 2);
@@ -350,7 +330,6 @@ void do10ms() {
 		IS10MS = FALSE;
 		tmo100ms--;
 		tmo20ms--;
-		PWMControl();
 		ESP01_Timeout10ms();
 		if (!tmo20ms) {
 			tmo20ms = 2;
@@ -546,7 +525,7 @@ void i2cTask() {
 //}
 
 
-void PWMControl(){
+void PWM_Control(uint8_t lPwr, uint8_t rPwr){
 
 	  uint32_t period = htim3.Init.Period;
 	  // Calcula CCRx = period * percent / 100

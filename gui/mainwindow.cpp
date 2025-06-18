@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_CMD->addItem("FIRMWARE", 0xF1);
     ui->comboBox_CMD->addItem("GETMPU", 0xF2);
     ui->comboBox_CMD->addItem("GETADC", 0xF3);
+    ui->comboBox_CMD->addItem("SETPWM", 0xF4);
     ui->comboBox_CMD->addItem("*", 0xA9);
 
     //inicializamos
@@ -309,6 +310,11 @@ void MainWindow::decodeData(uint8_t *datosRx, uint8_t source){
         ui->ir8_data->setText(str);
 
         break;
+    case SETPWM:
+        if(datosRx[2]==0x0D)
+            strOut= "PWM Motores ACK";
+        ui->textBrowserProcessed->append(strOut);
+        break;
     default:
         str = str + "Comando DESCONOCIDO!!!!";
         ui->textBrowserProcessed->append(str);
@@ -317,8 +323,8 @@ void MainWindow::decodeData(uint8_t *datosRx, uint8_t source){
 
 void MainWindow::sendDataSerial(){
     uint8_t cmdId;
-    // _udat   w;
-    // bool ok;
+    _udat   w;
+    bool ok;
 
     unsigned char dato[256];
     unsigned char indice=0, chk=0;
@@ -340,6 +346,24 @@ void MainWindow::sendDataSerial(){
         dato[indice++]=cmdId;
         dato[NBYTES]=0x02;
     break;
+    case SETPWM:
+        dato[indice++] = cmdId;
+        w.i32 = QInputDialog::getInt(this, "Velocidad", "Motor1:", 0, 0, 100, 1, &ok);
+        if(!ok)
+            break;
+        dato[indice++] = w.ui8[0];
+        dato[indice++] = w.ui8[1];
+        dato[indice++] = w.ui8[2];
+        dato[indice++] = w.ui8[3];
+        w.i32 = QInputDialog::getInt(this, "Velocidad", "Motor2:", 0, 0, 100, 1, &ok);
+        if(!ok)
+            break;
+        dato[indice++] = w.ui8[0];
+        dato[indice++] = w.ui8[1];
+        dato[indice++] = w.ui8[2];
+        dato[indice++] = w.ui8[3];
+        dato[NBYTES]= 0x0A;
+        break;
     default:
         return;
     }

@@ -46,7 +46,7 @@ typedef enum {
 	FIRMWARE = 0xF1,
 	GETMPU = 0xF2,
 	GETADC = 0xF3,
-	SETPWM = 0xF4,
+	SETMOTOR = 0xF4,
 	ACK = 0x0D,
 	UNKNOWN = 0xFF
 } _eCmd;

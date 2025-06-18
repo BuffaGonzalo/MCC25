@@ -53,7 +53,7 @@
 // ------------------------------------------------------
 
 // Inicializa el sensor: saca del modo sleep y configura escala de medición
-void MPU6050_Init(void);
+void mpu6050_Init(void);
 
 //// Lee el acelerómetro, aplica offset y escala a m/s² ×100
 //void mpu6050_Read_Accel(void);

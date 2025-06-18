@@ -3,6 +3,6 @@
 ../Core/Src/mpu6050.c:36:6:mpu6050_Attach_MemReadDMA	1
 ../Core/Src/mpu6050.c:42:6:mpu6050_WriteData	1
 ../Core/Src/mpu6050.c:47:6:mpu6050_ReadDataDMA	1
-../Core/Src/mpu6050.c:53:6:MPU6050_Init	1
+../Core/Src/mpu6050.c:53:6:mpu6050_Init	1
 ../Core/Src/mpu6050.c:75:6:mpu6050_Read	17
 ../Core/Src/mpu6050.c:141:6:mpu6050_GetData	7

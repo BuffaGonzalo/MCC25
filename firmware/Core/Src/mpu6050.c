@@ -50,7 +50,7 @@ void mpu6050_ReadDataDMA(uint8_t* buffer, size_t size, uint8_t type) {
 }
 
 
-void MPU6050_Init(void)
+void mpu6050_Init(void)
 {
     uint8_t data;
 

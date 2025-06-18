@@ -3,12 +3,18 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<item key="replaceBarOpen" value="false"/>
 	<list key="searchhistory">
+		<item value="heartBeatTask"/>
+		<item value="index"/>
+		<item value="ONDISPLAY"/>
+		<item value="ESP01_WriteRX"/>
+		<item value="CH"/>
+		<item value="CHPD"/>
+		<item value="overdispla"/>
 		<item value="htim"/>
 		<item value="htim1"/>
 		<item value="IS100MS"/>
 		<item value="IS20MS"/>
 		<item value="mpu6050_RxCplt"/>
-		<item value="ONDISPLAY"/>
 		<item value="ssd1306_WriteData"/>
 	</list>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">

@@ -53,17 +53,23 @@
 #define	SSD1306_SNDCOL		40
 #define	SSD1306_TRDCOL		85
 
+#define SSD1306				0
+#define MPU6050				1
+#define I2CSIZE				16
+
+#define ON					1
+#define OFF					0
+
+
 //banderas
 #define ALLFLAGS          	myFlags.bytes
 #define IS10MS				myFlags.bits.bit0
 #define IS20MS				myFlags.bits.bit1
 #define IS100MS				myFlags.bits.bit2
 
+#define HEARTBEAT			myFlags.bits.bit3
 
-#define	ONDISPLAY			myFlags.bits.bit4
-#define ONMPU				myFlags.bits.bit6
 
-#define TEST				myFlags.bits.bit7
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -83,6 +89,8 @@ TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
+
+USART_HandleTypeDef husart1;
 
 /* USER CODE BEGIN PV */
 uint32_t heartBeatMask[] = {0x55555555, 0x1, 0x2010080, 0x5F, 0x5, 0x28140A00, 0x15F, 0x15, 0x2A150A08, 0x55F};
@@ -111,7 +119,25 @@ volatile uint8_t mpu6050_RxCplt = 0;
 int16_t ax=0, ay=0, az=0;
 int16_t gx=0, gy=0, gz=0;
 
-uint8_t screenOver=TRUE;
+
+//i2c
+uint8_t Pila[I2CSIZE] = {};
+uint8_t i2cIndex = 0;
+
+typedef enum{
+	IDLE = 0,
+	DATA_DISPLAY = 1,
+	UPD_DISPLAY = 2,
+	ONMPU = 3
+}_eDMA;
+
+_eDMA myDMA;
+
+uint8_t tmo100 = 5;
+uint8_t IS100 = 0;
+
+//Wifi
+_sESP01Handle esp01Handler;
 
 /* USER CODE END PV */
 
@@ -125,6 +151,7 @@ static void MX_TIM1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
+static void MX_USART1_Init(void);
 /* USER CODE BEGIN PFP */
 
 //USB-Serial Communication
@@ -139,12 +166,16 @@ void do100ms();
 void heartBeatTask();
 
 //Display
-void displayTask();
+//void displayTask();
+void ssd1306Data();
 void displayMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
 void displayMemWriteDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
 //MPU6050
 void mpuMemWrite(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
 void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type);
+//i2C
+void i2cTask();
+
 
 /* USER CODE END PFP */
 
@@ -171,17 +202,26 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		time10ms++;
 		if (time10ms == TO10MS) {
 			time10ms = 0;
-			IS10MS=TRUE;
+			IS10MS = TRUE;
 		}
 		HAL_ADC_Start_DMA(&hadc1, (uint32_t*) adcData, 8);
 	}
 
-	if(htim->Instance == TIM2){ //20ms
-		//ONMPU=TRUE;
+	if (htim->Instance == TIM2) { //20ms
+		Pila[i2cIndex] = MPU6050;
+		i2cIndex++;
+		i2cIndex&=(I2CSIZE-1);
+		tmo100--;
+		if(!tmo100){
+			tmo100=5;
+			Pila[i2cIndex] = SSD1306;
+			i2cIndex++;
+			i2cIndex&=(I2CSIZE-1);
+		}
 	}
 
-	if(htim->Instance ==TIM4){ //100ms
-		//ONDISPLAY=TRUE;
+	if (htim->Instance == TIM4) { //100ms
+
 	}
 }
 
@@ -290,15 +330,14 @@ void do10ms() {
 		IS10MS = FALSE;
 		tmo100ms--;
 		tmo20ms--;
+		ESP01_Timeout10ms();
 		if (!tmo20ms) {
 			tmo20ms = 2;
 			IS20MS = TRUE;
-			ONMPU = TRUE;
 		}
 		if (!tmo100ms) {
 			tmo100ms = 10;
 			IS100MS = TRUE;
-			ONDISPLAY = TRUE;
 			heartBeatTask();
 		}
 	}
@@ -336,110 +375,183 @@ void mpuMemReadDMA(uint8_t address, uint8_t *data, uint8_t size, uint8_t type){
 	HAL_I2C_Mem_Read_DMA(&hi2c1, address , type, 1, data, size);
 }
 
-void displayTask() {
+void ssd1306Data() {
 	char data[8];
 	uint8_t y = 0, x = 2;
-	static uint8_t init = FALSE;
-	static uint8_t wait = FALSE;
-	static uint8_t over = TRUE;
 
-	if(!over){
-		ONMPU=FALSE;
-	}
+	ssd1306_Fill(White);
 
-	if (ONMPU) { //Espera de la pantalla
-		wait = TRUE;
-		ONDISPLAY = FALSE;
-		return;
-	}
+	ssd1306_FillRectangle(30, 0, 32, 64, Black);
 
-	if (wait && !ONMPU) { //MPU terminó, entra pantalla
-		wait = FALSE;
-		init = TRUE;
-		ONDISPLAY = TRUE;
-	}
+	ssd1306_FillRectangle(0, 20, 128, 22, Black);
 
-	if(ONDISPLAY){
-	if (init) {
-		init = FALSE;
-		over = FALSE;
-		ssd1306_Fill(White);
+	ssd1306_FillRectangle(80, 0, 82, 64, Black);
 
-		ssd1306_FillRectangle(30, 0, 32, 64, Black);
+	x = SSD1306_SNDCOL;
+	y = 0;
+	ssd1306_SetCursor(x, y);
+	snprintf(data, sizeof(data), "ACC");
+	ssd1306_WriteString(data, Font_11x18, Black);
+	x = SSD1306_TRDCOL;
+	ssd1306_SetCursor(x, y);
+	snprintf(data, sizeof(data), "GYR");
+	ssd1306_WriteString(data, Font_11x18, Black);
 
-		ssd1306_FillRectangle(0, 20, 128, 22, Black);
+	x = SSD1306_SNDCOL;
+	y += 25;
+	ssd1306_SetCursor(x, y);
+	snprintf(data, sizeof(data), "%d", ax);
+	ssd1306_WriteString(data, Font_7x10, Black);
+	x = SSD1306_TRDCOL;
+	ssd1306_SetCursor(x, y);
+	snprintf(data, sizeof(data), "%d", gx);
+	ssd1306_WriteString(data, Font_7x10, Black);
 
-		ssd1306_FillRectangle(80,0, 82, 64, Black);
+	x = SSD1306_SNDCOL;
+	y += 12;
+	ssd1306_SetCursor(x, y);
+	snprintf(data, sizeof(data), "%d", ay);
+	ssd1306_WriteString(data, Font_7x10, Black);
+	x = SSD1306_TRDCOL;
+	ssd1306_SetCursor(x, y);
+	snprintf(data, sizeof(data), "%d", gy);
+	ssd1306_WriteString(data, Font_7x10, Black);
 
-		x = SSD1306_SNDCOL;
-		y = 0;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "ACC");
-		ssd1306_WriteString(data, Font_11x18, Black);
-		x = SSD1306_TRDCOL;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "GYR");
-		ssd1306_WriteString(data, Font_11x18, Black);
+	x = SSD1306_SNDCOL;
+	y += 12;
+	ssd1306_SetCursor(x, y);
+	snprintf(data, sizeof(data), "%d", az);
+	ssd1306_WriteString(data, Font_7x10, Black);
+	x = SSD1306_TRDCOL;
+	ssd1306_SetCursor(x, y);
+	snprintf(data, sizeof(data), "%d", gz);
+	ssd1306_WriteString(data, Font_7x10, Black);
 
-		x = SSD1306_SNDCOL;
-		y+=25;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "%d", ax);
-		ssd1306_WriteString(data, Font_7x10, Black);
-		x = SSD1306_TRDCOL;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "%d", gx);
-		ssd1306_WriteString(data, Font_7x10, Black);
-
-		x = SSD1306_SNDCOL;
-		y+=12;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "%d", ay);
-		ssd1306_WriteString(data, Font_7x10, Black);
-		x = SSD1306_TRDCOL;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "%d", gy);
-		ssd1306_WriteString(data, Font_7x10, Black);
-
-		x = SSD1306_SNDCOL;
-		y+=12;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "%d", az);
-		ssd1306_WriteString(data, Font_7x10, Black);
-		x = SSD1306_TRDCOL;
-		ssd1306_SetCursor(x, y);
-		snprintf(data, sizeof(data), "%d", gz);
-		ssd1306_WriteString(data, Font_7x10, Black);
-
-		ssd1306_Line(3, 60, 3, (SSD1306_MINADC - (adcDataTx[0] / 4090) * SSD1306_MAXADC), Black);
-		ssd1306_Line(6, 60, 6, (SSD1306_MINADC - (adcDataTx[1] / 4090) * SSD1306_MAXADC), Black);
-		ssd1306_Line(9, 60, 9, (SSD1306_MINADC - (adcDataTx[2] / 4090) * SSD1306_MAXADC), Black);
-		ssd1306_Line(12, 60, 12, (SSD1306_MINADC - (adcDataTx[3] / 4090) * SSD1306_MAXADC), Black);
-		ssd1306_Line(15, 60, 15, (SSD1306_MINADC - (adcDataTx[4] / 4090) * SSD1306_MAXADC), Black);
-		ssd1306_Line(18, 60, 18, (SSD1306_MINADC - (adcDataTx[5] / 4090) * SSD1306_MAXADC), Black);
-		ssd1306_Line(21, 60, 21, (SSD1306_MINADC - (adcDataTx[6] / 4090) * SSD1306_MAXADC), Black);
-		ssd1306_Line(24, 60, 24, (SSD1306_MINADC - (adcDataTx[7] / 4090) * SSD1306_MAXADC), Black);
-	}
-
-	if (ssd1306_UpdateScreenDMA()) {
-		ONDISPLAY = FALSE;
-		over = TRUE;
-		init = TRUE;
-	}
-	}
+	ssd1306_Line(3, 60, 3,
+			(SSD1306_MINADC - (adcDataTx[0] / 4090) * SSD1306_MAXADC), Black);
+	ssd1306_Line(6, 60, 6,
+			(SSD1306_MINADC - (adcDataTx[1] / 4090) * SSD1306_MAXADC), Black);
+	ssd1306_Line(9, 60, 9,
+			(SSD1306_MINADC - (adcDataTx[2] / 4090) * SSD1306_MAXADC), Black);
+	ssd1306_Line(12, 60, 12,
+			(SSD1306_MINADC - (adcDataTx[3] / 4090) * SSD1306_MAXADC), Black);
+	ssd1306_Line(15, 60, 15,
+			(SSD1306_MINADC - (adcDataTx[4] / 4090) * SSD1306_MAXADC), Black);
+	ssd1306_Line(18, 60, 18,
+			(SSD1306_MINADC - (adcDataTx[5] / 4090) * SSD1306_MAXADC), Black);
+	ssd1306_Line(21, 60, 21,
+			(SSD1306_MINADC - (adcDataTx[6] / 4090) * SSD1306_MAXADC), Black);
+	ssd1306_Line(24, 60, 24,
+			(SSD1306_MINADC - (adcDataTx[7] / 4090) * SSD1306_MAXADC), Black);
 }
 
+void i2cTask() {
+	static uint8_t i = IDLE;
+	static uint8_t j = 0;
 
-void mpuTask() {
-
-	if (ONMPU) {
-		if (mpu6050_Read()) {
-			ONMPU = FALSE;
-			mpu6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
+	switch (i) {
+	case IDLE:
+		if (Pila[j]) { //mpu6050
+			i = ONMPU;
+			j++;
+			j&=(I2CSIZE-1);
+			break;
 		}
+		if(!Pila[j]){
+			i = DATA_DISPLAY;
+			j++;
+			j&=(I2CSIZE-1);
+		}
+		break;
+	case DATA_DISPLAY:
+		ssd1306Data();
+		i = UPD_DISPLAY;
+		break;
+	case UPD_DISPLAY:
+		if (ssd1306_UpdateScreenDMA()) {
+			ssd1306_TxCplt=FALSE;
+			i = IDLE;
+		}
+		break;
+	case ONMPU:
+		if (mpu6050_Read()) {
+			mpu6050_GetData(&ax, &ay, &az, &gx, &gy, &gz);
+			mpu6050_RxCplt=FALSE;
+			i = IDLE;
+		}
+		break;
 	}
-
 }
+
+
+//void displayTask() {
+//	char data[8];
+//	uint8_t y = 0, x = 2;
+//	static uint8_t init = TRUE;
+//	static uint8_t wait = FALSE;
+//	static uint8_t running = FALSE;
+//
+//	if(ONDISPLAY && ONMPU && !BUSY){ //Prioridad a MPU
+//		wait=TRUE;
+//		ONDISPLAY=FALSE;
+//	}
+//
+//	if(!ONMPU && wait && !BUSY){ //MPU finaliza entra display
+//		ONDISPLAY=TRUE;
+//		wait=FALSE;
+//	}
+//
+//	if (ONDISPLAY && !ONMPU) {
+////		running = TRUE;
+////		BUSY = TRUE;
+//		if (init) {
+//			init = FALSE;
+//
+//		}
+//
+//
+//	}
+//}
+
+
+//void mpuTask() {
+//
+//	if ((ONMPU && !ONDISPLAY) {
+////		BUSY = TRUE;
+////		RUNMPU = TRUE;
+//
+//	}
+//
+//}
+
+
+static void CHPD_Control(uint8_t state)
+{
+    /* Assuming CH_PD is on GPIOB Pin 0 */
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+/**
+ * @brief  Send one byte out over UART to ESP-01.
+ * @param  byte  The data byte to transmit.
+ */
+static void USART_SendByte(uint8_t byte)
+{
+    /* Assuming huart2 is configured for the ESP01 */
+    HAL_USART_Transmit(&husart1, &byte, 1, HAL_MAX_DELAY);
+}
+
+/**
+ * @brief  Forward one received byte into the ESP01 driver’s rx buffer.
+ * @param  byte  The byte received from UART ISR.
+ */
+static void FeedRxBuf(uint8_t byte)
+{
+    ESP01_WriteRX(byte);
+}
+
+
+
 
 /* USER CODE END 0 */
 
@@ -480,6 +592,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM3_Init();
   MX_TIM4_Init();
+  MX_USART1_Init();
   /* USER CODE BEGIN 2 */
 
 	CDC_Attach_Rx(USBRxData); //Attach a la función que tenia en el .C
@@ -502,7 +615,21 @@ int main(void)
 	mpu6050_ADC_ConfCpltCallback(&mpu6050_RxCplt);
 	mpu6050_Attach_MemWrite(mpuMemWrite);
 	mpu6050_Attach_MemReadDMA(mpuMemReadDMA);
-	MPU6050_Init();
+	mpu6050_Init();
+
+	//esp01
+
+//	esp01Handler.DoCHPD = CHPD_Control(ON);
+//	esp01Handler.WriteByteToBufRX = USART_SendByte();
+//	esp01Handler.WriteUSARTByte = FeedRxBuf(byte);
+
+	ESP01_Init(&esp01Handler);
+
+	//ESP01_SetWIFI("FCAL","fcalconcordia.06-2019");
+	//ESP01_StartUDP("192.168.0.10", 30010, 30001);
+
+	//ESP01_SetWIFI("ARPANET","1969-Apolo_11-2022");
+	//ESP01_StartUDP("192.168.0.10", 30010, 30001);
 
 	//Inicializacion de protocolo
 	unerPrtcl_Init(&USBRx, &USBTx, buffUSBRx, buffUSBTx);
@@ -521,8 +648,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 		do10ms();
 		USBTask();
-		displayTask();
-		mpuTask();
+		//i2cTask();
 	}
   /* USER CODE END 3 */
 }
@@ -917,7 +1043,6 @@ static void MX_TIM4_Init(void)
   /* USER CODE END TIM4_Init 0 */
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_SlaveConfigTypeDef sSlaveConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
 
   /* USER CODE BEGIN TIM4_Init 1 */
@@ -938,12 +1063,6 @@ static void MX_TIM4_Init(void)
   {
     Error_Handler();
   }
-  sSlaveConfig.SlaveMode = TIM_SLAVEMODE_DISABLE;
-  sSlaveConfig.InputTrigger = TIM_TS_ITR0;
-  if (HAL_TIM_SlaveConfigSynchro(&htim4, &sSlaveConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
   if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
@@ -953,6 +1072,40 @@ static void MX_TIM4_Init(void)
   /* USER CODE BEGIN TIM4_Init 2 */
 
   /* USER CODE END TIM4_Init 2 */
+
+}
+
+/**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART1_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  husart1.Instance = USART1;
+  husart1.Init.BaudRate = 115200;
+  husart1.Init.WordLength = USART_WORDLENGTH_8B;
+  husart1.Init.StopBits = USART_STOPBITS_1;
+  husart1.Init.Parity = USART_PARITY_NONE;
+  husart1.Init.Mode = USART_MODE_TX_RX;
+  husart1.Init.CLKPolarity = USART_POLARITY_LOW;
+  husart1.Init.CLKPhase = USART_PHASE_1EDGE;
+  husart1.Init.CLKLastBit = USART_LASTBIT_DISABLE;
+  if (HAL_USART_Init(&husart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART1_Init 2 */
+
+  /* USER CODE END USART1_Init 2 */
 
 }
 
@@ -1006,6 +1159,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : SW0_Pin */
+  GPIO_InitStruct.Pin = SW0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(SW0_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

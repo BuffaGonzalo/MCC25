@@ -525,24 +525,7 @@ void i2cTask() {
 //}
 
 
-void PWM_Control(uint8_t lPwr, uint8_t rPwr){
-
-	  uint32_t period = htim3.Init.Period;
-	  // Calcula CCRx = period * percent / 100
-	  uint32_t lPulse = (period + 1UL) * (uint32_t)lPwr / 100UL;
-
-	  uint32_t rPulse = (period + 1UL) * (uint32_t)rPwr / 100UL;
-
-	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,lPulse);
-	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_2,lPulse);
-
-	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_3,rPulse);
-	__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_4,rPulse);
-
-}
-
-
-void CHPD_Control(uint8_t state)
+static void CHPD_Control(uint8_t state)
 {
     /* Assuming CH_PD is on GPIOB Pin 0 */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
@@ -552,7 +535,7 @@ void CHPD_Control(uint8_t state)
  * @brief  Send one byte out over UART to ESP-01.
  * @param  byte  The data byte to transmit.
  */
-void USART_SendByte(uint8_t byte)
+static void USART_SendByte(uint8_t byte)
 {
     /* Assuming huart2 is configured for the ESP01 */
     HAL_USART_Transmit(&husart1, &byte, 1, HAL_MAX_DELAY);
@@ -562,7 +545,7 @@ void USART_SendByte(uint8_t byte)
  * @brief  Forward one received byte into the ESP01 driver’s rx buffer.
  * @param  byte  The byte received from UART ISR.
  */
-void FeedRxBuf(uint8_t byte)
+static void FeedRxBuf(uint8_t byte)
 {
     ESP01_WriteRX(byte);
 }
